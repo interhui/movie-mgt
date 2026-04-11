@@ -89,19 +89,9 @@ async function importJson(services, filePath, options = {}) {
  * Generate JSON import template
  */
 function generateTemplate() {
-    const template = [
-        {
-            name: '示例电影',
-            category: 'movie',
-            description: '电影描述',
-            publisher: '发行商',
-            publishDate: '2024-01-01',
-            developer: '开发商',
-            tags: ['action', 'drama']
-        }
-    ];
-
-    console.log(JSON.stringify(template, null, 2));
+    const templatePath = path.join(__dirname, '..', '..', '..', 'templates', 'movie.nfo');
+    const content = fs.readFileSync(templatePath, 'utf-8');
+    console.log(content);
 }
 
 module.exports = {

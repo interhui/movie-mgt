@@ -73,8 +73,6 @@ movieProgram
     .alias('ls')
     .description('List all movies or movies by category')
     .option('-c, --category <id>', 'Filter by category')
-    .option('-f, --favorite', 'Show only favorites')
-    .option('-r, --rating <number>', 'Filter by rating')
     .option('-t, --tag <tagId>', 'Filter by tag')
     .option('-s, --status <status>', 'Filter by status')
     .option('--sort <field>', 'Sort by field (name, rating, playtime)')
@@ -90,8 +88,6 @@ movieProgram
     .argument('<keyword>', 'Search keyword')
     .description('Search movies by keyword')
     .option('-c, --category <id>', 'Filter by category')
-    .option('-f, --favorite', 'Show only favorites')
-    .option('-r, --rating <number>', 'Filter by rating')
     .option('-t, --tag <tagId>', 'Filter by tag')
     .option('-o, --output <format>', 'Output format')
     .action(async (keyword, cmdOptions) => {
@@ -143,15 +139,6 @@ movieProgram
     .action(async (movieId, cmdOptions) => {
         const services = await getServices(program.opts());
         await movieCommands.editMovie(services, movieId, cmdOptions);
-    });
-
-movieProgram
-    .command('favorite')
-    .argument('<movieId>', 'Movie ID')
-    .description('Toggle movie favorite status')
-    .action(async (movieId) => {
-        const services = await getServices(program.opts());
-        await movieCommands.toggleFavorite(services, movieId);
     });
 
 movieProgram

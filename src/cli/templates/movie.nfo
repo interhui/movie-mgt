@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>电影ID</id>
+    <title>电影名</title>
+    <year>发行日期</year>
+    <outline>电影描述</outline>
+    <sorttitle>电影短描述</sorttitle>
+    <runtime>电影时长(分钟)</runtime>
+    <studio>发行商</studio>
+    <director>导演</director>
+    <tag>标签1</tag>
+    <tag>标签2</tag>
+    <actor>
+        <name>演员1</name>
+        <name>演员2</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>视频编码</codec>
+                <width>视频宽</width>
+                <height>视频高</height>
+                <durationinseconds>视频时长(秒)</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+    <original_filename>视频文件地址</original_filename>
+</movie>
