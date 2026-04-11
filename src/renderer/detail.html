@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: file: https://images.igdb.com;">
+    <title>电影详情</title>
+    <link rel="stylesheet" href="css/themes/dark.css">
+    <link rel="stylesheet" href="css/detail.css">
+</head>
+<body>
+    <div id="app">
+        <header class="detail-header">
+            <div id="movie-title-container"><h1 id="movie-title">电影详情</h1></div>
+            <button id="close-btn" class="close-btn">&times;</button>
+        </header>
+
+        <main class="detail-content">
+            <!-- Tab Navigation -->
+            <div class="detail-tabs">
+                <button class="tab-btn active" data-tab="movie-info">电影信息</button>
+                <button class="tab-btn" data-tab="movie-files">电影文件</button>
+            </div>
+
+            <!-- Movie Info Tab -->
+            <div id="tab-movie-info" class="tab-content">
+                <div class="movie-info-layout">
+                    <div class="movie-poster-section">
+                        <img id="movie-poster" class="detail-poster" src="" alt="电影封面">
+                        <div id="poster-placeholder" class="poster-placeholder">🎬</div>
+                        <button id="upload-poster-btn" class="btn btn-secondary upload-poster-btn" style="display: none;">上传海报</button>
+                        <input type="file" id="poster-upload-input" accept="image/*" style="display: none;">
+                    </div>
+
+                    <div class="movie-info-section">
+                        <div class="info-row">
+                            <span class="label">电影ID：</span>
+                            <span id="movie-id" class="value movie-id"></span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="label">分类：</span>
+                            <span id="movie-category" class="value"></span>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="label">发行日期：</span>
+                            <div id="movie-publish-date-container"><span id="movie-publish-date" class="value"></span></div>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="label">导演：</span>
+                            <div id="movie-director-container"><span id="movie-director" class="value"></span></div>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="label">演员：</span>
+                            <div id="movie-actors-container" class="actors-container">
+                                <div id="movie-actors-display" class="value"></div>
+                                <div id="movie-actors-edit" class="actors-input" style="display: none;"></div>
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="label">制作商：</span>
+                            <div id="movie-studio-container"><span id="movie-studio" class="value"></span></div>
+                        </div>
+
+                        <div id="box-info-section" class="box-info-section" style="display: none;">
+                            <div class="info-row">
+                                <span class="label">观看状态：</span>
+                                <span id="box-status" class="value box-status-tag-display unplayed">未看</span>
+                                <button id="edit-status-btn" class="edit-status-btn">修改</button>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">观看时间：</span>
+                                <span id="box-play-time" class="value">-</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">最后观看：</span>
+                                <span id="box-last-played" class="value">-</span>
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="label">标签：</span>
+                            <div id="movie-tags" class="tags-container"></div>
+                        </div>
+
+                        <div class="info-row">
+                            <span class="label">电影简介：</span>
+                            <div id="movie-description-container"><p id="movie-description" class="description"></p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Movie Files Tab -->
+            <div id="tab-movie-files" class="tab-content" style="display: none;">
+                <div class="movie-files-layout">
+                    <!-- File List Panel -->
+                    <div class="files-list-panel">
+                        <div class="files-list-header">
+                            <h3>关联文件 <span id="files-count"></span></h3>
+                            <button id="add-file-btn" class="btn btn-secondary btn-sm" style="display: none;">+ 添加文件</button>
+                        </div>
+                        <div id="movie-files-list" class="movie-files-list"></div>
+                    </div>
+
+                    <!-- File Details Panel -->
+                    <div class="files-details-panel">
+                        <h3>文件属性</h3>
+                        <div id="file-details-empty" class="file-details-empty">
+                            <p>请选择一个文件查看详情</p>
+                        </div>
+                        <div id="file-details-form" class="file-details-form" style="display: none;">
+                            <div class="form-group">
+                                <label>文件名</label>
+                                <input type="text" id="file-detail-name" class="form-input" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>原始文件名</label>
+                                <input type="text" id="file-detail-original" class="form-input" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>完整路径</label>
+                                <input type="text" id="file-detail-fullpath" class="form-input" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>文件大小</label>
+                                <input type="text" id="file-detail-size" class="form-input" readonly>
+                            </div>
+                            <div id="video-info-group" class="form-group" style="display: none;">
+                                <label>视频信息</label>
+                                <input type="text" id="file-detail-video-info" class="form-input" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>文件类型</label>
+                                <select id="file-detail-type" class="form-input">
+                                    <option value="Main">Main - 电影文件</option>
+                                    <option value="Subtitle">Subtitle - 字幕文件</option>
+                                    <option value="Extra">Extra - 花絮/特辑</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>文件说明</label>
+                                <textarea id="file-detail-memo" class="form-input" rows="3" placeholder="输入文件说明（可选）"></textarea>
+                            </div>
+                            <div class="file-details-actions" style="display: none;">
+                                <button id="delete-file-btn" class="btn btn-danger btn-sm">删除</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons (shown only when not in edit mode on movie-info tab) -->
+            <div id="normal-actions" class="action-buttons">
+                <button id="play-btn" class="btn btn-primary launch-hidden">播放</button>
+                <button id="edit-btn" class="btn btn-secondary">编辑</button>
+                <button id="delete-btn" class="btn btn-danger">删除</button>
+                <button id="add-to-box-btn" class="btn btn-secondary">添加到盒子</button>
+            </div>
+
+            <div id="box-actions" class="action-buttons" style="display: none;">
+                <button id="play-btn-box" class="btn btn-primary launch-hidden">播放</button>
+                <button id="edit-status-action-btn" class="btn btn-secondary">修改状态</button>
+                <button id="remove-from-box-btn" class="btn btn-danger">移除</button>
+            </div>
+        </main>
+
+        <!-- Detail Footer (shown only in edit mode) -->
+        <footer id="detail-footer" class="detail-footer" style="display: none;">
+            <button id="save-edit-btn" class="btn btn-primary">保存</button>
+            <button id="cancel-edit-btn" class="btn btn-secondary">取消</button>
+        </footer>
+
+        <!-- Add to Box Modal -->
+        <div id="add-to-box-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3>添加到电影盒子</h3>
+                <select id="box-select" class="box-select">
+                    <option value="">选择电影盒子</option>
+                </select>
+                <div class="modal-actions">
+                    <button id="confirm-add-to-box" class="btn btn-primary">确定</button>
+                    <button id="cancel-add-to-box" class="btn btn-secondary">取消</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Status Modal -->
+        <div id="edit-status-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h3>修改观看状态</h3>
+                <div class="status-radio-group">
+                    <label class="status-radio">
+                        <input type="radio" name="edit-status" value="unplayed">
+                        <span class="status-dot unplayed"></span>
+                        <span>未看</span>
+                    </label>
+                    <label class="status-radio">
+                        <input type="radio" name="edit-status" value="playing">
+                        <span class="status-dot playing"></span>
+                        <span>观看中</span>
+                    </label>
+                    <label class="status-radio">
+                        <input type="radio" name="edit-status" value="played">
+                        <span class="status-dot played"></span>
+                        <span>已看</span>
+                    </label>
+                    <label class="status-radio">
+                        <input type="radio" name="edit-status" value="completed">
+                        <span class="status-dot completed"></span>
+                        <span>已完成</span>
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button id="cancel-edit-status" class="btn btn-secondary">取消</button>
+                    <button id="confirm-edit-status" class="btn btn-primary">确定</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tag Selector Modal -->
+        <div id="tag-selector-modal" class="modal" style="display: none;">
+            <div class="modal-content tag-selector-content">
+                <div class="modal-header">
+                    <h2>选择标签</h2>
+                    <button class="close-btn" id="close-tag-selector">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="tag-selector-list" class="tag-selector-list"></div>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirm-tag-selection" class="btn btn-primary" onclick="confirmTagSelection()">确定</button>
+                    <button id="cancel-tag-selection" class="btn btn-secondary">取消</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actor Selector Modal -->
+        <div id="actor-selector-modal" class="modal" style="display: none;">
+            <div class="modal-content tag-selector-content">
+                <div class="modal-header">
+                    <h2>选择演员</h2>
+                    <button class="close-btn" id="close-actor-selector">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="actor-selector-list" class="tag-selector-list"></div>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirm-actor-selection" class="btn btn-primary">确定</button>
+                    <button id="cancel-actor-selection" class="btn btn-secondary">取消</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add File Modal -->
+        <div id="add-file-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>添加电影文件</h2>
+                    <button class="close-btn" id="close-add-file">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>选择文件</label>
+                        <button type="button" id="select-file-btn" class="btn btn-secondary">选择文件</button>
+                        <span id="selected-file-name" class="selected-file-name"></span>
+                    </div>
+                    <div id="selected-file-info" class="selected-file-info" style="display: none;">
+                        <div class="form-group">
+                            <label>文件名</label>
+                            <input type="text" id="new-file-name" class="form-input" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>完整路径</label>
+                            <input type="text" id="new-file-fullpath" class="form-input" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>文件大小</label>
+                            <input type="text" id="new-file-size" class="form-input" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>文件类型</label>
+                            <select id="new-file-type" class="form-input">
+                                <option value="Main">Main - 电影文件</option>
+                                <option value="Subtitle">Subtitle - 字幕文件</option>
+                                <option value="Extra">Extra - 花絮/特辑</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>文件说明</label>
+                            <textarea id="new-file-memo" class="form-input" rows="3" placeholder="输入文件说明（可选）"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirm-add-file" class="btn btn-primary">确定</button>
+                    <button id="cancel-add-file" class="btn btn-secondary">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/detail.js"></script>
+</body>
+</html>

@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: file:;">
+    <title>电影管理程序</title>
+    <link rel="stylesheet" href="css/themes/dark.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 顶部工具栏 -->
+        <header class="toolbar">
+            <div class="toolbar-left">
+                <div class="filter-group">
+                    <select id="sort-select" class="filter-select">
+                        <option value="name-asc">名称 ↑</option>
+                        <option value="name-desc">名称 ↓</option>
+                        <option value="rating-desc">评分 ↓</option>
+                        <option value="rating-asc">评分 ↑</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <select id="category-filter" class="filter-select">
+                        <option value="">全部分类</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <select id="tag-filter" class="filter-select">
+                        <option value="">全部标签</option>
+                    </select>
+                </div>
+            </div>
+            <div class="toolbar-right">
+                <button id="batch-add-btn" class="btn btn-secondary" style="display: none;">添加到盒子</button>
+                <button id="batch-delete-btn" class="btn btn-danger" style="display: none;">批量删除</button>
+                <button id="scan-dir-btn" class="btn btn-secondary">扫描目录</button>
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="搜索电影...">
+                    <button id="search-btn" class="icon-btn">🔍</button>
+                    <button id="clear-search-btn" class="icon-btn clear-search-btn" style="display: none;">✕</button>
+                </div>
+                <button id="view-toggle" class="icon-btn" title="切换视图">▦</button>
+                <button id="refresh-btn" class="icon-btn" title="刷新电影库">⟳</button>
+                <button id="settings-btn" class="icon-btn" title="设置">⚙</button>
+            </div>
+        </header>
+
+        <!-- 统计栏 -->
+        <div class="stats-bar">
+            <span id="total-movies">电影总数：0</span>
+            <span id="played-movies">已看：0</span>
+            <span id="playing-movies">观看中：0</span>
+            <span id="unplayed-movies">未看：0</span>
+        </div>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 侧边栏：分类列表 -->
+            <aside class="sidebar" id="sidebar">
+                <h3>电影库</h3>
+                <ul class="category-list" id="category-list">
+                    <li class="category-item active" data-category="">
+                        <span class="category-name">全部分类</span>
+                        <span class="movie-count">0</span>
+                    </li>
+                </ul>
+
+                <!-- 电影盒子 -->
+                <div class="sidebar-section">
+                    <div class="sidebar-section-header">
+                        <h3>电影盒子</h3>
+                        <button id="add-box-btn" class="icon-btn small" title="创建盒子">+</button>
+                    </div>
+                    <ul class="box-list" id="box-list">
+                        <!-- 盒子列表将通过 JS 动态生成 -->
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- 可拖动分隔线 -->
+            <div class="splitter" id="main-splitter"></div>
+
+            <!-- 电影海报墙 -->
+            <section class="movie-wall" id="movie-wall">
+                <div class="movies-grid" id="movies-grid">
+                    <!-- 电影卡片将通过 JS 动态生成 -->
+                </div>
+                <div class="empty-state" id="empty-state" style="display: none;">
+                    <p>暂无电影</p>
+                    <p>请在电影目录中添加电影</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 创建盒子模态框 -->
+    <div id="create-box-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>创建电影盒子</h2>
+                <button class="close-btn" id="close-create-box">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>盒子名称：</label>
+                    <input type="text" id="box-name-input" class="form-input" placeholder="输入盒子名称">
+                </div>
+                <div class="form-group">
+                    <label>盒子描述：</label>
+                    <textarea id="box-description-input" class="form-input" rows="3" placeholder="输入盒子描述（可选）"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-create-box" class="btn btn-primary">创建</button>
+                <button id="cancel-create-box" class="btn btn-secondary">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑盒子模态框 -->
+    <div id="edit-box-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>编辑电影盒子</h2>
+                <button class="close-btn" id="close-edit-box">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-box-original-name">
+                <div class="form-group">
+                    <label>盒子名称：</label>
+                    <input type="text" id="edit-box-name-input" class="form-input" placeholder="输入盒子名称">
+                </div>
+                <div class="form-group">
+                    <label>盒子描述：</label>
+                    <textarea id="edit-box-description-input" class="form-input" rows="3" placeholder="输入盒子描述（可选）"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-edit-box" class="btn btn-primary">保存</button>
+                <button id="cancel-edit-box" class="btn btn-secondary">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除盒子确认模态框 -->
+    <div id="delete-box-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>删除电影盒子</h2>
+                <button class="close-btn" id="close-delete-box">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>确定要删除电影盒子 "<span id="delete-box-name"></span>" 吗？</p></p>
+                <p style="color: var(--text-secondary); font-size: 13px; margin-top: 8px;">删除后，盒子文件将被重命名为备份文件。</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-delete-box" class="btn btn-danger">确定</button>
+                <button id="cancel-delete-box" class="btn btn-secondary">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 批量添加电影到盒子模态框 -->
+    <div id="batch-add-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>添加到电影盒子</h2>
+                <button class="close-btn" id="close-batch-add">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="batch-add-info" style="margin-bottom: 16px; color: var(--text-secondary);"></p>
+                <div class="form-group">
+                    <label>选择电影盒子：</label>
+                    <select id="batch-box-select" class="form-input">
+                        <option value="">选择电影盒子...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-batch-add" class="btn btn-primary">确定</button>
+                <button id="cancel-batch-add" class="btn btn-secondary">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 设置模态框 -->
+    <div id="settings-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>设置</h2>
+                <button class="close-btn" id="close-settings">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-group">
+                    <h3>外观</h3>
+                    <label>
+                        主题：
+                        <select id="theme-select">
+                            <option value="dark">深色</option>
+                            <option value="light">浅色</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="settings-group">
+                    <h3>布局</h3>
+                    <label>
+                        侧边栏宽度：
+                        <input type="number" id="sidebar-width" min="150" max="300" value="200">
+                    </label>
+                    <label>
+                        海报尺寸：
+                        <select id="poster-size">
+                            <option value="small">小</option>
+                            <option value="medium" selected>中</option>
+                            <option value="large">大</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="settings-group">
+                    <h3>电影目录</h3>
+                    <div class="movies-dir-config">
+                        <label>电影目录：</label>
+                        <input type="text" id="movies-dir-input" readonly>
+                        <button id="select-dir-btn">选择</button>
+                    </div>
+                    <div class="movies-dir-config">
+                        <label>电影盒子目录：</label>
+                        <input type="text" id="moviebox-dir-input" readonly>
+                        <button id="select-moviebox-dir-btn">选择</button>
+                    </div>
+                </div>
+                            </div>
+            <div class="modal-footer">
+                <button id="save-settings" class="btn btn-primary">保存</button>
+                <button id="cancel-settings" class="btn btn-secondary">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加电影模态框 -->
+    <div id="add-movie-modal" class="modal" style="display: none;">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>添加电影</h2>
+                <button class="close-btn" id="close-add-movie">&times;</button>
+            </div>
+            <div class="modal-body add-movie-body">
+                <!-- Tab 切换 -->
+                <div class="add-movie-tabs">
+                    <button class="tab-btn active" data-tab="movie-info">电影信息</button>
+                    <button class="tab-btn" data-tab="movie-files">电影文件</button>
+                </div>
+                <!-- Tab 内容 -->
+                <div class="tab-content active" id="tab-movie-info">
+                    <div class="add-movie-left">
+                        <div class="form-group">
+                            <label>电影封面</label>
+                            <div class="cover-upload">
+                                <input type="file" id="movie-cover-input" accept="image/*" style="display: none;">
+                                <div id="cover-preview" class="cover-preview-large">
+                                    <div class="cover-placeholder">选择封面图片</div>
+                                </div>
+                                <button type="button" id="select-cover-btn" class="btn btn-secondary">选择图片</button>
+                                <span id="cover-name" class="cover-name"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-movie-right">
+                        <form id="add-movie-form">
+                            <div class="form-group">
+                                <label>电影名称 *</label>
+                                <input type="text" id="movie-name" class="form-input" placeholder="输入电影名称" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>分类 *</label>
+                                    <select id="movie-category" class="form-input" required>
+                                        <option value="">选择分类...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>上映日期</label>
+                                    <input type="number" id="movie-publish-date" class="form-input" placeholder="年份" min="1900" max="2100">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>导演</label>
+                                    <input type="text" id="movie-director" class="form-input" placeholder="输入导演">
+                                </div>
+                                <div class="form-group">
+                                    <label>制片商</label>
+                                    <input type="text" id="movie-publisher" class="form-input" placeholder="输入制片商">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>演员</label>
+                                <div id="movie-actors" class="actors-input">
+                                    <!-- 演员将通过 JS 动态生成 -->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>描述</label>
+                                <textarea id="movie-description" class="form-input" rows="4" placeholder="输入电影描述"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>标签</label>
+                                <div id="movie-tags" class="tags-input">
+                                    <!-- 标签将通过 JS 动态生成 -->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="tab-content" id="tab-movie-files">
+                    <div class="movie-files-container">
+                        <div class="movie-files-left">
+                            <div class="movie-files-header">
+                                <span>文件列表</span>
+                                <button id="add-file-btn" class="btn btn-secondary btn-small">+ 添加文件</button>
+                            </div>
+                            <div id="file-list" class="file-list">
+                                <!-- 文件列表将通过 JS 动态生成 -->
+                                <div class="file-list-empty">暂无关联文件</div>
+                            </div>
+                        </div>
+                        <div class="movie-files-right">
+                            <div class="file-details-empty">
+                                <p>请选择左侧文件查看详情</p>
+                                <p>或点击"添加文件"关联新文件</p>
+                            </div>
+                            <div id="file-details" class="file-details" style="display: none;">
+                                <div class="form-group">
+                                    <label>文件名</label>
+                                    <input type="text" id="file-name" class="form-input" readonly placeholder="文件名">
+                                </div>
+                                <div class="form-group">
+                                    <label>完整路径</label>
+                                    <input type="text" id="file-fullpath" class="form-input" readonly placeholder="文件完整路径">
+                                </div>
+                                <div class="form-group">
+                                    <label>文件大小</label>
+                                    <input type="text" id="file-size" class="form-input" readonly placeholder="文件大小">
+                                </div>
+                                <div class="form-group">
+                                    <label>文件类型</label>
+                                    <select id="file-type" class="form-input" disabled>
+                                        <option value="Main">Main - 电影文件</option>
+                                        <option value="Subtitle">Subtitle - 字幕文件</option>
+                                        <option value="Extra">Extra - 花絮/特辑</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>文件说明</label>
+                                    <textarea id="file-memo" class="form-input" rows="3" placeholder="输入文件说明（可选）" readonly></textarea>
+                                </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="add-movie-footer" class="modal-footer">
+                <button id="confirm-add-movie" class="btn btn-primary">保存</button>
+                <button id="cancel-add-movie" class="btn btn-secondary">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加文件弹窗 -->
+    <div id="add-file-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>添加电影文件</h2>
+                <button class="close-btn" id="close-add-file">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>选择文件</label>
+                    <input type="file" id="file-select-input" style="display: none;">
+                    <button type="button" id="select-file-btn" class="btn btn-secondary">选择文件</button>
+                    <span id="selected-file-name" class="selected-file-name"></span>
+                </div>
+                <div id="selected-file-info" class="selected-file-info" style="display: none;">
+                    <div class="form-group">
+                        <label>文件名</label>
+                        <input type="text" id="new-file-name" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>完整路径</label>
+                        <input type="text" id="new-file-fullpath" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>文件大小</label>
+                        <input type="text" id="new-file-size" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>文件类型</label>
+                        <select id="new-file-type" class="form-input">
+                            <option value="ZIP">ZIP - 压缩包</option>
+                            <option value="Main">Main - 电影文件</option>
+                            <option value="DSL">DSL - DSL发行</option>
+                            <option value="Patch">Patch - 电影补丁</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>文件说明</label>
+                        <textarea id="new-file-memo" class="form-input" rows="3" placeholder="输入文件说明（可选）"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-add-file" class="btn btn-primary" disabled>添加</button>
+                <button id="cancel-add-file" class="btn btn-secondary">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 标签选择弹窗 -->
+    <div id="tag-selector-modal" class="modal" style="display: none;">
+        <div class="modal-content tag-selector-content">
+            <div class="modal-header">
+                <h2>选择标签</h2>
+                <button class="close-btn" id="close-tag-selector">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="tag-selector-list" class="tag-selector-list"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-tag-selection" class="btn btn-primary" onclick="confirmTagSelection()">确定</button>
+                <button id="cancel-tag-selection" class="btn btn-secondary">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 演员选择弹窗 -->
+    <div id="actor-selector-modal" class="modal" style="display: none;">
+        <div class="modal-content tag-selector-content">
+            <div class="modal-header">
+                <h2>选择演员</h2>
+                <button class="close-btn" id="close-actor-selector">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="actor-selector-list" class="tag-selector-list"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-actor-selection" class="btn btn-primary">确定</button>
+                <button id="cancel-actor-selection" class="btn btn-secondary">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 目录扫描设置弹窗 -->
+    <div id="scan-dir-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>扫描电影目录</h2>
+                <button class="close-btn" id="close-scan-dir">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>扫描方式：</label>
+                    <div class="scan-type-group">
+                        <label class="radio-label">
+                            <input type="radio" name="scan-type" value="directory" checked>
+                            扫描目录（子文件夹作为电影）
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="scan-type" value="file">
+                            扫描文件（每行作为一部电影）
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>选择路径：</label>
+                    <div class="scan-path-group">
+                        <input type="text" id="scan-path-input" class="form-input" readonly placeholder="选择目录或文件">
+                        <button type="button" id="select-scan-path-btn" class="btn btn-secondary">选择</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>目标分类：</label>
+                    <select id="scan-category-select" class="form-input" required>
+                        <option value="">选择分类...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-scan-dir" class="btn btn-primary" disabled>开始扫描</button>
+                <button id="cancel-scan-dir" class="btn btn-secondary">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 目录扫描结果弹窗 -->
+    <div id="scan-result-modal" class="modal" style="display: none;">
+        <div class="modal-content modal-large scan-result-modal">
+            <div class="modal-header">
+                <h2>扫描结果</h2>
+                <button class="close-btn" id="close-scan-result">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="scan-result-toolbar">
+                    <span id="scan-result-info"></span>
+                    <div class="scan-result-actions">
+                        <button id="scan-result-import" class="btn btn-primary" disabled>导入全部</button>
+                        <button id="scan-result-cancel" class="btn btn-secondary">取消</button>
+                    </div>
+                </div>
+                <div id="scan-movies-list" class="scan-movies-list">
+                    <!-- 扫描结果列表 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 单个电影扫描编辑弹窗 -->
+    <div id="scan-movie-edit-modal" class="modal" style="display: none;">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>编辑电影信息</h2>
+                <button class="close-btn" id="close-scan-movie-edit">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="scan-movie-edit-content">
+                    <div class="scan-movie-edit-left">
+                        <div class="form-group">
+                            <label>电影封面</label>
+                            <div class="cover-upload">
+                                <input type="file" id="scan-movie-cover-input" accept="image/*" style="display: none;">
+                                <div id="scan-cover-preview" class="scan-cover-preview">
+                                    <div class="cover-placeholder">选择封面图片</div>
+                                </div>
+                                <button type="button" id="scan-select-cover-btn" class="btn btn-secondary">选择图片</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scan-movie-edit-right">
+                        <form id="scan-movie-edit-form">
+                            <input type="hidden" id="scan-movie-temp-path">
+                            <div class="form-group">
+                                <label>电影名称 *</label>
+                                <input type="text" id="scan-movie-name" class="form-input" placeholder="输入电影名称" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>上映日期</label>
+                                    <input type="number" id="scan-movie-publish-date" class="form-input" placeholder="年份" min="1900" max="2100">
+                                </div>
+                                <div class="form-group">
+                                    <label>制片商</label>
+                                    <input type="text" id="scan-movie-publisher" class="form-input" placeholder="输入制片商">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>电影描述</label>
+                                <textarea id="scan-movie-description" class="form-input scan-movie-description" rows="4" placeholder="输入电影描述"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>电影标签</label>
+                                <div id="scan-movie-tags" class="tags-input">
+                                    <!-- 标签将通过 JS 动态生成 -->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-scan-movie-edit" class="btn btn-primary">保存</button>
+                <button id="cancel-scan-movie-edit" class="btn btn-secondary">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 扫描电影标签选择弹窗 -->
+    <div id="scan-tag-selector-modal" class="modal" style="display: none;">
+        <div class="modal-content tag-selector-content">
+            <div class="modal-header">
+                <h2>选择标签</h2>
+                <button class="close-btn" id="close-scan-tag-selector">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="scan-tag-selector-list" class="tag-selector-list"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-scan-tag-selection" class="btn btn-primary">确定</button>
+                <button id="cancel-scan-tag-selection" class="btn btn-secondary">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

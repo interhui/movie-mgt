@@ -1,0 +1,142 @@
+/**
+ * 预加载脚本
+ * 用于安全地暴露 API 给渲染进程
+ */
+const { contextBridge, ipcRenderer } = require('electron');
+
+// 暴露给渲染进程的 API
+contextBridge.exposeInMainWorld('electronAPI', {
+    // 电影查询
+    getCategories: () => ipcRenderer.invoke('get-categories'),
+    getPlatforms: () => ipcRenderer.invoke('get-categories'),  // 兼容旧代码,使用categories作为platforms
+    getMoviesByCategory: (filters) => ipcRenderer.invoke('get-movies-by-category', filters),
+    searchMovies: (params) => ipcRenderer.invoke('search-movies', params),
+    getAllMovies: (filters) => ipcRenderer.invoke('get-all-movies', filters),
+    getAllMoviesFromIndex: (filters) => ipcRenderer.invoke('get-all-movies-from-index', filters),
+    getMoviesByCategoryFromIndex: (filters) => ipcRenderer.invoke('get-movies-by-category-from-index', filters),
+    getMovieDetail: (movieId) => ipcRenderer.invoke('get-movie-detail', movieId),
+
+    // 电影状态管理
+    toggleFavorite: (movieId) => ipcRenderer.invoke('toggle-favorite', movieId),
+    saveMovieRating: (data) => ipcRenderer.invoke('save-movie-rating', data),
+
+    // 统计数据
+    getMovieStats: (category) => ipcRenderer.invoke('get-movie-stats', category),
+
+    // 配置管理
+    getSettings: () => ipcRenderer.invoke('get-settings'),
+    saveSettings: (newSettings) => ipcRenderer.invoke('save-settings', newSettings),
+    updateMoviesDir: (dirPath) => ipcRenderer.invoke('update-movies-dir', dirPath),
+    getMoviesDir: () => ipcRenderer.invoke('get-movies-dir'),
+    setTheme: (theme) => ipcRenderer.invoke('set-theme', theme),
+    getCategoryConfig: () => ipcRenderer.invoke('get-category-config'),
+    getCategoriesFromCache: () => ipcRenderer.invoke('get-categories-from-cache'),
+    getCategoryName: (categoryId) => ipcRenderer.invoke('get-category-name', categoryId),
+    getCategoryShortName: (categoryId) => ipcRenderer.invoke('get-category-short-name', categoryId),
+
+    // 批量操作
+    batchToggleFavorite: (data) => ipcRenderer.invoke('batch-toggle-favorite', data),
+    batchDeleteMovies: (data) => ipcRenderer.invoke('batch-delete-movies', data),
+
+    // 电影编辑与删除
+    saveMovieEdit: (movieData) => ipcRenderer.invoke('save-movie-edit', movieData),
+    deleteMovie: (movieData) => ipcRenderer.invoke('delete-movie', movieData),
+
+    // 电影盒子管理
+    getAllBoxes: () => ipcRenderer.invoke('get-all-boxes'),
+    createBox: (data) => ipcRenderer.invoke('create-box', data),
+    updateBox: (data) => ipcRenderer.invoke('update-box', data),
+    deleteBox: (boxName) => ipcRenderer.invoke('delete-box', boxName),
+    getBoxDetail: (boxName) => ipcRenderer.invoke('get-box-detail', boxName),
+    addMovieToBox: (data) => ipcRenderer.invoke('add-movie-to-box', data),
+    removeMovieFromBox: (data) => ipcRenderer.invoke('remove-movie-from-box', data),
+    updateMovieInBox: (data) => ipcRenderer.invoke('update-movie-in-box', data),
+
+    // 窗口管理
+    openMovieDetail: (movieData) => ipcRenderer.invoke('open-movie-detail', movieData),
+    getPendingMovieDetail: () => ipcRenderer.invoke('get-pending-movie-detail'),
+    closeDetailWindow: () => ipcRenderer.invoke('close-detail-window'),
+    openBoxWindow: (boxName) => ipcRenderer.invoke('open-box-window', boxName),
+    setDetailEditMode: (isEditing) => ipcRenderer.invoke('set-detail-edit-mode', isEditing),
+
+    // 文件选择对话框
+    selectDirectory: () => ipcRenderer.invoke('select-directory'),
+    selectFile: (filters) => ipcRenderer.invoke('select-file', filters),
+    selectImage: () => ipcRenderer.invoke('select-image'),
+
+    // 添加电影
+    addMovie: (movieData) => ipcRenderer.invoke('add-movie', movieData),
+
+    // 演员列表
+    getActors: () => ipcRenderer.invoke('get-actors'),
+
+    // 电影目录扫描
+    scanMovieDirectory: (params) => ipcRenderer.invoke('scan-movie-directory', params),
+    updateTempMovie: (params) => ipcRenderer.invoke('update-temp-movie', params),
+    importScannedMovies: (tempDir) => ipcRenderer.invoke('import-scanned-movies', tempDir),
+    getTempScannedMovies: (tempDir) => ipcRenderer.invoke('get-temp-scanned-movies', tempDir),
+    deleteTempScanDir: (tempDir) => ipcRenderer.invoke('delete-temp-scan-dir', tempDir),
+    checkFileExists: (filePath) => ipcRenderer.invoke('check-file-exists', filePath),
+
+    // 事件监听
+    onRefreshLibrary: (callback) => {
+        ipcRenderer.on('refresh-library', callback);
+    },
+    onBoxUpdated: (callback) => {
+        ipcRenderer.on('box-updated', callback);
+    },
+    onOpenSettings: (callback) => {
+        ipcRenderer.on('open-settings', callback);
+    },
+    onLoadMovieDetail: (callback) => {
+        // 监听主进程请求获取电影详情的通知
+        ipcRenderer.on('request-movie-detail', async () => {
+            const movieData = await ipcRenderer.invoke('get-pending-movie-detail');
+            if (movieData) {
+                callback(movieData);
+            }
+        });
+    },
+    onThemeChanged: (callback) => {
+        ipcRenderer.on('theme-changed', (event, theme) => callback(theme));
+    },
+    onDetailEditModeChanged: (callback) => {
+        ipcRenderer.on('detail-edit-mode-changed', (event, isEditing) => callback(isEditing));
+    },
+
+    // 移除事件监听
+    removeAllListeners: (channel) => {
+        ipcRenderer.removeAllListeners(channel);
+    },
+
+    // 窗口操作
+    resizeWindow: (width, height) => ipcRenderer.invoke('resize-window', width, height),
+    setMinSize: (minWidth, minHeight) => ipcRenderer.invoke('set-min-size', minWidth, minHeight),
+
+    // 下载电影封面
+    downloadMovieCover: (data) => ipcRenderer.invoke('download-movie-cover', data),
+
+    // 标签
+    getTags: () => ipcRenderer.invoke('get-tags'),
+    createTag: (data) => ipcRenderer.invoke('create-tag', data),
+    updateTag: (data) => ipcRenderer.invoke('update-tag', data),
+    deleteTag: (tagId) => ipcRenderer.invoke('delete-tag', tagId),
+
+    // 分类管理
+    createCategory: (data) => ipcRenderer.invoke('create-category', data),
+    updateCategory: (data) => ipcRenderer.invoke('update-category', data),
+    deleteCategory: (categoryId) => ipcRenderer.invoke('delete-category', categoryId),
+
+    // 事件监听
+    onTagsUpdated: (callback) => {
+        ipcRenderer.on('tags-updated', callback);
+    },
+    onCategoriesUpdated: (callback) => {
+        ipcRenderer.on('categories-updated', callback);
+    },
+    onOpenAddMovie: (callback) => {
+        ipcRenderer.on('open-add-movie', callback);
+    }
+});
+
+console.log('Preload script loaded');

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+    <title>标签管理</title>
+    <link rel="stylesheet" href="css/themes/dark.css">
+    <link rel="stylesheet" href="css/management.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 标题栏 -->
+        <header class="management-titlebar">
+            <h1 id="window-title">标签管理</h1>
+            <button id="close-btn" class="titlebar-close-btn">&times;</button>
+        </header>
+
+        <!-- 工具栏 -->
+        <div class="management-toolbar">
+            <div class="toolbar-actions">
+                <button id="add-tag-btn" class="btn btn-primary">新建标签</button>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <main class="management-main">
+            <!-- 左侧：标签列表 -->
+            <aside class="management-sidebar">
+                <div class="sidebar-header">
+                    <h2>标签列表</h2>
+                    <div class="search-box">
+                        <input type="text" id="search-input" placeholder="搜索标签...">
+                    </div>
+                </div>
+                <div class="list-container">
+                    <ul class="item-list" id="tag-list">
+                        <!-- 动态生成 -->
+                    </ul>
+                    <div class="empty-state" id="empty-list" style="display: none;">
+                        <div class="empty-icon">🏷️</div>
+                        <p>暂无标签</p>
+                        <p>点击"新建标签"添加</p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 右侧：标签详情 -->
+            <section class="management-detail" id="detail-section">
+                <div class="empty-state" id="no-selection">
+                    <div class="empty-icon">👈</div>
+                    <p>请从左侧选择一个标签</p>
+                    <p>或点击"新建标签"创建新标签</p>
+                </div>
+
+                <div id="tag-form" style="display: none;">
+                    <div class="detail-header">
+                        <h2 id="form-title">编辑标签</h2>
+                        <div class="detail-actions">
+                            <button id="delete-btn" class="btn btn-danger">删除</button>
+                        </div>
+                    </div>
+
+                    <form class="detail-form" id="tag-form-element">
+                        <div class="form-group">
+                            <label for="tag-id">标签ID</label>
+                            <input type="text" id="tag-id" placeholder="输入标签ID（如：action）" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tag-name">标签名称</label>
+                            <input type="text" id="tag-name" placeholder="输入标签名称（如：动作）" required>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" id="save-btn" class="btn btn-primary">保存</button>
+                            <button type="button" id="cancel-btn" class="btn btn-secondary">取消</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/tag-mgt.js"></script>
+</body>
+</html>

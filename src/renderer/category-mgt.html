@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+    <title>分类管理</title>
+    <link rel="stylesheet" href="css/themes/dark.css">
+    <link rel="stylesheet" href="css/management.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 标题栏 -->
+        <header class="management-titlebar">
+            <h1 id="window-title">分类管理</h1>
+            <button id="close-btn" class="titlebar-close-btn">&times;</button>
+        </header>
+
+        <!-- 工具栏 -->
+        <div class="management-toolbar">
+            <div class="toolbar-actions">
+                <button id="add-category-btn" class="btn btn-primary">新建分类</button>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <main class="management-main">
+            <!-- 左侧：分类列表 -->
+            <aside class="management-sidebar">
+                <div class="sidebar-header">
+                    <h2>分类列表</h2>
+                    <div class="search-box">
+                        <input type="text" id="search-input" placeholder="搜索分类...">
+                    </div>
+                </div>
+                <div class="list-container">
+                    <ul class="item-list" id="category-list">
+                        <!-- 动态生成 -->
+                    </ul>
+                    <div class="empty-state" id="empty-list" style="display: none;">
+                        <div class="empty-icon">📁</div>
+                        <p>暂无分类</p>
+                        <p>点击"新建分类"添加</p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 右侧：分类详情 -->
+            <section class="management-detail" id="detail-section">
+                <div class="empty-state" id="no-selection">
+                    <div class="empty-icon">👈</div>
+                    <p>请从左侧选择一个分类</p>
+                    <p>或点击"新建分类"创建新分类</p>
+                </div>
+
+                <div id="category-form" style="display: none;">
+                    <div class="detail-header">
+                        <h2 id="form-title">编辑分类</h2>
+                        <div class="detail-actions">
+                            <button id="delete-btn" class="btn btn-danger">删除</button>
+                        </div>
+                    </div>
+
+                    <form class="detail-form" id="category-form-element">
+                        <div class="form-group">
+                            <label for="category-id">分类ID</label>
+                            <input type="text" id="category-id" placeholder="如：movie" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category-order">排序</label>
+                            <input type="number" id="category-order" placeholder="数字越小越靠前" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="category-name">分类名称</label>
+                            <input type="text" id="category-name" placeholder="如：电影" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category-short-name">简称</label>
+                            <input type="text" id="category-short-name" placeholder="如：电影">
+                        </div>
+                        <div class="form-group">
+                            <label for="category-icon">图标（URL或路径）</label>
+                            <input type="text" id="category-icon" placeholder="可选">
+                        </div>
+                        <div class="form-group">
+                            <label for="category-color">颜色</label>
+                            <div class="color-picker-wrapper">
+                                <input type="color" id="category-color" value="#0078d4">
+                                <div class="color-preview" id="color-preview" style="background: #0078d4;"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" id="save-btn" class="btn btn-primary">保存</button>
+                            <button type="button" id="cancel-btn" class="btn btn-secondary">取消</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/category-mgt.js"></script>
+</body>
+</html>

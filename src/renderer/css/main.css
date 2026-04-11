@@ -1,0 +1,1779 @@
+/* 电影管理程序 - 主样式 */
+
+/* CSS 变量 */
+:root {
+    --poster-width: 180px;
+    --poster-height: 254px;
+    --poster-gap: 15px;
+    --sidebar-width: 200px;
+    --search-box-height: 40px;
+    --toolbar-height: 50px;
+    --stats-bar-height: 36px;
+    --poster-min-width: 140px;
+    --poster-max-width: 220px;
+}
+
+/* 基础样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    overflow: hidden;
+    height: 100vh;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* 工具栏 */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: var(--toolbar-height);
+    padding: 0 16px;
+    background-color: var(--sidebar-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.toolbar-left,
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.filter-group label {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.filter-select {
+    padding: 6px 12px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* 搜索框 */
+.search-box {
+    display: flex;
+    align-items: center;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.search-box input {
+    padding: 8px 12px;
+    width: 200px;
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+.search-box input:focus {
+    outline: none;
+}
+
+.search-box input::placeholder {
+    color: var(--text-secondary);
+}
+
+.icon-btn {
+    padding: 8px 12px;
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+}
+
+.icon-btn:hover {
+    background-color: var(--hover-bg);
+}
+
+/* 清除搜索按钮 */
+.clear-search-btn {
+    color: var(--text-secondary);
+}
+
+.clear-search-btn:hover {
+    color: var(--text-color);
+}
+
+/* 统计栏 */
+.stats-bar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: var(--stats-bar-height);
+    padding: 0 16px;
+    background-color: var(--bg-color);
+    border-bottom: 1px solid var(--border-color);
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.stats-bar span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* 主内容区 */
+.main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* 侧边栏 */
+.sidebar {
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+/* 可拖动分隔线 */
+.splitter {
+    width: 4px;
+    background-color: var(--border-color);
+    cursor: col-resize;
+    flex-shrink: 0;
+    transition: background-color 0.2s;
+    position: relative;
+}
+
+.splitter:hover,
+.splitter.active {
+    background-color: var(--primary-color);
+}
+
+.splitter::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -4px;
+    right: -4px;
+    bottom: 0;
+    z-index: 10;
+}
+
+.sidebar h3 {
+    padding: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.category-list {
+    list-style: none;
+}
+
+.category-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.category-item:hover {
+    background-color: var(--hover-bg);
+}
+
+.category-item.active {
+    background-color: var(--active-bg);
+    border-left: 3px solid var(--primary-color);
+}
+
+/* 侧边栏分区 */
+.sidebar-section {
+    border-top: 1px solid var(--border-color);
+    padding-top: 16px;
+    margin-top: 16px;
+}
+
+.sidebar-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    margin-bottom: 0;
+}
+
+.sidebar-section-header h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.icon-btn.small {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    font-size: 16px;
+    line-height: 1;
+}
+
+/* 盒子列表 */
+.box-list {
+    list-style: none;
+}
+
+.box-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.box-item:hover {
+    background-color: var(--hover-bg);
+}
+
+.box-item.active {
+    background-color: var(--active-bg);
+    border-left: 3px solid var(--primary-color);
+}
+
+.box-item .box-name {
+    font-size: 13px;
+    color: var(--text-color);
+}
+
+.box-item .box-count {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.box-item .box-actions {
+    display: none;
+    gap: 4px;
+}
+
+.box-item:hover .box-actions {
+    display: flex;
+}
+
+.box-item .box-actions button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+}
+
+.box-item .box-actions button:hover {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.box-item .box-edit-btn:hover {
+    color: var(--primary-color);
+}
+
+.box-item .box-delete-btn:hover {
+    color: var(--danger-color, #f44336);
+}
+
+/* 模态框表单 */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.modal-footer {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    padding-top: 16px;
+}
+
+.category-name {
+    font-size: 14px;
+}
+
+.movie-count {
+    font-size: 12px;
+    color: var(--text-secondary);
+    background-color: var(--card-bg);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+/* 电影海报墙 */
+.movie-wall {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--poster-min-width), 1fr));
+    gap: var(--poster-gap);
+    justify-items: center;
+    align-items: start;
+    width: 100%;
+}
+
+/* 电影卡片 */
+.movie-card {
+    width: 100%;
+    max-width: var(--poster-max-width);
+    aspect-ratio: 2 / 3;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    background-color: var(--card-bg);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.movie-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px var(--shadow-color);
+}
+
+.movie-card.selected {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.movie-card-checkbox {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.movie-card:hover .movie-card-checkbox,
+.movie-card.selected .movie-card-checkbox {
+    opacity: 1;
+}
+
+.movie-card-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+.movie-poster {
+    width: 100%;
+    height: calc(100% - 50px);
+    object-fit: cover;
+    background-color: var(--card-bg);
+}
+
+.movie-poster-placeholder {
+    width: 100%;
+    height: calc(100% - 50px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--card-bg);
+    color: var(--text-secondary);
+    font-size: 48px;
+}
+
+.movie-year {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.upload-poster-btn {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.movie-info {
+    padding: 8px;
+    flex-shrink: 0;
+}
+
+.movie-name {
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+}
+
+.movie-extra {
+    font-size: 12px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.box-status-text {
+    font-size: 12px;
+    color: var(--primary-color);
+    margin-top: 2px;
+}
+
+.movie-category {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.movie-rating {
+    color: #f5c518;
+    font-size: 12px;
+}
+
+.movie-favorite {
+    color: #f44336;
+    font-size: 12px;
+}
+
+/* 空状态 */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-secondary);
+}
+
+.empty-state p {
+    margin: 8px 0;
+}
+
+/* 模态框 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    width: 500px;
+    max-width: 90%;
+    max-height: calc(100vh - 120px);
+    background-color: var(--modal-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: var(--text-secondary);
+}
+
+.modal-body {
+    padding: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.settings-group {
+    margin-bottom: 20px;
+}
+
+.settings-group h3 {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.settings-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.settings-group input,
+.settings-group select {
+    flex: 1;
+    padding: 8px 12px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-color);
+}
+
+.movies-dir-config {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.movies-dir-config label {
+    min-width: 100px;
+}
+
+.movies-dir-config input {
+    flex: 1;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--hover-bg);
+}
+
+.btn-danger {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #d32f2f;
+}
+
+/* 列表视图 - 表格形式 */
+.movies-grid.list-view {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    gap: 0;
+}
+
+.movies-grid.list-view .movie-card {
+    display: table-row;
+    height: 60px;
+    cursor: pointer;
+}
+
+.movies-grid.list-view .movie-card:hover {
+    background-color: var(--hover-bg);
+}
+
+.movies-grid.list-view .movie-card.selected {
+    background-color: rgba(0, 120, 212, 0.2);
+}
+
+.movies-grid.list-view .movie-card > * {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.movies-grid.list-view .movie-poster,
+.movies-grid.list-view .movie-poster-placeholder {
+    width: 45px;
+    height: 60px;
+    object-fit: cover;
+}
+
+.movies-grid.list-view .movie-poster-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    background-color: var(--card-bg);
+}
+
+.movies-grid.list-view .movie-name {
+    width: 250px;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movies-grid.list-view .movie-description {
+    width: 200px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: left;
+    padding: 0 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movies-grid.list-view .movie-publish-date {
+    width: 100px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.movies-grid.list-view .movie-category-info {
+    width: 100px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.movies-grid.list-view .movie-status {
+    width: 80px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.movies-grid.list-view .movie-rating {
+    width: 80px;
+    font-size: 13px;
+    color: #f5c518;
+    text-align: center;
+}
+
+.movies-grid.list-view .movie-time {
+    width: 100px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.movies-grid.list-view .movie-actions {
+    width: 60px;
+    text-align: center;
+}
+
+/* 列表视图标题 */
+.list-view-header {
+    display: table-row;
+    background-color: var(--sidebar-bg);
+    height: 40px;
+}
+
+.list-view-header > * {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--border-color);
+}
+
+/* 列表视图复选框列 */
+.movies-grid.list-view .movie-checkbox {
+    width: 40px;
+    text-align: center;
+}
+
+.movies-grid.list-view .movie-checkbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+}
+
+/* 列表视图图标列 */
+.movies-grid.list-view .movie-icon {
+    width: 40px;
+    padding: 0;
+}
+
+.movies-grid.list-view .movie-icon img,
+.movies-grid.list-view .movie-icon .movie-icon-placeholder {
+    width: 25px;
+    height: 25px;
+    object-fit: cover;
+    border-radius: 3px;
+}
+
+.movies-grid.list-view .movie-icon .movie-icon-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--card-bg);
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* 列表视图电影ID列 */
+.movies-grid.list-view .movie-id-col {
+    width: 180px;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 列表视图发行商列 */
+.movies-grid.list-view .movie-publisher-col {
+    width: 120px;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 列表视图主演列 */
+.movies-grid.list-view .movie-actors-col {
+    width: 150px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 列表视图发行商(Studio)列 */
+.movies-grid.list-view .movie-studio-col {
+    width: 100px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 列表视图导演列 */
+.movies-grid.list-view .movie-director-col {
+    width: 120px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 列表视图文件列 */
+.movies-grid.list-view .movie-files-col {
+    width: 70px;
+    font-size: 13px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* 大模态框 */
+.modal-large {
+    width: 850px;
+    height: 770px;
+    max-height: 90vh;
+}
+
+.modal-large .modal-body {
+    max-height: calc(90vh - 120px);
+}
+
+/* 添加电影左右分栏 */
+.add-movie-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+}
+
+/* Tab 切换 */
+.add-movie-tabs {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+}
+
+.tab-btn {
+    padding: 8px 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--card-bg);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.tab-btn:hover {
+    background: var(--hover-bg);
+    color: var(--text-color);
+}
+
+.tab-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Tab 内容 */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+}
+
+.add-movie-left {
+    width: 300px;
+    min-width: 300px;
+    flex-shrink: 0;
+}
+
+.add-movie-right {
+    flex: 1;
+    min-width: 0;
+}
+
+.add-movie-left .form-group {
+    margin-bottom: 12px;
+}
+
+.add-movie-right .form-group {
+    margin-bottom: 16px;
+}
+
+/* 电影文件 Tab 布局 */
+.movie-files-container {
+    display: flex;
+    gap: 10px;
+    height: 480px;
+}
+
+.movie-files-left {
+    width: 280px;
+    min-width: 280px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.movie-files-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 500;
+}
+
+.btn-small {
+    padding: 4px 12px;
+    font-size: 12px;
+}
+
+.file-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.file-list-empty {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 40px 16px;
+    font-size: 14px;
+}
+
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    margin-bottom: 4px;
+    background: var(--hover-bg);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.file-item:hover {
+    background: var(--border-color);
+}
+
+.file-item.selected {
+    background: var(--primary-color);
+    color: white;
+}
+
+.file-item-name {
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.file-item-type {
+    font-size: 11px;
+    padding: 2px 6px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+    margin-left: 8px;
+}
+
+.file-item-delete {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--text-secondary);
+    cursor: pointer;
+    margin-left: 8px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.file-item-delete:hover {
+    color: var(--danger-color);
+    background: rgba(220, 53, 69, 0.1);
+}
+
+.movie-files-right {
+    width: 460px;
+    margin-right: 30px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.file-details-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-secondary);
+    font-size: 14px;
+    text-align: center;
+    gap: 8px;
+}
+
+.file-details .form-group {
+    margin-bottom: 16px;
+}
+
+.file-details .form-group label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.file-details .form-input[readonly] {
+    background: var(--hover-bg);
+    cursor: not-allowed;
+}
+
+.file-details-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.file-details-actions .btn {
+    flex: 1;
+}
+
+/* 添加文件弹窗 */
+.selected-file-name {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-left: 12px;
+}
+
+.selected-file-info {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+}
+
+.cover-preview-large {
+    width: 100%;
+    height: 400px;
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--card-bg);
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+
+.cover-preview-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.cover-placeholder {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* 表单行 */
+.form-row {
+    display: flex;
+    gap: 16px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+/* 封面图片上传 */
+.cover-upload {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.cover-name {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.cover-preview {
+    width: 100%;
+    margin-top: 12px;
+}
+
+.cover-preview img {
+    max-width: 200px;
+    max-height: 280px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+/* 标签选择 */
+.tags-input {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.2s;
+}
+
+.tag-checkbox:hover {
+    background-color: var(--hover-bg);
+}
+
+.tag-checkbox input[type="checkbox"] {
+    accent-color: var(--primary-color);
+}
+
+/* JSON预览 */
+.json-preview {
+    margin-top: 16px;
+    padding: 12px;
+    background-color: var(--card-bg);
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.json-preview h4 {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.json-preview-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px;
+    background-color: var(--bg-color);
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.json-preview-item strong {
+    font-size: 14px;
+}
+
+.json-preview-item span {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.json-file-name {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-left: 12px;
+}
+
+/* 标签编辑样式 */
+.tags-input {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 36px;
+    padding: 8px;
+    background-color: var(--card-bg);
+    border-radius: 4px;
+}
+
+/* 演员选择样式 */
+.actors-input {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 36px;
+    padding: 8px;
+    background-color: var(--card-bg);
+    border-radius: 4px;
+}
+
+.tag-with-remove {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background-color: var(--input-bg);
+    border-radius: 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.tag-remove {
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    color: var(--text-secondary);
+    margin-left: 2px;
+}
+
+.tag-remove:hover {
+    color: var(--danger-color);
+}
+
+.tag-add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background-color: var(--card-bg);
+    border: 1px dashed var(--border-color);
+    border-radius: 14px;
+    font-size: 18px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tag-add-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* 标签选择弹窗 */
+.tag-selector-content {
+    max-width: 400px;
+    min-width: 300px;
+}
+
+.tag-selector-content .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.tag-selector-content .modal-header h2 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.tag-selector-content .close-btn {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.tag-selector-content .close-btn:hover {
+    color: var(--text-color);
+}
+
+.tag-selector-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.tag-selector-list .tag-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid var(--border-color);
+}
+
+.tag-selector-list .tag-checkbox:hover {
+    background-color: var(--hover-bg);
+    border-color: var(--primary-color);
+}
+
+.tag-selector-list .tag-checkbox.selected {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.tag-selector-list .tag-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.tag-selector-list .tag-checkbox span:last-child {
+    font-size: 14px;
+}
+
+/* 导入错误 */
+.import-errors {
+    margin-top: 16px;
+    padding: 12px;
+    background-color: rgba(244, 67, 54, 0.1);
+    border-radius: 4px;
+}
+
+.import-errors h4 {
+    font-size: 13px;
+    color: #f44336;
+    margin-bottom: 8px;
+}
+
+.import-errors ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin: 0;
+}
+
+.import-errors li {
+    font-size: 12px;
+    color: #f44336;
+    margin-bottom: 4px;
+}
+
+/* IGDB 导入样式 */
+.igdb-loading {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-secondary);
+}
+
+.igdb-error {
+    padding: 12px;
+    margin: 12px 0;
+    background-color: rgba(244, 67, 54, 0.1);
+    border-radius: 4px;
+    color: #f44336;
+    font-size: 13px;
+}
+
+.igdb-results {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 16px;
+}
+
+.igdb-result-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    margin-bottom: 8px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.igdb-result-item:hover {
+    border-color: var(--primary-color);
+    background-color: var(--hover-bg);
+}
+
+#igdb-search-add-results .igdb-result-item.selected {
+    border-color: var(--primary-color) !important;
+    background-color: var(--hover-bg);
+    outline: 3px solid var(--primary-color);
+    outline-offset: -3px;
+}
+
+.igdb-result-cover {
+    width: 60px;
+    height: 80px;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: var(--sidebar-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.igdb-result-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.igdb-result-cover-placeholder {
+    font-size: 24px;
+}
+
+.igdb-result-info {
+    margin-left: 16px;
+    flex: 1;
+}
+
+.igdb-result-name {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.igdb-result-date,
+.igdb-result-publisher {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* IGDB 预览样式 */
+.igdb-preview-content {
+    display: flex;
+    gap: 24px;
+}
+
+.igdb-preview-left {
+    flex-shrink: 0;
+}
+
+.igdb-preview-cover {
+    width: 180px;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 8px;
+    background-color: var(--sidebar-bg);
+}
+
+.igdb-preview-cover-placeholder {
+    width: 180px;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--sidebar-bg);
+    border-radius: 8px;
+    font-size: 48px;
+}
+
+.igdb-preview-right {
+    flex: 1;
+}
+
+.igdb-preview-right .form-group {
+    margin-bottom: 12px;
+}
+
+.igdb-preview-right label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-right: 8px;
+}
+
+.igdb-preview-description {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-color);
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 8px;
+}
+
+.search-input-group {
+    display: flex;
+    gap: 8px;
+}
+
+.search-input-group input {
+    flex: 1;
+}
+
+/* ==================== 目录扫描样式 ==================== */
+
+.scan-type-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.radio-label input[type="radio"] {
+    width: 16px;
+    height: 16px;
+}
+
+.scan-path-group {
+    display: flex;
+    gap: 8px;
+}
+
+.scan-path-group input {
+    flex: 1;
+}
+
+.scan-result-modal {
+    max-width: 900px;
+}
+
+.scan-result-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.scan-result-info {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.scan-result-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.scan-movies-list {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.scan-movie-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s;
+}
+
+.scan-movie-item:hover {
+    background-color: var(--hover-bg);
+}
+
+.scan-movie-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.scan-movie-name {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.scan-movie-status {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.scan-movie-status.confirmed {
+    color: var(--success-color);
+}
+
+.scan-movie-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* 单个电影编辑样式 */
+.scan-movie-edit-modal .modal-content {
+    max-width: 900px;
+}
+
+.scan-movie-edit-content {
+    display: flex;
+    gap: 24px;
+}
+
+.scan-movie-edit-left {
+    width: 320px;
+    flex-shrink: 0;
+}
+
+.scan-movie-edit-right {
+    flex: 1;
+}
+
+/* 电影名称输入框 + IGDB搜索按钮 */
+.movie-name-with-search {
+    display: flex;
+    gap: 8px;
+}
+
+.movie-name-with-search input {
+    flex: 1;
+}
+
+/* 扫描电影封面预览 - 300x400 */
+.scan-cover-preview {
+    width: 300px;
+    height: 400px;
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: var(--bg-secondary);
+    margin-bottom: 8px;
+}
+
+.scan-cover-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 扫描电影描述输入框 */
+.scan-movie-description {
+    height: 150px;
+    resize: vertical;
+}
+
+/* IGDB 搜索结果样式 */
+.scan-igdb-results {
+    max-height: 400px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.scan-igdb-results .igdb-result-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.scan-igdb-results .igdb-result-item:hover {
+    background-color: var(--hover-bg);
+}
+
+#scan-igdb-results .igdb-result-item.selected {
+    border-color: var(--primary-color) !important;
+    background-color: var(--hover-bg);
+    outline: 3px solid var(--primary-color);
+    outline-offset: -3px;
+}
+
+.scan-igdb-results .igdb-result-item.selected .igdb-result-date {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.scan-igdb-results .igdb-result-cover {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.scan-igdb-results .igdb-result-cover-placeholder {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-secondary);
+    border-radius: 4px;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.scan-igdb-results .igdb-result-info {
+    flex: 1;
+}
+
+.scan-igdb-results .igdb-result-name {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.scan-igdb-results .igdb-result-date {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.scan-igdb-results .loading,
+.scan-igdb-results .no-results,
+.scan-igdb-results .error {
+    padding: 20px;
+    text-align: center;
+    color: var(--text-secondary);
+}

@@ -1,0 +1,49 @@
+{
+  "version": "1.0.0",
+  "lastUpdate": 1773560220649,
+  "appearance": {
+    "theme": "dark",
+    "language": "zh-CN",
+    "showCategoryIcons": true,
+    "showDescriptions": true,
+    "enableAnimations": true
+  },
+  "layout": {
+    "sidebarWidth": 200,
+    "posterSize": "large",
+    "columns": 6,
+    "viewMode": "grid",
+    "sortBy": "name-asc",
+    "sortOrder": "asc"
+  },
+  "library": {
+    "moviesDir": "D:\\Develop\\Workspace\\movie-mgt\\movies",
+    "scanOnStartup": true,
+    "autoRefresh": false,
+    "showHiddenFiles": false,
+    "includeSubfolders": true
+  },
+  "shortcuts": {
+    "openSearch": "Ctrl+F",
+    "focusSearch": "Ctrl+K",
+    "launchMovie": "Enter",
+    "movieDetails": "Ctrl+D",
+    "editMovie": "Ctrl+E",
+    "deleteMovie": "Delete",
+    "toggleFavorite": "F",
+    "refreshLibrary": "R",
+    "openSettings": "Ctrl+Comma"
+  },
+  "notifications": {
+    "enableStartup": true,
+    "enableLibraryUpdate": true,
+    "showPlayReminders": true
+  },
+  "import": {
+    "autoImport": false,
+    "importPaths": []
+  },
+  "moviebox": {
+    "movieboxDir": "D:\\Develop\\Workspace\\movie-mgt\\boxes"
+  }
+}

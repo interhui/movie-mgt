@@ -1,0 +1,38 @@
+/* 深色主题 */
+:root {
+    --primary-color: #0078d4;
+    --primary-hover: #106ebe;
+    --bg-color: #2d2d2d;
+    --sidebar-bg: #2d2d2d;
+    --card-bg: #333333;
+    --text-color: #ffffff;
+    --text-secondary: #cccccc;
+    --border-color: #444444;
+    --hover-bg: #3a3a3a;
+    --active-bg: #404040;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+    --modal-bg: #2d2d2d;
+    --input-bg: #3a3a3a;
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+    --danger-color: #f44336;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}

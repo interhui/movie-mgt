@@ -1,0 +1,9 @@
+{
+  "name": "电影名称",
+  "category": "movie",
+  "description": "电影描述",
+  "publisher": "发行商",
+  "publishDate": "2024-01-01",
+  "developer": "开发商",
+  "tags": ["action", "drama"]
+}

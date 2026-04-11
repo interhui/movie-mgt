@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: file: https://images.igdb.com;">
+    <title>电影盒子</title>
+    <link rel="stylesheet" href="css/themes/dark.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/box.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 顶部工具栏 -->
+        <header class="toolbar">
+            <div class="toolbar-left">
+                <button id="back-btn" class="icon-btn" title="返回">←</button>
+                <h2 id="box-title" class="box-title">电影盒子</h2>
+            </div>
+            <div class="toolbar-right">
+                <button id="batch-remove-btn" class="batch-action" style="display: none;">批量移除</button>
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="搜索电影...">
+                    <button id="search-btn" class="icon-btn">🔍</button>
+                    <button id="clear-search-btn" class="icon-btn clear-search-btn" style="display: none;">✕</button>
+                </div>
+                <button id="view-toggle" class="icon-btn" title="切换视图">▦</button>
+            </div>
+        </header>
+
+        <!-- 统计栏 -->
+        <div class="stats-bar">
+            <span id="total-movies">电影总数：0</span>
+            <span id="played-movies">已看：0</span>
+            <span id="playing-movies">观看中：0</span>
+            <span id="unplayed-movies">未看：0</span>
+        </div>
+
+        <!-- 主内容区：分栏布局 -->
+        <main class="box-main-content">
+            <!-- 左侧：分类列表 -->
+            <aside class="box-sidebar" id="box-sidebar">
+                <h3>电影库</h3>
+                <ul class="box-category-list" id="category-list">
+                    <!-- 动态生成 -->
+                </ul>
+                <!-- 盒子描述信息 -->
+                <div class="box-description" id="box-description" style="display: none;">
+                    <p id="box-description-text"></p>
+                </div>
+            </aside>
+
+            <!-- 可拖动分隔线 -->
+            <div class="splitter" id="box-splitter"></div>
+
+            <!-- 右侧：电影展示区 -->
+            <section class="box-movie-wall" id="box-movie-wall">
+                <!-- 过滤栏 -->
+                <div class="box-filter-bar">
+                     <select id="sort-select" class="filter-select">
+                        <option value="name-asc">名称 ↑</option>
+                        <option value="name-desc">名称 ↓</option>
+                        <option value="rating-desc">评分 ↓</option>
+                        <option value="rating-asc">评分 ↑</option>
+                    </select>
+                    <select id="category-filter" class="filter-select">
+                        <option value="">全部分类</option>
+                    </select>
+                    <select id="status-filter" class="filter-select">
+                        <option value="">全部状态</option>
+                        <option value="unplayed">未看</option>
+                        <option value="playing">观看中</option>
+                        <option value="played">已看</option>
+                        <option value="completed">已完成</option>
+                    </select>
+                    <select id="tag-filter" class="filter-select">
+                        <option value="">全部标签</option>
+                    </select>
+                    <select id="rating-filter" class="filter-select">
+                        <option value="">全部评分</option>
+                        <option value="5">⭐⭐⭐⭐⭐</option>
+                        <option value="4">⭐⭐⭐⭐</option>
+                        <option value="3">⭐⭐⭐</option>
+                        <option value="2">⭐⭐</option>
+                        <option value="1">⭐</option>
+                    </select>
+                    <label><input type="checkbox" id="favorite-filter"> 收藏</label>
+
+                </div>
+
+                <!-- 电影网格 -->
+                <div class="box-movies-grid" id="movies-grid">
+                    <!-- 电影卡片将通过 JS 动态生成 -->
+                </div>
+                <div class="empty-state" id="empty-state" style="display: none;">
+                    <p>暂无电影</p>
+                    <p>请在电影详情中添加电影到盒子</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 修改观看状态弹窗 -->
+    <div id="status-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>修改观看状态</h2>
+                <button id="close-status-modal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="status-movie-name" class="status-movie-name"></p>
+                <div class="status-radio-group">
+                    <label class="status-radio">
+                        <input type="radio" name="status" value="unplayed">
+                        <span class="status-dot unplayed"></span>
+                        <span>未看</span>
+                    </label>
+                    <label class="status-radio">
+                        <input type="radio" name="status" value="playing">
+                        <span class="status-dot playing"></span>
+                        <span>观看中</span>
+                    </label>
+                    <label class="status-radio">
+                        <input type="radio" name="status" value="played">
+                        <span class="status-dot played"></span>
+                        <span>已看</span>
+                    </label>
+                    <label class="status-radio">
+                        <input type="radio" name="status" value="completed">
+                        <span class="status-dot completed"></span>
+                        <span>已完成</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-status-btn" class="btn btn-secondary">取消</button>
+                <button id="confirm-status-btn" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/box.js"></script>
+</body>
+</html>

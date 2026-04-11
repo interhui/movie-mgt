@@ -1,0 +1,12 @@
+[
+    { "id": "action", "name": "动作" },
+    { "id": "adventure", "name": "冒险" },
+    { "id": "rpg", "name": "角色扮演" },
+    { "id": "strategy", "name": "策略" },
+    { "id": "simulation", "name": "模拟" },
+    { "id": "sports", "name": "体育" },
+    { "id": "racing", "name": "竞速" },
+    { "id": "puzzle", "name": "解谜" },
+    { "id": "horror", "name": "恐怖" },
+    { "id": "multiplayer", "name": "多人" }
+]
