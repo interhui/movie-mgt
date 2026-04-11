@@ -1,0 +1,238 @@
+/**
+ * SettingsService 单元测试
+ */
+const SettingsService = require('../../src/main/services/SettingsService');
+const path = require('path');
+const fs = require('fs');
+
+describe('SettingsService', () => {
+    let service;
+    let testDataDir;
+
+    beforeEach(() => {
+        testDataDir = path.join(__dirname, 'test-data', 'settings');
+        if (!fs.existsSync(testDataDir)) {
+            fs.mkdirSync(testDataDir, { recursive: true });
+        }
+        const settingsPath = path.join(testDataDir, 'settings.json');
+        service = new SettingsService(settingsPath);
+    });
+
+    afterEach(() => {
+        if (fs.existsSync(testDataDir)) {
+            fs.rmSync(testDataDir, { recursive: true, force: true });
+        }
+    });
+
+    describe('constructor', () => {
+        test('SVC-SETTINGS-001: 创建实例加载默认设置', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const settings = service.getSettings();
+            expect(settings).toBeDefined();
+            expect(settings.appearance).toBeDefined();
+            expect(settings.version).toBe('1.0.0');
+        });
+    });
+
+    describe('getSettings', () => {
+        test('SVC-SETTINGS-002: 返回完整设置对象', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const settings = service.getSettings();
+            expect(settings).toHaveProperty('appearance');
+            expect(settings).toHaveProperty('layout');
+            expect(settings).toHaveProperty('library');
+            expect(settings).toHaveProperty('moviebox');
+        });
+    });
+
+    describe('getTheme / setTheme', () => {
+        test('SVC-SETTINGS-003: 返回默认主题', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            expect(service.getTheme()).toBe('dark');
+        });
+
+        test('SVC-SETTINGS-004: 设置主题成功', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setTheme('light');
+            expect(service.getTheme()).toBe('light');
+        });
+    });
+
+    describe('getLayoutSettings / setLayoutSettings', () => {
+        test('SVC-SETTINGS-005: 返回默认布局', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const layout = service.getLayoutSettings();
+            expect(layout.sidebarWidth).toBe(200);
+        });
+
+        test('SVC-SETTINGS-006: 设置布局成功', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setLayoutSettings({ sidebarWidth: 300 });
+            expect(service.getLayoutSettings().sidebarWidth).toBe(300);
+        });
+    });
+
+    describe('getShortcuts / setShortcuts', () => {
+        test('SVC-SETTINGS-007: 返回快捷键配置', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const shortcuts = service.getShortcuts();
+            expect(shortcuts.openSearch).toBe('Ctrl+F');
+        });
+
+        test('SVC-SETTINGS-008: 设置快捷键成功', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setShortcuts({ openSearch: 'Ctrl+Shift+F' });
+            expect(service.getShortcuts().openSearch).toBe('Ctrl+Shift+F');
+        });
+    });
+
+    describe('getMoviesDir / setMoviesDir', () => {
+        test('SVC-SETTINGS-009: 返回电影目录', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const moviesDir = service.getMoviesDir();
+            expect(moviesDir).toBeDefined();
+        });
+
+        test('SVC-SETTINGS-010: 设置电影目录', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setMoviesDir('/new/path');
+            expect(service.getMoviesDir()).toBe('/new/path');
+        });
+    });
+
+    describe('getMovieboxDir / setMovieboxDir', () => {
+        test('SVC-SETTINGS-011: 返回盒子目录', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const boxDir = service.getMovieboxDir();
+            expect(boxDir).toBeDefined();
+        });
+
+        test('SVC-SETTINGS-012: 设置盒子目录', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setMovieboxDir('/new/box/path');
+            expect(service.getMovieboxDir()).toBe('/new/box/path');
+        });
+    });
+
+    describe('getEmulatorPath / getEmulatorConfig / setEmulatorConfig', () => {
+        beforeEach(async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            // Initialize emulators object since default settings don't have it
+            if (!service.settings.emulators) {
+                service.settings.emulators = {};
+            }
+        });
+
+        test('SVC-SETTINGS-013: 返回模拟器路径', async () => {
+            service.setEmulatorConfig('test', { path: '/emulator/test' });
+            expect(service.getEmulatorPath('test')).toBe('/emulator/test');
+        });
+
+        test('SVC-SETTINGS-014: 返回模拟器配置', async () => {
+            service.setEmulatorConfig('test', { path: '/emulator/test', exe: 'test.exe' });
+            expect(service.getEmulatorConfig('test').exe).toBe('test.exe');
+        });
+
+        test('SVC-SETTINGS-015: 设置模拟器配置', async () => {
+            service.setEmulatorConfig('new', { path: '/new' });
+            expect(service.getEmulatorConfig('new').path).toBe('/new');
+        });
+
+        test('SVC-SETTINGS-016: 不存在返回null', async () => {
+            expect(service.getEmulatorConfig('unknown')).toBeNull();
+        });
+    });
+
+    describe('getLanguage / setLanguage', () => {
+        test('SVC-SETTINGS-017: 返回默认语言', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            expect(service.getLanguage()).toBe('zh-CN');
+        });
+
+        test('SVC-SETTINGS-018: 设置语言成功', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setLanguage('en-US');
+            expect(service.getLanguage()).toBe('en-US');
+        });
+    });
+
+    describe('getIgdbConfig / setIgdbConfig', () => {
+        test('SVC-SETTINGS-019: 返回IGDB配置', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const config = service.getIgdbConfig();
+            expect(config.clientId).toBe('');
+            expect(config.clientSecret).toBe('');
+        });
+
+        test('SVC-SETTINGS-020: 设置IGDB配置', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setIgdbConfig({ clientId: 'test-id', clientSecret: 'test-secret' });
+            const config = service.getIgdbConfig();
+            expect(config.clientId).toBe('test-id');
+            expect(config.clientSecret).toBe('test-secret');
+        });
+    });
+
+    describe('getDefaultSettings', () => {
+        test('SVC-SETTINGS-021: 返回默认设置对象', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const defaults = service.getDefaultSettings();
+            expect(defaults).toHaveProperty('appearance');
+            expect(defaults).toHaveProperty('layout');
+            expect(defaults.version).toBe('1.0.0');
+        });
+    });
+
+    describe('mergeDeep', () => {
+        test('SVC-SETTINGS-022: 深度合并对象', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const target = { a: 1, b: { c: 2 } };
+            const source = { b: { d: 3 }, e: 4 };
+            const result = service.mergeDeep(target, source);
+            expect(result.a).toBe(1);
+            expect(result.b.c).toBe(2);
+            expect(result.b.d).toBe(3);
+            expect(result.e).toBe(4);
+        });
+
+        test('SVC-SETTINGS-023: 源对象覆盖目标', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const target = { a: 1, b: { c: 2 } };
+            const source = { a: 10, b: { c: 20 } };
+            const result = service.mergeDeep(target, source);
+            expect(result.a).toBe(10);
+            expect(result.b.c).toBe(20);
+        });
+    });
+
+    describe('resetToDefaults', () => {
+        test('SVC-SETTINGS-024: 重置为默认设置', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setTheme('light');
+            service.resetToDefaults();
+            expect(service.getTheme()).toBe('dark');
+        });
+    });
+
+    describe('exportSettings / importSettings', () => {
+        test('SVC-SETTINGS-025: 导出设置JSON', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const exported = service.exportSettings();
+            expect(typeof exported).toBe('string');
+            const parsed = JSON.parse(exported);
+            expect(parsed.appearance).toBeDefined();
+        });
+
+        test('SVC-SETTINGS-026: 导入设置成功', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const jsonStr = JSON.stringify({ appearance: { theme: 'light' } });
+            service.importSettings(jsonStr);
+            expect(service.getTheme()).toBe('light');
+        });
+
+        test('SVC-SETTINGS-027: 无效JSON抛错误', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            expect(() => service.importSettings('invalid json')).toThrow();
+        });
+    });
+});
