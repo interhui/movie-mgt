@@ -171,6 +171,53 @@ describe('FileService', () => {
             const result = service.parseMovieNfo(xml);
             expect(result.actors).toEqual(['Actor 1', 'Actor 2']);
         });
+
+        test('SVC-FILE-021: 解析完整fileinfo视频信息', () => {
+            const xml = `<?xml version="1.0"?>
+<movie>
+    <id>video-parse-test</id>
+    <title>Video Parse Test</title>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>h264</codec>
+                <width>1920</width>
+                <height>1080</height>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>`;
+            const result = service.parseMovieNfo(xml);
+            expect(result.id).toBe('video-parse-test');
+            expect(result.title).toBe('Video Parse Test');
+            expect(result.videoCodec).toBe('H264');
+            expect(result.videoWidth).toBe('1920');
+            expect(result.videoHeight).toBe('1080');
+            expect(result.videoDuration).toBe('7200');
+        });
+
+        test('SVC-FILE-022: 解析部分fileinfo视频信息', () => {
+            const xml = `<?xml version="1.0"?>
+<movie>
+    <id>partial-parse-test</id>
+    <title>Partial Parse Test</title>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <codec>H265</codec>
+                <width>3840</width>
+                <height>2160</height>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>`;
+            const result = service.parseMovieNfo(xml);
+            expect(result.videoCodec).toBe('H265');
+            expect(result.videoWidth).toBe('3840');
+            expect(result.videoHeight).toBe('2160');
+            expect(result.videoDuration).toBeUndefined();
+        });
     });
 
     describe('generateMovieNfo', () => {
@@ -195,6 +242,41 @@ describe('FileService', () => {
             expect(xml).toContain('&amp;');
             expect(xml).toContain('&lt;');
             expect(xml).toContain('&gt;');
+        });
+
+        test('SVC-FILE-019: 生成包含视频信息的NFO', () => {
+            const data = {
+                id: 'video-test',
+                title: 'Video Test Movie',
+                year: '2024',
+                videoCodec: 'H264',
+                videoWidth: '1920',
+                videoHeight: '1080',
+                videoDuration: '7200'
+            };
+            const xml = service.generateMovieNfo(data);
+            expect(xml).toContain('<codec>H264</codec>');
+            expect(xml).toContain('<width>1920</width>');
+            expect(xml).toContain('<height>1080</height>');
+            expect(xml).toContain('<durationinseconds>7200</durationinseconds>');
+            expect(xml).toContain('<fileinfo>');
+            expect(xml).toContain('<streamdetails>');
+            expect(xml).toContain('<video>');
+        });
+
+        test('SVC-FILE-020: 生成仅有部分视频信息的NFO', () => {
+            const data = {
+                id: 'partial-video-test',
+                title: 'Partial Video Test',
+                videoCodec: 'H265',
+                videoWidth: '3840',
+                videoHeight: '2160'
+            };
+            const xml = service.generateMovieNfo(data);
+            expect(xml).toContain('<codec>H265</codec>');
+            expect(xml).toContain('<width>3840</width>');
+            expect(xml).toContain('<height>2160</height>');
+            expect(xml).not.toContain('<durationinseconds>');
         });
     });
 

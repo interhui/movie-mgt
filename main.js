@@ -226,6 +226,14 @@ function createApplicationMenu() {
  * @param {Object} movieData - 电影数据
  */
 function createMovieDetailWindow(movieData) {
+    console.log('[DEBUG main.js] createMovieDetailWindow called');
+    console.log('[DEBUG main.js] movieData.original_filename:', movieData?.original_filename);
+    console.log('[DEBUG main.js] movieData.videoCodec:', movieData?.videoCodec);
+    console.log('[DEBUG main.js] movieData.videoWidth:', movieData?.videoWidth);
+    console.log('[DEBUG main.js] movieData.videoHeight:', movieData?.videoHeight);
+    console.log('[DEBUG main.js] movieData.videoDuration:', movieData?.videoDuration);
+    console.log('[DEBUG main.js] movieData.fileinfo:', movieData?.fileinfo);
+    console.log('[DEBUG main.js] movieData.fileset:', movieData?.fileset);
     // 存储待发送的电影数据
     pendingDetailMovieData = movieData;
 
@@ -409,7 +417,11 @@ app.whenReady().then(async () => {
         getMainWindow: () => mainWindow,
         createMovieDetailWindow,
         createBoxWindow,
-        getPendingDetailMovieData: () => pendingDetailMovieData,
+        getPendingDetailMovieData: () => {
+            console.log('[DEBUG main.js] getPendingDetailMovieData called');
+            console.log('[DEBUG main.js] returning:', pendingDetailMovieData?.original_filename, pendingDetailMovieData?.videoCodec);
+            return pendingDetailMovieData;
+        },
         clearPendingDetailMovieData: () => { pendingDetailMovieData = null; }
     });
 

@@ -77,13 +77,10 @@ const elements = {
     addFileBtn: document.getElementById('add-file-btn'),
     fileDetailsEmpty: document.getElementById('file-details-empty'),
     fileDetailsForm: document.getElementById('file-details-form'),
-    fileDetailName: document.getElementById('file-detail-name'),
     fileDetailOriginal: document.getElementById('file-detail-original'),
-    fileDetailFullpath: document.getElementById('file-detail-fullpath'),
-    fileDetailSize: document.getElementById('file-detail-size'),
-    fileDetailVideoInfo: document.getElementById('file-detail-video-info'),
-    videoInfoGroup: document.getElementById('video-info-group'),
-    fileDetailType: document.getElementById('file-detail-type'),
+    fileDetailCodec: document.getElementById('file-detail-codec'),
+    fileDetailResolution: document.getElementById('file-detail-resolution'),
+    fileDetailDuration: document.getElementById('file-detail-duration'),
     fileDetailMemo: document.getElementById('file-detail-memo'),
     deleteFileBtn: document.getElementById('delete-file-btn'),
     fileDetailsActions: document.querySelector('.file-details-actions'),
@@ -91,10 +88,11 @@ const elements = {
     selectFileBtn: document.getElementById('select-file-btn'),
     selectedFileName: document.getElementById('selected-file-name'),
     selectedFileInfo: document.getElementById('selected-file-info'),
-    newFileName: document.getElementById('new-file-name'),
     newFileFullpath: document.getElementById('new-file-fullpath'),
-    newFileSize: document.getElementById('new-file-size'),
     newFileType: document.getElementById('new-file-type'),
+    newFileCodec: document.getElementById('new-file-codec'),
+    newFileResolution: document.getElementById('new-file-resolution'),
+    newFileDuration: document.getElementById('new-file-duration'),
     newFileMemo: document.getElementById('new-file-memo'),
     confirmAddFile: document.getElementById('confirm-add-file'),
     cancelAddFile: document.getElementById('cancel-add-file'),
@@ -421,7 +419,30 @@ function loadMovieDetail(movie) {
     renderTags(movie.tags || []);
     elements.movieDescription.textContent = movie.description || '暂无描述';
 
-    renderMovieFiles(movie.fileset || []);
+    // 处理fileset：如果original_filename存在但fileset中没有Main文件，则创建一个
+    let fileset = movie.fileset || [];
+    if (movie.original_filename) {
+        const hasMainFile = fileset.some(f => f.type === 'Main');
+        if (!hasMainFile) {
+            // 从original_filename提取文件名
+            const fullPath = movie.original_filename;
+            const fileName = fullPath.split(/[/\\]/).pop();
+            fileset = [{
+                filename: fileName,
+                fullpath: fullPath,
+                type: 'Main',
+                videoCodec: movie.videoCodec || '',
+                videoWidth: movie.videoWidth || '',
+                videoHeight: movie.videoHeight || '',
+                videoDuration: movie.videoDuration || ''
+            }, ...fileset];
+        }
+    }
+
+    // 更新currentMovie.fileset，以便在编辑模式下能正确初始化editFileset
+    currentMovie.fileset = fileset;
+
+    renderMovieFiles(fileset);
     clearFileDetails();
 
     if (fromBox) {
@@ -474,44 +495,41 @@ function renderMovieFiles(files) {
     elements.filesCount.textContent = `(${files.length})`;
 
     const typeLabels = {
-        'Main': '电影文件',
-        'Subtitle': '字幕文件',
-        'Extra': '花絮/特辑'
+        'Main': '电影正片',
+        'Preview': '预览片'
     };
 
     const html = files.map((file, index) => {
         const isMainFile = file.type === 'Main';
-        const displayName = isMainFile && currentMovie.original_filename
-            ? currentMovie.original_filename
-            : file.filename;
 
         let videoInfoStr = '';
-        if (isMainFile && currentMovie.fileinfo) {
-            const videoInfo = parseFileinfo(currentMovie.fileinfo);
-            if (videoInfo.codec || (videoInfo.width && videoInfo.height)) {
-                const parts = [];
-                if (videoInfo.codec) parts.push(videoInfo.codec);
-                if (videoInfo.width && videoInfo.height) parts.push(`${videoInfo.width}x${videoInfo.height}`);
-                videoInfoStr = `<span class="file-video-info">${parts.join(' | ')}</span>`;
-            }
+
+        const parts = [];
+        if (file.videoCodec) parts.push(file.videoCodec);
+        if (file.videoWidth && file.videoHeight) parts.push(`${file.videoWidth}x${file.videoHeight}`);
+        if (file.videoDuration) {
+            const durationStr = formatDuration(file.videoDuration);
+            parts.push(durationStr);
         }
+        if (parts.length > 0) {
+            videoInfoStr = `<span class="file-video-info">${parts.join(' | ')}</span>`;
+        }
+
 
         return `
         <div class="movie-file-item ${index === selectedFileIndex ? 'selected' : ''}" data-index="${index}">
             <span class="file-icon">📄</span>
             <div class="file-info">
-                <div class="file-name" title="${displayName}">${displayName}</div>
-                <div class="file-meta">${file.size} | ${file.fullpath}</div>
+                <div class="file-name" title="${file.filename || ''}">${file.filename || '未知'}</div>
                 ${videoInfoStr}
                 ${file.memo ? `<div class="file-memo">${file.memo}</div>` : ''}
             </div>
-            <span class="file-type-badge">${typeLabels[file.type] || file.type}</span>
+            <span class="file-type-badge ${file.type?.toLowerCase() || ''}">${typeLabels[file.type] || file.type || '未知'}</span>
         </div>
         `;
     }).join('');
 
     elements.movieFilesList.innerHTML = html;
-
     elements.movieFilesList.querySelectorAll('.movie-file-item').forEach(item => {
         item.addEventListener('click', () => {
             const index = parseInt(item.dataset.index);
@@ -526,7 +544,6 @@ function renderMovieFiles(files) {
 function selectFileItem(index) {
     // 如果在编辑模式下，先保存当前选中文件的更改
     if (isEditMode && selectedFileIndex >= 0 && selectedFileIndex < editFileset.length) {
-        editFileset[selectedFileIndex].type = elements.fileDetailType.value;
         editFileset[selectedFileIndex].memo = elements.fileDetailMemo.value;
     }
 
@@ -540,45 +557,26 @@ function selectFileItem(index) {
 
     if (index >= 0 && index < files.length) {
         const file = files[index];
-        const isMainFile = file.type === 'Main';
 
         elements.fileDetailsEmpty.style.display = 'none';
         elements.fileDetailsForm.style.display = 'flex';
 
-        // 对于Main类型文件，使用original_filename；其他类型使用filename
-        elements.fileDetailName.value = file.filename || '';
-        elements.fileDetailOriginal.value = isMainFile ? (currentMovie.original_filename || '') : '';
+        // 显示文件路径
+        elements.fileDetailOriginal.value = file.fullpath || '';
 
-        elements.fileDetailFullpath.value = file.fullpath || '';
-        elements.fileDetailSize.value = file.size || '';
+        // 显示视频信息（所有文件类型）
+        elements.fileDetailCodec.value = file.videoCodec || '';
+        elements.fileDetailResolution.value = (file.videoWidth && file.videoHeight)
+            ? `${file.videoWidth}x${file.videoHeight}` : '';
+        elements.fileDetailDuration.value = file.videoDuration
+            ? formatDuration(file.videoDuration) : '';
 
-        // 对于Main类型文件，显示视频信息
-        if (isMainFile && currentMovie.fileinfo) {
-            const videoInfo = parseFileinfo(currentMovie.fileinfo);
-            if (videoInfo.codec || videoInfo.width || videoInfo.height) {
-                const parts = [];
-                if (videoInfo.codec) parts.push(videoInfo.codec);
-                if (videoInfo.width && videoInfo.height) parts.push(`${videoInfo.width}x${videoInfo.height}`);
-                elements.fileDetailVideoInfo.value = parts.join(' | ');
-                elements.videoInfoGroup.style.display = 'block';
-            } else {
-                elements.fileDetailVideoInfo.value = '';
-                elements.videoInfoGroup.style.display = 'none';
-            }
-        } else {
-            elements.fileDetailVideoInfo.value = '';
-            elements.videoInfoGroup.style.display = 'none';
-        }
-
-        elements.fileDetailType.value = file.type || 'Main';
         elements.fileDetailMemo.value = file.memo || '';
 
         if (isEditMode) {
-            elements.fileDetailType.disabled = false;
             elements.fileDetailMemo.readOnly = false;
             elements.fileDetailsActions.style.display = 'flex';
         } else {
-            elements.fileDetailType.disabled = true;
             elements.fileDetailMemo.readOnly = true;
             elements.fileDetailsActions.style.display = 'none';
         }
@@ -590,11 +588,11 @@ function selectFileItem(index) {
 /**
  * 解析fileinfo XML并提取视频信息
  * @param {string} fileinfoXml - fileinfo XML字符串
- * @returns {object} 包含codec, width, height的对象
+ * @returns {object} 包含codec, width, height, durationinseconds的对象
  */
 function parseFileinfo(fileinfoXml) {
     if (!fileinfoXml) {
-        return { codec: '', width: '', height: '' };
+        return { codec: '', width: '', height: '', durationinseconds: '' };
     }
 
     try {
@@ -610,10 +608,14 @@ function parseFileinfo(fileinfoXml) {
         const heightMatch = fileinfoXml.match(/<height>([^<]*)<\/height>/i);
         const height = heightMatch ? heightMatch[1] : '';
 
-        return { codec, width, height };
+        // 提取durationinseconds
+        const durationMatch = fileinfoXml.match(/<durationinseconds>([^<]*)<\/durationinseconds>/i);
+        const durationinseconds = durationMatch ? durationMatch[1] : '';
+
+        return { codec, width, height, durationinseconds };
     } catch (e) {
         console.error('Error parsing fileinfo:', e);
-        return { codec: '', width: '', height: '' };
+        return { codec: '', width: '', height: '', durationinseconds: '' };
     }
 }
 
@@ -624,13 +626,10 @@ function clearFileDetails() {
     selectedFileIndex = -1;
     elements.fileDetailsEmpty.style.display = 'flex';
     elements.fileDetailsForm.style.display = 'none';
-    elements.fileDetailName.value = '';
     elements.fileDetailOriginal.value = '';
-    elements.fileDetailFullpath.value = '';
-    elements.fileDetailSize.value = '';
-    elements.fileDetailVideoInfo.value = '';
-    elements.videoInfoGroup.style.display = 'none';
-    elements.fileDetailType.value = 'Main';
+    elements.fileDetailCodec.value = '';
+    elements.fileDetailResolution.value = '';
+    elements.fileDetailDuration.value = '';
     elements.fileDetailMemo.value = '';
 }
 
@@ -972,10 +971,15 @@ function bindEditModeEvents() {
     elements.posterUploadInput.onchange = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            const base64 = await fileToBase64(file);
-            editData.coverImage = base64;
-            elements.moviePoster.src = base64;
-            elements.posterPlaceholder.style.display = 'none';
+            try {
+                const base64 = await fileToBase64(file);
+                editData.coverImage = base64;
+                elements.moviePoster.src = base64;
+                elements.posterPlaceholder.style.display = 'none';
+            } catch (error) {
+                console.error('Error converting image to base64:', error);
+                alert('图片处理失败: ' + error.message);
+            }
         }
     };
 }
@@ -1003,9 +1007,16 @@ async function saveEdit() {
     const descriptionInput = document.getElementById('edit-description');
 
     if (selectedFileIndex >= 0 && selectedFileIndex < editFileset.length) {
-        editFileset[selectedFileIndex].type = elements.fileDetailType.value;
         editFileset[selectedFileIndex].memo = elements.fileDetailMemo.value;
     }
+
+    // 从 fileset 中提取视频信息（从 Main 类型文件）
+    const mainFile = editFileset.find(f => f.type === 'Main');
+    const videoCodec = mainFile ? (mainFile.videoCodec || '') : (currentMovie.videoCodec || '');
+    const videoWidth = mainFile ? (mainFile.videoWidth || '') : (currentMovie.videoWidth || '');
+    const videoHeight = mainFile ? (mainFile.videoHeight || '') : (currentMovie.videoHeight || '');
+    const videoDuration = mainFile ? (mainFile.videoDuration || '') : (currentMovie.videoDuration || '');
+    const originalFilename = mainFile ? (mainFile.fullpath || '') : (currentMovie.original_filename || '');
 
     // 确保 folderName 存在，如果缺失则从 id 中提取 (格式: category-folderName)
     let folderName = currentMovie.folderName;
@@ -1027,7 +1038,12 @@ async function saveEdit() {
         tags: [...editData.tags],
         description: descriptionInput ? descriptionInput.value : editData.description,
         userComment: currentMovie.userComment || '',
-        fileset: editFileset
+        fileset: editFileset,
+        original_filename: originalFilename,
+        videoCodec: videoCodec,
+        videoWidth: videoWidth,
+        videoHeight: videoHeight,
+        videoDuration: videoDuration
     };
 
     // 如果有封面路径，添加到更新数据中
@@ -1102,10 +1118,11 @@ function bindFileEvents() {
 function openAddFileModal() {
     elements.selectedFileName.textContent = '';
     elements.selectedFileInfo.style.display = 'none';
-    elements.newFileName.value = '';
     elements.newFileFullpath.value = '';
-    elements.newFileSize.value = '';
     elements.newFileType.value = 'Main';
+    elements.newFileCodec.value = '';
+    elements.newFileResolution.value = '';
+    elements.newFileDuration.value = '';
     elements.newFileMemo.value = '';
     elements.addFileModal.style.display = 'flex';
 }
@@ -1125,14 +1142,14 @@ async function selectFileForAdd() {
     if (!result.canceled && result.path) {
         const filePath = result.path;
         const fileName = result.name || filePath.split(/[/\\]/).pop();
-        const fileSize = formatFileSize(result.size || 0);
 
         elements.selectedFileName.textContent = fileName;
         elements.selectedFileInfo.style.display = 'block';
-        elements.newFileName.value = fileName;
         elements.newFileFullpath.value = filePath;
-        elements.newFileSize.value = fileSize;
         elements.newFileType.value = 'Main';
+        elements.newFileCodec.value = '';
+        elements.newFileResolution.value = '';
+        elements.newFileDuration.value = '';
         elements.newFileMemo.value = '';
     }
 }
@@ -1141,17 +1158,47 @@ async function selectFileForAdd() {
  * 确认添加文件
  */
 function confirmAddFile() {
-    if (!elements.newFileName.value || !elements.newFileFullpath.value) {
+    if (!elements.newFileFullpath.value) {
         alert('请选择文件');
         return;
     }
 
+    const fileType = elements.newFileType.value;
+
+    // 检查是否已存在Main类型的文件
+    if (fileType === 'Main') {
+        const hasMainFile = editFileset.some(f => f.type === 'Main');
+        if (hasMainFile) {
+            alert('已存在电影正片，一个电影只能添加一个正片文件');
+            return;
+        }
+    }
+
+    // 解析视频尺寸
+    const resolution = elements.newFileResolution.value.trim();
+    let videoWidth = '';
+    let videoHeight = '';
+    if (resolution) {
+        const resMatch = resolution.match(/^(\d+)\s*[xX]\s*(\d+)$/);
+        if (resMatch) {
+            videoWidth = resMatch[1];
+            videoHeight = resMatch[2];
+        }
+    }
+
+    // 从fullpath提取文件名
+    const fullPath = elements.newFileFullpath.value;
+    const fileName = fullPath.split(/[/\\]/).pop();
+
     const newFile = {
-        filename: elements.newFileName.value,
-        fullpath: elements.newFileFullpath.value,
-        size: elements.newFileSize.value,
-        type: elements.newFileType.value,
-        memo: elements.newFileMemo.value
+        filename: fileName,
+        fullpath: fullPath,
+        type: fileType,
+        memo: elements.newFileMemo.value,
+        videoCodec: elements.newFileCodec.value,
+        videoWidth: videoWidth,
+        videoHeight: videoHeight,
+        videoDuration: elements.newFileDuration.value.trim()
     };
 
     editFileset.push(newFile);
@@ -1187,6 +1234,27 @@ function formatFileSize(bytes) {
     const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+/**
+ * 格式化视频时长（秒转为 HH:MM:SS 或 MM:SS 格式）
+ * @param {string|number} seconds - 秒数
+ * @returns {string} 格式化后的时长字符串
+ */
+function formatDuration(seconds) {
+    if (!seconds) return '';
+    const totalSeconds = parseInt(seconds, 10);
+    if (isNaN(totalSeconds) || totalSeconds <= 0) return '';
+
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const secs = totalSeconds % 60;
+
+    if (hours > 0) {
+        return `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    } else {
+        return `${minutes}:${String(secs).padStart(2, '0')}`;
+    }
 }
 
 /**

@@ -129,10 +129,10 @@ const elements = {
     addFileBtn: document.getElementById('add-file-btn'),
     fileList: document.getElementById('file-list'),
     fileDetails: document.getElementById('file-details'),
-    fileName: document.getElementById('file-name'),
     fileFullpath: document.getElementById('file-fullpath'),
-    fileSize: document.getElementById('file-size'),
-    fileType: document.getElementById('file-type'),
+    fileCodec: document.getElementById('file-codec'),
+    fileResolution: document.getElementById('file-resolution'),
+    fileDuration: document.getElementById('file-duration'),
     fileMemo: document.getElementById('file-memo'),
     addFileModal: document.getElementById('add-file-modal'),
     closeAddFile: document.getElementById('close-add-file'),
@@ -140,10 +140,11 @@ const elements = {
     fileSelectInput: document.getElementById('file-select-input'),
     selectedFileName: document.getElementById('selected-file-name'),
     selectedFileInfo: document.getElementById('selected-file-info'),
-    newFileName: document.getElementById('new-file-name'),
     newFileFullpath: document.getElementById('new-file-fullpath'),
-    newFileSize: document.getElementById('new-file-size'),
     newFileType: document.getElementById('new-file-type'),
+    newFileCodec: document.getElementById('new-file-codec'),
+    newFileResolution: document.getElementById('new-file-resolution'),
+    newFileDuration: document.getElementById('new-file-duration'),
     newFileMemo: document.getElementById('new-file-memo'),
     confirmAddFile: document.getElementById('confirm-add-file'),
     cancelAddFile: document.getElementById('cancel-add-file'),
@@ -1013,8 +1014,17 @@ async function openMovieDetail(movieId) {
         return;
     }
     try {
-        const movie = state.movies.find(m => m.id === movieId);
-        if (movie) {
+        // 获取完整的电影详情数据（包含NFO中的所有字段）
+        const movie = await window.electronAPI.getMovieDetail(movieId);
+        if (movie && !movie.error) {
+            console.log('[DEBUG main.js renderer] openMovieDetail - full movie data:');
+            console.log('[DEBUG] movie.original_filename:', movie.original_filename);
+            console.log('[DEBUG] movie.videoCodec:', movie.videoCodec);
+            console.log('[DEBUG] movie.videoWidth:', movie.videoWidth);
+            console.log('[DEBUG] movie.videoHeight:', movie.videoHeight);
+            console.log('[DEBUG] movie.videoDuration:', movie.videoDuration);
+            console.log('[DEBUG] movie.fileinfo:', movie.fileinfo);
+            console.log('[DEBUG] movie.fileset:', movie.fileset);
             await window.electronAPI.openMovieDetail(movie);
         }
     } catch (error) {
@@ -1631,13 +1641,14 @@ function bindEvents() {
         if (!result.canceled && result.path) {
             const filePath = result.path;
             const fileName = result.name || filePath.split(/[/\\]/).pop();
-            const fileSize = formatFileSize(result.size || 0);
 
             state.pendingFilePath = filePath;
             elements.selectedFileName.textContent = fileName;
-            elements.newFileName.value = fileName;
             elements.newFileFullpath.value = filePath;
-            elements.newFileSize.value = fileSize;
+            elements.newFileType.value = 'Main';
+            elements.newFileCodec.value = '';
+            elements.newFileResolution.value = '';
+            elements.newFileDuration.value = '';
             elements.selectedFileInfo.style.display = 'block';
             elements.confirmAddFile.disabled = false;
         }
@@ -1645,12 +1656,41 @@ function bindEvents() {
 
     // 确认添加文件
     elements.confirmAddFile.addEventListener('click', () => {
+        // 检查是否已存在Main类型的文件
+        const fileType = elements.newFileType.value;
+        if (fileType === 'Main') {
+            const hasMainFile = state.movieFiles.some(f => f.type === 'Main');
+            if (hasMainFile) {
+                alert('已存在电影正片，一个电影只能添加一个正片文件');
+                return;
+            }
+        }
+
+        // 解析视频尺寸
+        const resolution = elements.newFileResolution.value.trim();
+        let videoWidth = '';
+        let videoHeight = '';
+        if (resolution) {
+            const resMatch = resolution.match(/^(\d+)\s*[xX]\s*(\d+)$/);
+            if (resMatch) {
+                videoWidth = resMatch[1];
+                videoHeight = resMatch[2];
+            }
+        }
+
+        // 从fullpath提取文件名
+        const fullPath = elements.newFileFullpath.value;
+        const fileName = fullPath.split(/[/\\]/).pop();
+
         const fileEntry = {
-            filename: elements.newFileName.value,
-            fullpath: elements.newFileFullpath.value,
-            size: elements.newFileSize.value,
-            type: elements.newFileType.value,
-            memo: elements.newFileMemo.value.trim()
+            filename: fileName,
+            fullpath: fullPath,
+            type: fileType,
+            memo: elements.newFileMemo.value.trim(),
+            videoCodec: elements.newFileCodec.value,
+            videoWidth: videoWidth,
+            videoHeight: videoHeight,
+            videoDuration: elements.newFileDuration.value.trim()
         };
 
         state.movieFiles.push(fileEntry);
@@ -1848,6 +1888,27 @@ function formatFileSize(bytes) {
 }
 
 /**
+ * 格式化视频时长（秒转为 HH:MM:SS 或 MM:SS 格式）
+ * @param {string|number} seconds - 秒数
+ * @returns {string} 格式化后的时长字符串
+ */
+function formatDuration(seconds) {
+    if (!seconds) return '';
+    const totalSeconds = parseInt(seconds, 10);
+    if (isNaN(totalSeconds) || totalSeconds <= 0) return '';
+
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const secs = totalSeconds % 60;
+
+    if (hours > 0) {
+        return `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    } else {
+        return `${minutes}:${String(secs).padStart(2, '0')}`;
+    }
+}
+
+/**
  * 渲染文件列表
  */
 function renderFileList() {
@@ -1859,10 +1920,19 @@ function renderFileList() {
     let html = '';
     state.movieFiles.forEach((file, index) => {
         const isSelected = index === state.selectedFileIndex;
+        const parts = [];
+        if (file.videoCodec) parts.push(file.videoCodec);
+        if (file.videoWidth && file.videoHeight) parts.push(`${file.videoWidth}x${file.videoHeight}`);
+        if (file.videoDuration) parts.push(formatDuration(file.videoDuration));
+        const videoInfo = parts.length > 0 ? parts.join(' | ') : '';
+
         html += `
             <div class="file-item ${isSelected ? 'selected' : ''}" data-index="${index}">
-                <span class="file-item-name" title="${file.filename}">${file.filename}</span>
-                <span class="file-item-type">${file.type}</span>
+                <span class="file-icon">📄</span>
+                <div class="file-info">
+                    <div class="file-name" title="${file.filename || ''}">${file.filename || '未知'}</div>
+                    ${videoInfo ? `<div class="file-video-info">${videoInfo}</div>` : ''}
+                </div>
                 <span class="file-item-delete" data-index="${index}" title="删除">&times;</span>
             </div>
         `;
@@ -1916,10 +1986,11 @@ function showFileDetails(index) {
     }
 
     const file = state.movieFiles[index];
-    elements.fileName.value = file.filename;
-    elements.fileFullpath.value = file.fullpath;
-    elements.fileSize.value = file.size;
-    elements.fileType.value = file.type;
+    elements.fileFullpath.value = file.fullpath || '';
+    elements.fileCodec.value = file.videoCodec || '';
+    elements.fileResolution.value = (file.videoWidth && file.videoHeight)
+        ? `${file.videoWidth}x${file.videoHeight}` : '';
+    elements.fileDuration.value = file.videoDuration ? formatDuration(file.videoDuration) : '';
     elements.fileMemo.value = file.memo || '';
 
     elements.fileDetails.style.display = 'block';
@@ -1957,10 +2028,11 @@ function resetAddFileForm() {
     elements.fileSelectInput.value = '';
     elements.selectedFileName.textContent = '';
     elements.selectedFileInfo.style.display = 'none';
-    elements.newFileName.value = '';
     elements.newFileFullpath.value = '';
-    elements.newFileSize.value = '';
     elements.newFileType.value = 'Main';
+    elements.newFileCodec.value = '';
+    elements.newFileResolution.value = '';
+    elements.newFileDuration.value = '';
     elements.newFileMemo.value = '';
     elements.confirmAddFile.disabled = true;
     state.pendingFilePath = '';

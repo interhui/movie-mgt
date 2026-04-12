@@ -538,11 +538,12 @@ function setupIpcHandlers(services) {
                 return { error: '电影路径信息不完整，无法保存' };
             }
 
-            // 读取现有的 movie.json
-            const movieFilePath = path.join(moviesDir, category, folderName, 'movie.json');
+            // 读取现有的 movie.nfo
+            const moviePath = path.join(moviesDir, category, folderName);
+            const movieNfoPath = path.join(moviePath, 'movie.nfo');
             let existingData;
-            if (fs.existsSync(movieFilePath)) {
-                existingData = JSON.parse(fs.readFileSync(movieFilePath, 'utf-8'));
+            if (fs.existsSync(movieNfoPath)) {
+                existingData = await fileService.readMovieNfo(moviePath);
             } else {
                 return { error: '电影文件不存在' };
             }
@@ -556,18 +557,31 @@ function setupIpcHandlers(services) {
             existingData.description = movieData.description;
             existingData.userComment = movieData.userComment;
             existingData.fileset = movieData.fileset || [];
+            existingData.original_filename = movieData.original_filename || existingData.original_filename || '';
+            existingData.videoCodec = movieData.videoCodec || existingData.videoCodec || '';
+            existingData.videoWidth = movieData.videoWidth || existingData.videoWidth || '';
+            existingData.videoHeight = movieData.videoHeight || existingData.videoHeight || '';
+            existingData.videoDuration = movieData.videoDuration || existingData.videoDuration || '';
 
             // 如果有封面路径，更新
             if (movieData.coverPath) {
                 existingData.poster = movieData.coverPath;
             }
 
-            // 重新生成电影数据
-            const moviePath = path.join(moviesDir, category, folderName);
-            const updatedMovie = movieService.generateMovieData(existingData, folderName, category, moviePath);
+            // 如果有封面图片数据（base64），保存为 poster.jpg
+            if (movieData.coverImage && movieData.coverImage.startsWith('data:')) {
+                const base64Data = movieData.coverImage.replace(/^data:image\/\w+;base64,/, '');
+                const posterPath = path.join(moviePath, 'poster.jpg');
+                fs.writeFileSync(posterPath, Buffer.from(base64Data, 'base64'));
+                existingData.poster = 'poster.jpg';
+            }
 
-            // 保存更新后的数据
-            fs.writeFileSync(movieFilePath, JSON.stringify(updatedMovie, null, 2), 'utf-8');
+            // 保存更新后的数据到 NFO
+            console.log('[DEBUG save-movie-edit] existingData.fileset:', JSON.stringify(existingData.fileset));
+            await fileService.writeMovieNfo(moviePath, existingData);
+
+            // 重新生成电影数据用于索引和缓存
+            const updatedMovie = movieService.generateMovieData(existingData, folderName, category, moviePath);
 
             // 更新索引
             await indexService.updateMovieIndex(updatedMovie, category, moviesDir);
@@ -622,11 +636,31 @@ function setupIpcHandlers(services) {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
 
-            // 构建电影ID
-            const movieId = movieData.id || `${movieData.platform}-${movieData.folderName}`;
+            // 获取 category 和 folderName
+            let category = movieData.platform || movieData.category;
+            let folderName = movieData.folderName;
 
-            // 删除电影文件夹（包括 movie.json 和所有资源文件）
-            const movieFolderPath = path.join(moviesDir, movieData.platform, movieData.folderName);
+            // 如果 id 存在但 category 或 folderName 缺失，从 id 中提取
+            // id 格式为 "category-folderName" 或 "category-folder-part1-folder-part2"
+            if (movieData.id && (!category || !folderName)) {
+                const firstDashIndex = movieData.id.indexOf('-');
+                if (firstDashIndex > 0) {
+                    category = movieData.id.substring(0, firstDashIndex);
+                    folderName = movieData.id.substring(firstDashIndex + 1);
+                }
+            }
+
+            // 如果仍然缺失，返回错误
+            if (!category || !folderName) {
+                console.error('delete-movie: category or folderName is missing', { category, folderName, movieData });
+                return { error: '电影路径信息不完整，无法删除' };
+            }
+
+            // 构建电影ID
+            const movieId = movieData.id || `${category}-${folderName}`;
+
+            // 删除电影文件夹
+            const movieFolderPath = path.join(moviesDir, category, folderName);
             await fileService.deleteDir(movieFolderPath);
 
             // 从缓存中移除
@@ -635,7 +669,7 @@ function setupIpcHandlers(services) {
             }
 
             // 从 index.json 中移除
-            await indexService.deleteMovieFromIndex(movieId, movieData.platform, moviesDir);
+            await indexService.deleteMovieFromIndex(movieId, category, moviesDir);
 
             // 通知主窗口刷新
             const mainWindow = getMainWindow();

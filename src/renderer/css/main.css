@@ -874,7 +874,7 @@ body {
 
 /* 大模态框 */
 .modal-large {
-    width: 850px;
+    width: 1000px;
     height: 770px;
     max-height: 90vh;
 }
@@ -955,12 +955,12 @@ body {
 .movie-files-container {
     display: flex;
     gap: 10px;
-    height: 480px;
+    height: 565px;
 }
 
 .movie-files-left {
-    width: 280px;
-    min-width: 280px;
+    width: 370px;
+    min-width: 370px;
     display: flex;
     flex-direction: column;
     border: 1px solid var(--border-color);
@@ -998,59 +998,74 @@ body {
 
 .file-item {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 10px 12px;
-    margin-bottom: 4px;
-    background: var(--hover-bg);
+    background: var(--bg-color);
     border-radius: 6px;
+    margin-bottom: 6px;
+    gap: 12px;
     cursor: pointer;
     transition: all 0.2s;
+    border: 1px solid transparent;
 }
 
 .file-item:hover {
-    background: var(--border-color);
+    background: var(--hover-bg);
 }
 
 .file-item.selected {
-    background: var(--primary-color);
-    color: white;
+    border-color: var(--primary-color);
+    background: var(--hover-bg);
 }
 
-.file-item-name {
+.file-item:last-child {
+    margin-bottom: 0;
+}
+
+.file-item .file-icon {
+    font-size: 20px;
+}
+
+.file-item .file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-item .file-name {
     font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
-    flex: 1;
 }
 
-.file-item-type {
+.file-item .file-video-info {
     font-size: 11px;
-    padding: 2px 6px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 4px;
-    margin-left: 8px;
+    color: var(--primary-color);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.file-item-delete {
-    font-size: 16px;
+.file-item .file-item-delete {
+    font-size: 18px;
     font-weight: bold;
     color: var(--text-secondary);
     cursor: pointer;
-    margin-left: 8px;
-    padding: 2px 6px;
+    padding: 2px 8px;
     border-radius: 4px;
     transition: all 0.2s;
+    flex-shrink: 0;
 }
 
-.file-item-delete:hover {
+.file-item .file-item-delete:hover {
     color: var(--danger-color);
     background: rgba(220, 53, 69, 0.1);
 }
 
 .movie-files-right {
-    width: 460px;
+    width: 570px;
     margin-right: 30px;
     border: 1px solid var(--border-color);
     border-radius: 8px;

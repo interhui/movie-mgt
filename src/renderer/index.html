@@ -273,6 +273,10 @@
                                 <label>电影名称 *</label>
                                 <input type="text" id="movie-name" class="form-input" placeholder="输入电影名称" required>
                             </div>
+                            <div class="form-group">
+                                <label>电影介绍</label>
+                                <textarea id="movie-description" class="form-input" rows="4" placeholder="输入电影描述"></textarea>
+                            </div>
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>分类 *</label>
@@ -301,11 +305,7 @@
                                     <!-- 演员将通过 JS 动态生成 -->
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>描述</label>
-                                <textarea id="movie-description" class="form-input" rows="4" placeholder="输入电影描述"></textarea>
-                            </div>
-                            <div class="form-group">
+                             <div class="form-group">
                                 <label>标签</label>
                                 <div id="movie-tags" class="tags-input">
                                     <!-- 标签将通过 JS 动态生成 -->
@@ -333,24 +333,20 @@
                             </div>
                             <div id="file-details" class="file-details" style="display: none;">
                                 <div class="form-group">
-                                    <label>文件名</label>
-                                    <input type="text" id="file-name" class="form-input" readonly placeholder="文件名">
+                                    <label>文件路径</label>
+                                    <input type="text" id="file-fullpath" class="form-input" readonly placeholder="文件路径">
                                 </div>
                                 <div class="form-group">
-                                    <label>完整路径</label>
-                                    <input type="text" id="file-fullpath" class="form-input" readonly placeholder="文件完整路径">
+                                    <label>视频编码</label>
+                                    <input type="text" id="file-codec" class="form-input" readonly placeholder="如: H264">
                                 </div>
                                 <div class="form-group">
-                                    <label>文件大小</label>
-                                    <input type="text" id="file-size" class="form-input" readonly placeholder="文件大小">
+                                    <label>视频尺寸</label>
+                                    <input type="text" id="file-resolution" class="form-input" readonly placeholder="如: 1920x1080">
                                 </div>
                                 <div class="form-group">
-                                    <label>文件类型</label>
-                                    <select id="file-type" class="form-input" disabled>
-                                        <option value="Main">Main - 电影文件</option>
-                                        <option value="Subtitle">Subtitle - 字幕文件</option>
-                                        <option value="Extra">Extra - 花絮/特辑</option>
-                                    </select>
+                                    <label>视频时长</label>
+                                    <input type="text" id="file-duration" class="form-input" readonly placeholder="如: 01:30:00">
                                 </div>
                                 <div class="form-group">
                                     <label>文件说明</label>
@@ -384,25 +380,31 @@
                 </div>
                 <div id="selected-file-info" class="selected-file-info" style="display: none;">
                     <div class="form-group">
-                        <label>文件名</label>
-                        <input type="text" id="new-file-name" class="form-input" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label>完整路径</label>
+                        <label>文件路径</label>
                         <input type="text" id="new-file-fullpath" class="form-input" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label>文件大小</label>
-                        <input type="text" id="new-file-size" class="form-input" readonly>
                     </div>
                     <div class="form-group">
                         <label>文件类型</label>
                         <select id="new-file-type" class="form-input">
-                            <option value="ZIP">ZIP - 压缩包</option>
-                            <option value="Main">Main - 电影文件</option>
-                            <option value="DSL">DSL - DSL发行</option>
-                            <option value="Patch">Patch - 电影补丁</option>
+                            <option value="Main">Main - 电影正片</option>
+                            <option value="Preview">Preview - 预览片</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label>视频编码</label>
+                        <select id="new-file-codec" class="form-input">
+                            <option value="">请选择</option>
+                            <option value="H264">H264</option>
+                            <option value="H265">H265</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>视频尺寸</label>
+                        <input type="text" id="new-file-resolution" class="form-input" placeholder="如: 1920x1080">
+                    </div>
+                    <div class="form-group">
+                        <label>视频时长</label>
+                        <input type="text" id="new-file-duration" class="form-input" placeholder="如: 7200（秒）">
                     </div>
                     <div class="form-group">
                         <label>文件说明</label>

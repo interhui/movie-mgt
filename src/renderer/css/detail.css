@@ -1098,3 +1098,16 @@ body {
 .rating-star.active {
     color: #f5c518;
 }
+
+/* Hidden file input - allows programmatic click while visually hidden */
+.hidden-file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

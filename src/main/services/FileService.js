@@ -124,10 +124,40 @@ class FileService {
             }
         }
 
-        // 解析 fileinfo
+        // 解析 fileinfo - 包含视频信息
         const fileinfoMatch = xmlContent.match(/<fileinfo>([\s\S]*?)<\/fileinfo>/i);
         if (fileinfoMatch) {
             movie.fileinfo = fileinfoMatch[1];
+
+            // 解析视频信息
+            const videoMatch = fileinfoMatch[1].match(/<video>[\s\S]*?<\/video>/i);
+            if (videoMatch) {
+                const videoContent = videoMatch[0];
+
+                // 解析 codec
+                const codecMatch = videoContent.match(/<codec>([^<]*)<\/codec>/i);
+                if (codecMatch) {
+                    movie.videoCodec = codecMatch[1].toUpperCase();
+                }
+
+                // 解析 width
+                const widthMatch = videoContent.match(/<width>([^<]*)<\/width>/i);
+                if (widthMatch) {
+                    movie.videoWidth = widthMatch[1];
+                }
+
+                // 解析 height
+                const heightMatch = videoContent.match(/<height>([^<]*)<\/height>/i);
+                if (heightMatch) {
+                    movie.videoHeight = heightMatch[1];
+                }
+
+                // 解析 durationinseconds
+                const durationMatch = videoContent.match(/<durationinseconds>([^<]*)<\/durationinseconds>/i);
+                if (durationMatch) {
+                    movie.videoDuration = durationMatch[1];
+                }
+            }
         }
 
         // 解析 userRating（数字）
@@ -146,6 +176,42 @@ class FileService {
         const tagsMatch = xmlContent.match(/<tags>([^<]*)<\/tags>/i);
         if (tagsMatch && tagsMatch[1]) {
             movie.tags = tagsMatch[1].split(',').map(t => t.trim()).filter(t => t);
+        }
+
+        // 解析 fileset（关联文件列表）
+        const filesetMatch = xmlContent.match(/<fileset>([\s\S]*?)<\/fileset>/i);
+        if (filesetMatch) {
+            const filesetContent = filesetMatch[1];
+            const fileMatches = filesetContent.match(/<file>[\s\S]*?<\/file>/gi) || [];
+            movie.fileset = [];
+            for (const fileBlock of fileMatches) {
+                const file = {};
+                // 解析 filename
+                const filenameMatch = fileBlock.match(/<filename>([^<]*)<\/filename>/i);
+                if (filenameMatch) file.filename = filenameMatch[1];
+                // 解析 fullpath
+                const fullpathMatch = fileBlock.match(/<fullpath>([^<]*)<\/fullpath>/i);
+                if (fullpathMatch) file.fullpath = fullpathMatch[1];
+                // 解析 type
+                const typeMatch = fileBlock.match(/<type>([^<]*)<\/type>/i);
+                if (typeMatch) file.type = typeMatch[1];
+                // 解析 videocodec
+                const videocodecMatch = fileBlock.match(/<videocodec>([^<]*)<\/videocodec>/i);
+                if (videocodecMatch) file.videoCodec = videocodecMatch[1].toUpperCase();
+                // 解析 videowidth
+                const videowidthMatch = fileBlock.match(/<videowidth>([^<]*)<\/videowidth>/i);
+                if (videowidthMatch) file.videoWidth = videowidthMatch[1];
+                // 解析 videoheight
+                const videoheightMatch = fileBlock.match(/<videoheight>([^<]*)<\/videoheight>/i);
+                if (videoheightMatch) file.videoHeight = videoheightMatch[1];
+                // 解析 videoduration
+                const videodurationMatch = fileBlock.match(/<videoduration>([^<]*)<\/videoduration>/i);
+                if (videodurationMatch) file.videoDuration = videodurationMatch[1];
+                // 解析 memo
+                const memoMatch = fileBlock.match(/<memo>([^<]*)<\/memo>/i);
+                if (memoMatch) file.memo = memoMatch[1];
+                movie.fileset.push(file);
+            }
         }
 
         return movie;
@@ -175,12 +241,32 @@ class FileService {
     generateMovieNfo(movieData) {
         let xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<movie>\n';
 
-        // 写入简单字段
-        const textFields = ['id', 'title', 'year', 'outline', 'sorttitle', 'runtime', 'studio', 'director', 'original_filename', 'description'];
+        // 从 fileset 中提取 Main 文件的信息，写入到 movie 级别
+        let mainFile = null;
+        const nonMainFiles = [];
+        if (movieData.fileset && Array.isArray(movieData.fileset)) {
+            for (const file of movieData.fileset) {
+                if (file.type === 'Main') {
+                    mainFile = file;
+                } else {
+                    nonMainFiles.push(file);
+                }
+            }
+        }
+
+        // 写入简单字段（注意：如果有 Main 文件，original_filename 从 Main 文件获取）
+        const textFields = ['id', 'title', 'year', 'outline', 'sorttitle', 'runtime', 'studio', 'director', 'description'];
         for (const field of textFields) {
             if (movieData[field]) {
                 xml += `    <${field}>${this.escapeXml(movieData[field])}</${field}>\n`;
             }
+        }
+
+        // 写入 original_filename（如果存在 Main 文件，使用 Main 文件的 fullpath）
+        if (mainFile && mainFile.fullpath) {
+            xml += `    <original_filename>${this.escapeXml(mainFile.fullpath)}</original_filename>\n`;
+        } else if (movieData.original_filename) {
+            xml += `    <original_filename>${this.escapeXml(movieData.original_filename)}</original_filename>\n`;
         }
 
         // 写入标签
@@ -199,9 +285,68 @@ class FileService {
             xml += '    </actor>\n';
         }
 
-        // 写入 fileinfo
-        if (movieData.fileinfo) {
+        // 写入 fileinfo（包含视频信息，从 Main 文件获取）
+        const videoCodec = mainFile ? (mainFile.videoCodec || movieData.videoCodec || '') : (movieData.videoCodec || '');
+        const videoWidth = mainFile ? (mainFile.videoWidth || movieData.videoWidth || '') : (movieData.videoWidth || '');
+        const videoHeight = mainFile ? (mainFile.videoHeight || movieData.videoHeight || '') : (movieData.videoHeight || '');
+        const videoDuration = mainFile ? (mainFile.videoDuration || movieData.videoDuration || '') : (movieData.videoDuration || '');
+
+        if (videoCodec || videoWidth || videoHeight || videoDuration) {
+            xml += '    <fileinfo>\n';
+            xml += '        <streamdetails>\n';
+            xml += '            <video>\n';
+            if (videoCodec) {
+                xml += `                <codec>${this.escapeXml(videoCodec)}</codec>\n`;
+            }
+            if (videoWidth) {
+                xml += `                <width>${this.escapeXml(videoWidth)}</width>\n`;
+            }
+            if (videoHeight) {
+                xml += `                <height>${this.escapeXml(videoHeight)}</height>\n`;
+            }
+            if (videoDuration) {
+                xml += `                <durationinseconds>${this.escapeXml(videoDuration)}</durationinseconds>\n`;
+            }
+            xml += '            </video>\n';
+            xml += '        </streamdetails>\n';
+            xml += '    </fileinfo>\n';
+        } else if (movieData.fileinfo) {
+            // 如果没有独立的视频信息字段但有原始fileinfo字符串
             xml += `    <fileinfo>${movieData.fileinfo}</fileinfo>\n`;
+        }
+
+        // 写入 fileset（仅包含非 Main 类型的文件）
+        if (nonMainFiles.length > 0) {
+            xml += '    <fileset>\n';
+            for (const file of nonMainFiles) {
+                xml += '        <file>\n';
+                if (file.filename) {
+                    xml += `            <filename>${this.escapeXml(file.filename)}</filename>\n`;
+                }
+                if (file.fullpath) {
+                    xml += `            <fullpath>${this.escapeXml(file.fullpath)}</fullpath>\n`;
+                }
+                if (file.type) {
+                    xml += `            <type>${this.escapeXml(file.type)}</type>\n`;
+                }
+                if (file.videoCodec) {
+                    xml += `            <videocodec>${this.escapeXml(file.videoCodec)}</videocodec>\n`;
+                }
+                if (file.videoWidth) {
+                    xml += `            <videowidth>${this.escapeXml(file.videoWidth)}</videowidth>\n`;
+                }
+                if (file.videoHeight) {
+                    xml += `            <videoheight>${this.escapeXml(file.videoHeight)}</videoheight>\n`;
+                }
+                if (file.videoDuration) {
+                    xml += `            <videoduration>${this.escapeXml(file.videoDuration)}</videoduration>\n`;
+                }
+                if (file.memo) {
+                    xml += `            <memo>${this.escapeXml(file.memo)}</memo>\n`;
+                }
+                xml += '        </file>\n';
+            }
+            xml += '    </fileset>\n';
         }
 
         // 写入用户评分
