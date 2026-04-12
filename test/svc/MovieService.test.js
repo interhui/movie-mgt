@@ -41,7 +41,6 @@ describe('MovieService', () => {
     <outline>Test outline</outline>
     <director>Director</director>
     <actor><name>Actor 1</name></actor>
-    <favorite>true</favorite>
     <userRating>5</userRating>
 </movie>`;
         fs.writeFileSync(path.join(moviesDir, 'movie', 'test-movie', 'movie.nfo'), movieNfo);
@@ -119,15 +118,7 @@ describe('MovieService', () => {
             expect(movies).toBeDefined();
         });
 
-        test('SVC-MOVIE-010: 支持收藏筛选', async () => {
-            await service.refreshCache(moviesDir);
-            const movies = await service.getMoviesByCategory('movie', moviesDir, { favorite: true });
-            movies.forEach(m => {
-                expect(m.favorite).toBe(true);
-            });
-        });
-
-        test('SVC-MOVIE-011: 支持评分筛选', async () => {
+        test('SVC-MOVIE-010: 支持评分筛选', async () => {
             await service.refreshCache(moviesDir);
             const movies = await service.getMoviesByCategory('movie', moviesDir, { rating: 5 });
             movies.forEach(m => {
@@ -165,15 +156,7 @@ describe('MovieService', () => {
             });
         });
 
-        test('SVC-MOVIE-016: 收藏筛选', async () => {
-            await service.refreshCache(moviesDir);
-            const results = await service.searchMovies('', moviesDir, { favorite: true });
-            results.forEach(m => {
-                expect(m.favorite).toBe(true);
-            });
-        });
-
-        test('SVC-MOVIE-017: 评分筛选', async () => {
+        test('SVC-MOVIE-016: 评分筛选', async () => {
             await service.refreshCache(moviesDir);
             const results = await service.searchMovies('', moviesDir, { rating: 5 });
             results.forEach(m => {
@@ -181,7 +164,7 @@ describe('MovieService', () => {
             });
         });
 
-        test('SVC-MOVIE-018: 无匹配返回空', async () => {
+        test('SVC-MOVIE-017: 无匹配返回空', async () => {
             await service.refreshCache(moviesDir);
             const results = await service.searchMovies('', moviesDir, { rating: 1 });
             expect(results).toEqual([]);
@@ -216,56 +199,28 @@ describe('MovieService', () => {
         });
     });
 
-    describe('toggleFavorite', () => {
-        test('SVC-MOVIE-023: 切换收藏状态', async () => {
-            await service.refreshCache(moviesDir);
-            const favorite = await service.toggleFavorite('movie-1', moviesDir);
-            expect(typeof favorite).toBe('boolean');
-        });
-
-        test('SVC-MOVIE-024: 不存在抛错误', async () => {
-            await service.refreshCache(moviesDir);
-            await expect(service.toggleFavorite('not-exists', moviesDir))
-                .rejects.toThrow('Movie not found');
-        });
-    });
-
     describe('saveRating', () => {
-        test('SVC-MOVIE-025: 保存评分和评论', async () => {
+        test('SVC-MOVIE-023: 保存评分和评论', async () => {
             await service.refreshCache(moviesDir);
             const result = await service.saveRating('movie-1', 4, 'Good movie!', moviesDir);
             expect(result.success).toBe(true);
         });
 
-        test('SVC-MOVIE-026: 电影不存在抛错误', async () => {
+        test('SVC-MOVIE-024: 电影不存在抛错误', async () => {
             await service.refreshCache(moviesDir);
             await expect(service.saveRating('not-exists', 4, '', moviesDir))
                 .rejects.toThrow('Movie not found');
         });
     });
 
-    describe('batchToggleFavorite', () => {
-        test('SVC-MOVIE-027: 批量切换收藏', async () => {
-            await service.refreshCache(moviesDir);
-            const result = await service.batchToggleFavorite(['movie-1'], moviesDir);
-            expect(result.success).toBe(true);
-        });
-
-        test('SVC-MOVIE-028: 空数组返回成功', async () => {
-            await service.refreshCache(moviesDir);
-            const result = await service.batchToggleFavorite([], moviesDir);
-            expect(result.success).toBe(true);
-        });
-    });
-
     describe('batchDeleteMovies', () => {
-        test('SVC-MOVIE-029: 批量删除电影', async () => {
+        test('SVC-MOVIE-025: 批量删除电影', async () => {
             await service.refreshCache(moviesDir);
             const result = await service.batchDeleteMovies(['movie-1'], moviesDir);
             expect(result.success).toBe(true);
         });
 
-        test('SVC-MOVIE-030: 删除不存在的电影', async () => {
+        test('SVC-MOVIE-026: 删除不存在的电影', async () => {
             await service.refreshCache(moviesDir);
             const result = await service.batchDeleteMovies(['not-exists'], moviesDir);
             expect(result.count).toBe(0);
@@ -273,15 +228,14 @@ describe('MovieService', () => {
     });
 
     describe('getStats', () => {
-        test('SVC-MOVIE-031: 返回全局统计', async () => {
+        test('SVC-MOVIE-023: 返回全局统计', async () => {
             await service.refreshCache(moviesDir);
             const stats = await service.getStats(null, moviesDir);
             expect(stats).toHaveProperty('totalMovies');
             expect(stats).toHaveProperty('avgRating');
-            expect(stats).toHaveProperty('favoriteCount');
         });
 
-        test('SVC-MOVIE-032: 支持分类筛选', async () => {
+        test('SVC-MOVIE-027: 支持分类筛选', async () => {
             await service.refreshCache(moviesDir);
             const stats = await service.getStats('movie', moviesDir);
             expect(stats.totalMovies).toBeGreaterThanOrEqual(0);
@@ -289,13 +243,13 @@ describe('MovieService', () => {
     });
 
     describe('generateMovieId', () => {
-        test('SVC-MOVIE-033: 正确生成ID格式', () => {
+        test('SVC-MOVIE-028: 正确生成ID格式', () => {
             const id = service.generateMovieId('action', 'Test Movie');
             expect(id).toContain('action-');
             expect(id).toContain('Test-Movie');
         });
 
-        test('SVC-MOVIE-034: 处理特殊字符', () => {
+        test('SVC-MOVIE-029: 处理特殊字符', () => {
             const id = service.generateMovieId('movie', 'Movie: Test/Name');
             expect(id).not.toContain(':');
             expect(id).not.toContain('/');
@@ -303,35 +257,26 @@ describe('MovieService', () => {
     });
 
     describe('generateFolderName', () => {
-        test('SVC-MOVIE-035: 正确生成文件夹名', () => {
+        test('SVC-MOVIE-030: 正确生成文件夹名', () => {
             const folderName = service.generateFolderName('Test Movie 2024');
             expect(folderName).toBe('test-movie-2024');
         });
     });
 
     describe('sortMovies', () => {
-        test('SVC-MOVIE-036: 按名称升序', () => {
+        test('SVC-MOVIE-030: 按名称升序', () => {
             const movies = [
-                { title: 'Zebra', favorite: false },
-                { title: 'Animal', favorite: false },
-                { title: 'Beta', favorite: false }
+                { title: 'Zebra' },
+                { title: 'Animal' },
+                { title: 'Beta' }
             ];
             const sorted = service.sortMovies(movies, 'name', 'asc');
             expect(sorted[0].title).toBe('Animal');
         });
-
-        test('SVC-MOVIE-037: 收藏优先', () => {
-            const movies = [
-                { title: 'NoFav', favorite: false },
-                { title: 'IsFav', favorite: true }
-            ];
-            const sorted = service.sortMovies(movies, 'name', 'asc');
-            expect(sorted[0].favorite).toBe(true);
-        });
     });
 
     describe('calculateAverageRating', () => {
-        test('SVC-MOVIE-038: 正确计算平均分', () => {
+        test('SVC-MOVIE-031: 正确计算平均分', () => {
             const movies = [
                 { userRating: 5 },
                 { userRating: 3 },
@@ -341,7 +286,7 @@ describe('MovieService', () => {
             expect(avg).toBe('4.0');
         });
 
-        test('SVC-MOVIE-039: 无评分返回0', () => {
+        test('SVC-MOVIE-032: 无评分返回0', () => {
             const movies = [
                 { userRating: 0 },
                 { userRating: 0 }
@@ -352,24 +297,24 @@ describe('MovieService', () => {
     });
 
     describe('getCategoryName / getCategoryShortName', () => {
-        test('SVC-MOVIE-040: 返回分类名称', () => {
+        test('SVC-MOVIE-033: 返回分类名称', () => {
             const name = service.getCategoryName('movie');
             expect(name).toBe('电影');
         });
 
-        test('SVC-MOVIE-041: 返回分类短名称', () => {
+        test('SVC-MOVIE-034: 返回分类短名称', () => {
             const shortName = service.getCategoryShortName('movie');
             expect(shortName).toBe('电影');
         });
 
-        test('SVC-MOVIE-042: 未知分类返回原值', () => {
+        test('SVC-MOVIE-035: 未知分类返回原值', () => {
             const name = service.getCategoryName('unknown-category');
             expect(name).toBe('unknown-category');
         });
     });
 
     describe('addMovie', () => {
-        test('SVC-MOVIE-043: 添加新电影', async () => {
+        test('SVC-MOVIE-036: 添加新电影', async () => {
             await service.refreshCache(moviesDir);
             const movieData = {
                 title: 'New Movie',
@@ -381,7 +326,7 @@ describe('MovieService', () => {
             expect(result.movie).toBeDefined();
         });
 
-        test('SVC-MOVIE-045: 自动创建分类目录', async () => {
+        test('SVC-MOVIE-037: 自动创建分类目录', async () => {
             await service.refreshCache(moviesDir);
             const movieData = {
                 title: 'AutoDir Movie',
@@ -394,7 +339,7 @@ describe('MovieService', () => {
     });
 
     describe('scanMovieDirectory', () => {
-        test('SVC-MOVIE-046: 扫描目录模式', async () => {
+        test('SVC-MOVIE-038: 扫描目录模式', async () => {
             // Create subdirectories for scanning
             fs.mkdirSync(path.join(testDataDir, 'scan-dir', 'movie1'), { recursive: true });
             fs.mkdirSync(path.join(testDataDir, 'scan-dir', 'movie2'), { recursive: true });
@@ -409,7 +354,7 @@ describe('MovieService', () => {
             expect(result.movies.length).toBeGreaterThanOrEqual(0);
         });
 
-        test('SVC-MOVIE-047: 扫描文件模式', async () => {
+        test('SVC-MOVIE-039: 扫描文件模式', async () => {
             const filePath = path.join(testDataDir, 'movie-list.txt');
             fs.writeFileSync(filePath, 'Movie 1\nMovie 2\n');
 
@@ -424,7 +369,7 @@ describe('MovieService', () => {
     });
 
     describe('importScannedMovies', () => {
-        test('SVC-MOVIE-048: 成功导入电影', async () => {
+        test('SVC-MOVIE-040: 成功导入电影', async () => {
             await service.refreshCache(moviesDir);
             // Create a temp directory with movies.json
             const tempDir = path.join(testDataDir, 'temp-import');
@@ -453,7 +398,7 @@ describe('MovieService', () => {
             expect(result.success).toBeGreaterThanOrEqual(0);
         });
 
-        test('SVC-MOVIE-049: 返回成功失败计数', async () => {
+        test('SVC-MOVIE-041: 返回成功失败计数', async () => {
             // This is covered by the previous test implicitly
         });
     });

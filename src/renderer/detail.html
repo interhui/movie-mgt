@@ -66,22 +66,6 @@
                             <div id="movie-studio-container"><span id="movie-studio" class="value"></span></div>
                         </div>
 
-                        <div id="box-info-section" class="box-info-section" style="display: none;">
-                            <div class="info-row">
-                                <span class="label">观看状态：</span>
-                                <span id="box-status" class="value box-status-tag-display unplayed">未看</span>
-                                <button id="edit-status-btn" class="edit-status-btn">修改</button>
-                            </div>
-                            <div class="info-row">
-                                <span class="label">观看时间：</span>
-                                <span id="box-play-time" class="value">-</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="label">最后观看：</span>
-                                <span id="box-last-played" class="value">-</span>
-                            </div>
-                        </div>
-
                         <div class="info-row">
                             <span class="label">标签：</span>
                             <div id="movie-tags" class="tags-container"></div>
@@ -90,6 +74,23 @@
                         <div class="info-row">
                             <span class="label">电影简介：</span>
                             <div id="movie-description-container"><p id="movie-description" class="description"></p></div>
+                        </div>
+
+                        <div id="box-info-section" class="box-info-section" style="display: none;">
+                            <div class="info-row">
+                                <span class="label">状态：</span>
+                                <span id="box-status" class="value box-status-tag-display unplayed clickable">未看</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">评分：</span>
+                                <div id="box-rating" class="rating-stars">
+                                    <span class="star" data-rating="1">⭐</span>
+                                    <span class="star" data-rating="2">⭐</span>
+                                    <span class="star" data-rating="3">⭐</span>
+                                    <span class="star" data-rating="4">⭐</span>
+                                    <span class="star" data-rating="5">⭐</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -203,11 +204,6 @@
                         <input type="radio" name="edit-status" value="playing">
                         <span class="status-dot playing"></span>
                         <span>观看中</span>
-                    </label>
-                    <label class="status-radio">
-                        <input type="radio" name="edit-status" value="played">
-                        <span class="status-dot played"></span>
-                        <span>已看</span>
                     </label>
                     <label class="status-radio">
                         <input type="radio" name="edit-status" value="completed">

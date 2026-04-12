@@ -70,7 +70,6 @@
                         <option value="">全部状态</option>
                         <option value="unplayed">未看</option>
                         <option value="playing">观看中</option>
-                        <option value="played">已看</option>
                         <option value="completed">已完成</option>
                     </select>
                     <select id="tag-filter" class="filter-select">
@@ -84,7 +83,6 @@
                         <option value="2">⭐⭐</option>
                         <option value="1">⭐</option>
                     </select>
-                    <label><input type="checkbox" id="favorite-filter"> 收藏</label>
 
                 </div>
 
@@ -104,32 +102,40 @@
     <div id="status-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>修改观看状态</h2>
+                <h2>修改电影信息</h2>
                 <button id="close-status-modal" class="close-btn">&times;</button>
             </div>
             <div class="modal-body">
                 <p id="status-movie-name" class="status-movie-name"></p>
-                <div class="status-radio-group">
-                    <label class="status-radio">
-                        <input type="radio" name="status" value="unplayed">
-                        <span class="status-dot unplayed"></span>
-                        <span>未看</span>
-                    </label>
-                    <label class="status-radio">
-                        <input type="radio" name="status" value="playing">
-                        <span class="status-dot playing"></span>
-                        <span>观看中</span>
-                    </label>
-                    <label class="status-radio">
-                        <input type="radio" name="status" value="played">
-                        <span class="status-dot played"></span>
-                        <span>已看</span>
-                    </label>
-                    <label class="status-radio">
-                        <input type="radio" name="status" value="completed">
-                        <span class="status-dot completed"></span>
-                        <span>已完成</span>
-                    </label>
+                <div class="modal-section">
+                    <label class="modal-section-label">状态</label>
+                    <div class="status-radio-group">
+                        <label class="status-radio">
+                            <input type="radio" name="status" value="unplayed">
+                            <span class="status-dot unplayed"></span>
+                            <span>未看</span>
+                        </label>
+                        <label class="status-radio">
+                            <input type="radio" name="status" value="playing">
+                            <span class="status-dot playing"></span>
+                            <span>观看中</span>
+                        </label>
+                        <label class="status-radio">
+                            <input type="radio" name="status" value="completed">
+                            <span class="status-dot completed"></span>
+                            <span>已完成</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <label class="modal-section-label">评分</label>
+                    <div class="rating-selector">
+                        <span class="rating-star" data-rating="1">☆</span>
+                        <span class="rating-star" data-rating="2">☆</span>
+                        <span class="rating-star" data-rating="3">☆</span>
+                        <span class="rating-star" data-rating="4">☆</span>
+                        <span class="rating-star" data-rating="5">☆</span>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

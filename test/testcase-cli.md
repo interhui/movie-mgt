@@ -381,9 +381,6 @@
         <name>Test Actor</name>
     </actor>
     <tag>action</tag>
-    <favorite>false</favorite>
-    <userRating>0</userRating>
-    <status>unplayed</status>
 </movie>
 ```
 

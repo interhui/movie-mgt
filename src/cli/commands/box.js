@@ -184,11 +184,8 @@ async function addMovieToBox(services, boxName, movieId) {
 
         const movieInfo = {
             id: movieDetail.id,
-            status: movieDetail.status || 'unplayed',
-            firstPlayed: movieDetail.firstPlayed || '',
-            lastPlayed: movieDetail.lastPlayed || '',
-            totalPlayTime: movieDetail.totalPlayTime || 0,
-            playCount: movieDetail.playCount || 0
+            status: 'unplayed',
+            rating: 0
         };
 
         await boxService.addMovieToBox(boxName, movieDetail.category, movieInfo, movieboxDir);

@@ -17,7 +17,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getMovieDetail: (movieId) => ipcRenderer.invoke('get-movie-detail', movieId),
 
     // 电影状态管理
-    toggleFavorite: (movieId) => ipcRenderer.invoke('toggle-favorite', movieId),
     saveMovieRating: (data) => ipcRenderer.invoke('save-movie-rating', data),
 
     // 统计数据
@@ -35,7 +34,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getCategoryShortName: (categoryId) => ipcRenderer.invoke('get-category-short-name', categoryId),
 
     // 批量操作
-    batchToggleFavorite: (data) => ipcRenderer.invoke('batch-toggle-favorite', data),
     batchDeleteMovies: (data) => ipcRenderer.invoke('batch-delete-movies', data),
 
     // 电影编辑与删除

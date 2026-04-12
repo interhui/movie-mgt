@@ -36,7 +36,6 @@ class IndexService {
             director: movie.director || '',
             actors: movie.actors || [],
             studio: movie.studio || '',
-            favorite: movie.favorite || false,
             userRating: movie.userRating || 0,
             tags: movie.tag || movie.tags || [],
             fileCount: (movie.fileset && Array.isArray(movie.fileset)) ? movie.fileset.length : 0

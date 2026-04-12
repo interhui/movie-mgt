@@ -46,7 +46,6 @@ class HardCodeService {
                 movieDetails: 'Ctrl+D',
                 editMovie: 'Ctrl+E',
                 deleteMovie: 'Delete',
-                toggleFavorite: 'F',
                 refreshLibrary: 'R',
                 openSettings: 'Ctrl+OemComma'
             },
@@ -64,11 +63,6 @@ class HardCodeService {
 
             moviebox: {
                 movieboxDir: path.join(__dirname, 'boxes')
-            },
-
-            igdb: {
-                clientId: '',
-                clientSecret: ''
             }
         };
     }

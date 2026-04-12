@@ -237,7 +237,7 @@ body {
 
 .star {
     cursor: default;
-    font-size: 20px;
+    font-size: 14px;
     opacity: 0.3;
     transition: opacity 0.2s;
 }
@@ -249,49 +249,6 @@ body {
 .star:hover,
 .star.active {
     opacity: 1;
-}
-
-/* 收藏按钮 */
-.favorite-row {
-    margin-top: 8px;
-    justify-content: flex-start;
-}
-
-.favorite-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    color: var(--text-color);
-    transition: all 0.2s;
-}
-
-.favorite-btn:hover {
-    color: #f44336;
-}
-
-.favorite-btn.active {
-    color: #f44336;
-}
-
-.favorite-btn .heart {
-    font-size: 16px;
-}
-
-.favorite-btn:disabled {
-    opacity: 0.7;
-    cursor: default;
-}
-
-.favorite-btn:disabled:hover {
-    color: var(--text-color);
-}
-
-.favorite-btn:disabled.active {
-    color: #f44336;
 }
 
 /* 标签 */
@@ -739,6 +696,14 @@ body {
     background-color: #9c27b0;
 }
 
+.box-status-tag-display.clickable {
+    cursor: pointer;
+}
+
+.box-status-tag-display.clickable:hover {
+    opacity: 0.8;
+}
+
 /* 修改状态按钮 */
 .edit-status-btn {
     margin-left: 12px;
@@ -1091,4 +1056,45 @@ body {
 
 .search-input-group input {
     flex: 1;
+}
+
+/* 模态弹窗 section */
+.modal-section {
+    margin-bottom: 20px;
+}
+
+.modal-section:last-child {
+    margin-bottom: 0;
+}
+
+.modal-section-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* 评分星星 */
+.rating-selector {
+    display: flex;
+    gap: 8px;
+}
+
+.rating-star {
+    font-size: 28px;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    user-select: none;
+}
+
+.rating-star:hover {
+    transform: scale(1.1);
+}
+
+.rating-star.active {
+    color: #f5c518;
 }

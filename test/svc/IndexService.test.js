@@ -42,7 +42,6 @@ describe('IndexService', () => {
     <outline>Test outline</outline>
     <director>Director</director>
     <actor><name>Actor 1</name></actor>
-    <favorite>true</favorite>
     <userRating>5</userRating>
 </movie>`;
         fs.writeFileSync(path.join(moviesDir, 'movie', 'test-movie', 'movie.nfo'), movieNfo);
@@ -80,7 +79,6 @@ describe('IndexService', () => {
                 director: 'Director',
                 actors: ['Actor 1'],
                 studio: 'Studio',
-                favorite: true,
                 userRating: 5,
                 tag: ['action'],
                 tags: ['action'],

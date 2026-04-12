@@ -184,6 +184,13 @@
     flex-shrink: 0;
 }
 
+.box-movie-card .movie-rating {
+    padding: 4px 8px;
+    text-align: left;
+    color: #f5c518;
+    font-size: 14px;
+}
+
 /* 移除按钮 */
 .box-movie-card .remove-btn {
     position: absolute;
@@ -567,3 +574,66 @@
 .box-list-status:hover {
     opacity: 0.8;
 }
+
+/* 模态弹窗 section */
+.modal-section {
+    margin-bottom: 20px;
+}
+
+.modal-section:last-child {
+    margin-bottom: 0;
+}
+
+.modal-section-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* 评分星星 */
+.rating-selector {
+    display: flex;
+    gap: 8px;
+}
+
+.rating-star {
+    font-size: 28px;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    user-select: none;
+}
+
+.rating-star:hover {
+    transform: scale(1.1);
+}
+
+.rating-star.active {
+    color: #f5c518;
+}
+
+/* 列表视图新列 */
+.box-movies-grid.list-view .movie-actors-col {
+    width: 100px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.box-movies-grid.list-view .movie-publisher-col {
+    width: 80px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+

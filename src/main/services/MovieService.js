@@ -170,7 +170,7 @@ class MovieService {
      */
     async getMoviesByCategory(category, moviesDir, options = {}) {
         try {
-            const { sortBy, sortOrder, favorite, tagId, rating } = options;
+            const { sortBy, sortOrder, tagId, rating } = options;
 
             // 如果缓存未初始化，先初始化缓存
             if (!this.cacheService.isCacheInitialized()) {
@@ -178,8 +178,8 @@ class MovieService {
             }
 
             // 如果有筛选条件，使用 searchMovies
-            if (favorite !== undefined || tagId || rating !== undefined && rating !== null && rating !== '') {
-                const filters = { category, sortBy, sortOrder, favorite, tagId, rating };
+            if (tagId || rating !== undefined && rating !== null && rating !== '') {
+                const filters = { category, sortBy, sortOrder, tagId, rating };
                 return this.cacheService.searchMovies(null, filters);
             }
 
@@ -206,11 +206,11 @@ class MovieService {
                 await this.refreshCache(moviesDir);
             }
 
-            const { sortBy, sortOrder, favorite, tagId, rating } = options;
+            const { sortBy, sortOrder, tagId, rating } = options;
 
             // 如果有筛选条件，使用 searchMovies
-            if (favorite !== undefined || tagId || rating !== undefined && rating !== null && rating !== '') {
-                const filters = { sortBy, sortOrder, favorite, tagId, rating };
+            if (tagId || rating !== undefined && rating !== null && rating !== '') {
+                const filters = { sortBy, sortOrder, tagId, rating };
                 return this.cacheService.searchMovies(null, filters);
             }
 
@@ -337,42 +337,6 @@ class MovieService {
     }
 
     /**
-     * 切换收藏状态
-     * @param {string} movieId - 电影 ID
-     * @param {string} moviesDir - 电影目录
-     * @returns {Promise<boolean>} 收藏状态
-     */
-    async toggleFavorite(movieId, moviesDir) {
-        try {
-            const movieDetail = await this.getMovieDetail(movieId, moviesDir);
-            if (!movieDetail) {
-                throw new Error('Movie not found');
-            }
-
-            const movieData = await this.fileService.readMovieNfo(movieDetail.path);
-            if (!movieData) {
-                throw new Error('Movie data not found');
-            }
-
-            movieData.favorite = !movieData.favorite;
-            await this.fileService.writeMovieNfo(movieDetail.path, movieData);
-
-            // 更新缓存
-            const updatedMovie = this.generateMovieData(movieData, movieDetail.folderName, movieDetail.category, movieDetail.path);
-            updatedMovie.poster = movieDetail.poster;
-            this.cacheService.updateMovieInCache(updatedMovie);
-
-            // 更新 index.json
-            await this.indexService.updateMovieIndex(updatedMovie, movieDetail.category, moviesDir);
-
-            return movieData.favorite;
-        } catch (error) {
-            console.error('Error toggling favorite:', error);
-            throw error;
-        }
-    }
-
-    /**
      * 保存用户评分
      * @param {string} movieId - 电影 ID
      * @param {number} rating - 评分 (1-5)
@@ -419,20 +383,6 @@ class MovieService {
      * @param {string} moviesDir - 电影目录
      * @returns {Promise<object>} 更新结果
      */
-    async batchToggleFavorite(movieIds, moviesDir) {
-        try {
-            const results = [];
-            for (const movieId of movieIds) {
-                const favorite = await this.toggleFavorite(movieId, moviesDir);
-                results.push({ movieId, favorite });
-            }
-            return { success: true, results };
-        } catch (error) {
-            console.error('Error batch toggling favorite:', error);
-            throw error;
-        }
-    }
-
     /**
      * 批量删除电影
      * @param {string[]} movieIds - 电影 ID 数组
@@ -477,8 +427,7 @@ class MovieService {
 
             const stats = {
                 totalMovies: movies.length,
-                avgRating: this.calculateAverageRating(movies),
-                favoriteCount: movies.filter(m => m.favorite).length
+                avgRating: this.calculateAverageRating(movies)
             };
 
             return stats;
@@ -521,7 +470,6 @@ class MovieService {
             fileinfo: movieData.fileinfo || '',
             original_filename: movieData.original_filename || '',
             category: category,
-            favorite: movieData.favorite || false,
             userRating: movieData.userRating || 0,
             userComment: movieData.userComment || '',
             tags: movieData.tags || [],
@@ -631,13 +579,6 @@ class MovieService {
             return 0;
         });
 
-        // 收藏电影排在前面
-        sorted.sort((a, b) => {
-            if (a.favorite && !b.favorite) return -1;
-            if (!a.favorite && b.favorite) return 1;
-            return 0;
-        });
-
         return sorted;
     }
 
@@ -728,7 +669,6 @@ class MovieService {
                 actors: actors || [],
                 studio: studio || '',
                 tags: tags || [],
-                favorite: false,
                 userRating: 0,
                 userComment: '',
                 fileset: fileset || []
@@ -807,7 +747,6 @@ class MovieService {
                     title: name,
                     category: category,
                     folderName: folderName,
-                    favorite: false,
                     userRating: 0,
                     userComment: '',
                     description: '',

@@ -98,7 +98,6 @@ function outputMovieDetail(movie) {
     console.log(`  分类:        ${movie.category || '-'}`);
     console.log(`  状态:        ${formatStatus(movie.status)}`);
     console.log(`  评分:        ${formatRating(movie.userRating)} (${movie.userRating || 0}/5)`);
-    console.log(`  收藏:        ${movie.favorite ? '是' : '否'}`);
     console.log(`  发行日期:    ${movie.publishDate || '-'}`);
     console.log(`  导演:        ${movie.director || '-'}`);
     console.log(`  演员:        ${movie.actors || '-'}`);
@@ -189,7 +188,6 @@ function outputStats(stats) {
     console.log(divider);
     console.log(`  电影总数:     ${stats.totalMovies || 0}`);
     console.log(`  平均评分:     ${stats.avgRating || 0}`);
-    console.log(`  收藏数量:     ${stats.favoriteCount || 0}`);
     console.log(divider);
 }
 

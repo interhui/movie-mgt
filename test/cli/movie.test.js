@@ -30,7 +30,6 @@ const mockMovieService = {
     getMovieDetail: jest.fn(),
     addMovie: jest.fn(),
     refreshCache: jest.fn(),
-    toggleFavorite: jest.fn(),
     getStats: jest.fn(),
     isCacheInitialized: jest.fn()
 };

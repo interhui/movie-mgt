@@ -203,25 +203,6 @@ class DatabaseService {
     }
 
     /**
-     * 设置收藏状态
-     * @param {string} movieId - 电影 ID
-     * @param {boolean} isFavorite - 是否收藏
-     */
-    setFavorite(movieId, isFavorite) {
-        try {
-            const movie = this.data.movies.find(m => m.id === movieId);
-            if (movie) {
-                movie.favorite = isFavorite ? 1 : 0;
-                movie.updated_at = Date.now();
-                this.saveData();
-            }
-        } catch (error) {
-            console.error('Error setting favorite:', error);
-            throw error;
-        }
-    }
-
-    /**
      * 获取标签列表
      * @returns {Array} 标签列表
      */
@@ -301,7 +282,6 @@ class DatabaseService {
 
             const movieData = {
                 ...movie,
-                favorite: movie.favorite ? 1 : 0,
                 updated_at: now,
                 created_at: movie.created_at || now
             };
@@ -348,11 +328,6 @@ class DatabaseService {
                 results = results.filter(movie => movie.status === filters.status);
             }
 
-            // 收藏筛选
-            if (filters.favorite) {
-                results = results.filter(movie => movie.favorite === 1);
-            }
-
             // 标签筛选
             if (filters.tagId) {
                 const movieIdsWithTag = this.data.movie_tags
@@ -386,11 +361,7 @@ class DatabaseService {
             if (filters.sort && sortMapping[filters.sort]) {
                 results.sort(sortMapping[filters.sort]);
             } else {
-                results.sort((a, b) => {
-                    if (b.favorite === 1 && a.favorite !== 1) return 1;
-                    if (a.favorite === 1 && b.favorite !== 1) return -1;
-                    return a.name.localeCompare(b.name);
-                });
+                results.sort((a, b) => a.name.localeCompare(b.name));
             }
 
             return results;

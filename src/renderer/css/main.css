@@ -502,11 +502,6 @@ body {
     font-size: 12px;
 }
 
-.movie-favorite {
-    color: #f44336;
-    font-size: 12px;
-}
-
 /* 空状态 */
 .empty-state {
     display: flex;

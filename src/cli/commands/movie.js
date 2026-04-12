@@ -23,14 +23,13 @@ async function listMovies(services, options = {}) {
     try {
         const { movieService, getMoviesDir } = services;
         const moviesDir = getMoviesDir();
-        const { category, favorite, rating, tag, status, sort, desc, format } = options;
+        const { category, rating, tag, status, sort, desc, format } = options;
 
         let movies;
         if (category) {
             movies = await movieService.getMoviesByCategory(category, moviesDir, {
                 sortBy: sort,
                 sortOrder: desc ? 'desc' : 'asc',
-                favorite: favorite ? 1 : undefined,
                 tagId: tag,
                 rating: rating ? parseInt(rating) : undefined
             });
@@ -38,7 +37,6 @@ async function listMovies(services, options = {}) {
             movies = await movieService.getAllMovies(moviesDir, {
                 sortBy: sort,
                 sortOrder: desc ? 'desc' : 'asc',
-                favorite: favorite ? 1 : undefined,
                 tagId: tag,
                 rating: rating ? parseInt(rating) : undefined
             });
@@ -61,11 +59,10 @@ async function searchMovies(services, keyword, options = {}) {
     try {
         const { movieService, getMoviesDir } = services;
         const moviesDir = getMoviesDir();
-        const { category, favorite, rating, tag, format } = options;
+        const { category, rating, tag, format } = options;
 
         const filters = {};
         if (category) filters.category = category;
-        if (favorite) filters.favorite = true;
         if (rating) filters.rating = parseInt(rating);
         if (tag) filters.tagId = tag;
 
@@ -281,29 +278,6 @@ async function deleteMovie(services, movieId, options = {}) {
 }
 
 /**
- * Toggle movie favorite status
- * @param {object} services - Loaded services
- * @param {string} movieId - Movie ID
- */
-async function toggleFavorite(services, movieId) {
-    try {
-        const { movieService, getMoviesDir } = services;
-        const moviesDir = getMoviesDir();
-
-        if (!validateMovieId(movieId)) {
-            outputError('无效的电影ID格式', '电影ID格式应为: category-movieName');
-            return;
-        }
-
-        const isFavorite = await movieService.toggleFavorite(movieId, moviesDir);
-        outputSuccess(isFavorite ? '已标记为收藏' : '已取消收藏', { 'ID': movieId });
-    } catch (error) {
-        outputError(`切换收藏状态失败: ${error.message}`);
-        throw error;
-    }
-}
-
-/**
  * Update movie status
  * @param {object} services - Loaded services
  * @param {string} movieId - Movie ID
@@ -356,6 +330,5 @@ module.exports = {
     addMovie,
     editMovie,
     deleteMovie,
-    toggleFavorite,
     updateStatus
 };

@@ -680,7 +680,6 @@ async function loadMovies() {
                 filters: {
                     category: state.currentCategory,
                     sort: state.currentSort,
-                    favorite: filterOptions.favorite,
                     tagId: filterOptions.tagId,
                     rating: filterOptions.rating
                 }
@@ -691,7 +690,6 @@ async function loadMovies() {
                 category: state.currentCategory,
                 sortBy: filterOptions.sortBy,
                 sortOrder: filterOptions.sortOrder,
-                favorite: filterOptions.favorite,
                 tagId: filterOptions.tagId,
                 rating: filterOptions.rating
             });
@@ -700,7 +698,6 @@ async function loadMovies() {
             movies = await window.electronAPI.getAllMovies({
                 sortBy: filterOptions.sortBy,
                 sortOrder: filterOptions.sortOrder,
-                favorite: filterOptions.favorite,
                 tagId: filterOptions.tagId,
                 rating: filterOptions.rating
             });
@@ -842,7 +839,6 @@ function renderMovies(movies) {
                         ${movie.movieId || ''}
                     </div>
                     <div class="movie-name">
-                        ${movie.favorite ? '<span class="movie-favorite">❤️</span>' : ''}
                         ${movie.name}
                     </div>
                     <div class="movie-actors-col">${movie.actors || '-'}</div>

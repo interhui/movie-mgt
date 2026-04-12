@@ -38,7 +38,6 @@ beforeAll(() => {
     </actor>
     <tag>action</tag>
     <tag>drama</tag>
-    <favorite>false</favorite>
     <userRating>5</userRating>
     <status>unplayed</status>
     <playCount>0</playCount>

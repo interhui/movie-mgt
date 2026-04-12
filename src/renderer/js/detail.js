@@ -59,9 +59,7 @@ const elements = {
     boxActions: document.getElementById('box-actions'),
     boxInfoSection: document.getElementById('box-info-section'),
     boxStatus: document.getElementById('box-status'),
-    boxPlayTime: document.getElementById('box-play-time'),
-    boxLastPlayed: document.getElementById('box-last-played'),
-    editStatusBtn: document.getElementById('edit-status-btn'),
+    boxRating: document.getElementById('box-rating'),
     editStatusActionBtn: document.getElementById('edit-status-action-btn'),
     editStatusModal: document.getElementById('edit-status-modal'),
     confirmEditStatus: document.getElementById('confirm-edit-status'),
@@ -431,11 +429,12 @@ function loadMovieDetail(movie) {
         elements.boxActions.style.display = 'flex';
         elements.boxInfoSection.style.display = 'block';
 
-        const status = movie.boxStatus || 'unwatched';
+        const status = movie.boxStatus || 'unplayed';
         elements.boxStatus.textContent = getStatusText(status);
         elements.boxStatus.className = `value box-status-tag-display ${status}`;
-        elements.boxPlayTime.textContent = formatPlaytime(movie.boxTotalPlayTime);
-        elements.boxLastPlayed.textContent = movie.boxLastPlayed || '-';
+
+        // 更新评分星星
+        updateBoxRating(movie.boxRating || 0);
     } else {
         elements.normalActions.style.display = 'flex';
         elements.boxActions.style.display = 'none';
@@ -756,12 +755,28 @@ function getCategoryName(categoryId) {
  */
 function getStatusText(status) {
     const statusMap = {
-        'unwatched': '未看',
-        'watching': '观看中',
-        'watched': '已看',
+        'unplayed': '未看',
+        'playing': '观看中',
         'completed': '已完成'
     };
     return statusMap[status] || status;
+}
+
+/**
+ * 更新盒子评分显示
+ */
+function updateBoxRating(rating) {
+    const stars = elements.boxRating.querySelectorAll('.star');
+    stars.forEach(star => {
+        const starRating = parseInt(star.dataset.rating);
+        if (starRating <= rating) {
+            star.textContent = '⭐';
+            star.classList.add('active');
+        } else {
+            star.textContent = '☆';
+            star.classList.remove('active');
+        }
+    });
 }
 
 /**
@@ -781,7 +796,7 @@ function formatPlaytime(minutes) {
 function openStatusModal() {
     if (!fromBox) return;
 
-    const status = currentMovie.boxStatus || 'unwatched';
+    const status = currentMovie.boxStatus || 'unplayed';
     const radioButtons = document.querySelectorAll('input[name="edit-status"]');
     radioButtons.forEach(radio => {
         radio.checked = radio.value === status;
@@ -1273,11 +1288,8 @@ function bindEvents() {
                 category: currentMovie.category,
                 movieInfo: {
                     id: currentMovie.movieId,
-                    status: 'unwatched',
-                    firstWatched: '',
-                    lastWatched: '',
-                    totalWatchTime: 0,
-                    watchCount: 0
+                    status: 'unplayed',
+                    rating: 0
                 }
             });
 
@@ -1338,7 +1350,7 @@ function bindEvents() {
         }
     });
 
-    elements.editStatusBtn.addEventListener('click', () => {
+    elements.boxStatus.addEventListener('click', () => {
         openStatusModal();
     });
 
@@ -1358,6 +1370,32 @@ function bindEvents() {
         if (e.target === elements.editStatusModal) {
             closeStatusModal();
         }
+    });
+
+    // 盒子评分星星点击
+    elements.boxRating.querySelectorAll('.star').forEach(star => {
+        star.addEventListener('click', async () => {
+            if (!fromBox) return;
+            const rating = parseInt(star.dataset.rating);
+            const newRating = currentMovie.boxRating === rating ? 0 : rating;
+            const result = await window.electronAPI.updateMovieInBox({
+                boxName: boxName,
+                category: currentMovie.category,
+                movieId: currentMovie.movieId,
+                movieInfo: {
+                    rating: newRating
+                }
+            });
+            if (!result.error) {
+                currentMovie.boxRating = newRating;
+                updateBoxRating(newRating);
+            }
+        });
+    });
+
+    elements.boxRating.addEventListener('mouseleave', () => {
+        if (!fromBox) return;
+        updateBoxRating(currentMovie.boxRating || 0);
     });
 
     const tagSelectorModal = document.getElementById('tag-selector-modal');

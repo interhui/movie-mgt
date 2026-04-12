@@ -280,15 +280,6 @@ class MovieCacheService {
             results = results.filter(movie => movie.category === filters.category);
         }
 
-        // 收藏筛选
-        if (filters.favorite !== undefined) {
-            const favValue = filters.favorite === 1 || filters.favorite === true ? 1 : 0;
-            results = results.filter(movie => {
-                const movieFav = movie.favorite === true || movie.favorite === 1 ? 1 : 0;
-                return movieFav === favValue;
-            });
-        }
-
         // 标签筛选
         if (filters.tagId) {
             results = results.filter(movie =>
@@ -324,17 +315,6 @@ class MovieCacheService {
             return movies;
         }
 
-        // 如果没有指定排序字段，只应用收藏优先排序
-        if (!sortBy) {
-            const sorted = [...movies];
-            sorted.sort((a, b) => {
-                if (a.favorite && !b.favorite) return -1;
-                if (!a.favorite && b.favorite) return 1;
-                return 0;
-            });
-            return sorted;
-        }
-
         // 先按指定字段排序
         const sorted = [...movies];
         sorted.sort((a, b) => {
@@ -363,11 +343,7 @@ class MovieCacheService {
             return 0;
         });
 
-        // 然后将收藏电影排在前面（保持组内相对顺序）
-        const favorites = sorted.filter(m => m.favorite);
-        const nonFavorites = sorted.filter(m => !m.favorite);
-
-        return [...favorites, ...nonFavorites];
+        return sorted;
     }
 }
 

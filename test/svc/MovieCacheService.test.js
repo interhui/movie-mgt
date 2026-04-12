@@ -15,7 +15,6 @@ describe('MovieCacheService', () => {
                 name: 'Action Movie',
                 title: 'Action Movie',
                 category: 'movie',
-                favorite: true,
                 userRating: 5,
                 tags: ['action'],
                 year: 2024
@@ -25,7 +24,6 @@ describe('MovieCacheService', () => {
                 name: 'Drama Movie',
                 title: 'Drama Movie',
                 category: 'movie',
-                favorite: false,
                 userRating: 3,
                 tags: ['drama'],
                 year: 2023
@@ -35,7 +33,6 @@ describe('MovieCacheService', () => {
                 name: 'TV Show',
                 title: 'TV Show',
                 category: 'tv',
-                favorite: true,
                 userRating: 4,
                 tags: ['drama'],
                 year: 2024
@@ -170,15 +167,7 @@ describe('MovieCacheService', () => {
             expect(results.length).toBe(2);
         });
 
-        test('SVC-CACHE-019: 收藏筛选', () => {
-            const results = service.searchMovies(null, { favorite: true });
-            expect(results.length).toBe(2);
-            results.forEach(m => {
-                expect(m.favorite).toBe(true);
-            });
-        });
-
-        test('SVC-CACHE-020: 标签筛选', () => {
+        test('SVC-CACHE-019: 标签筛选', () => {
             const results = service.searchMovies(null, { tagId: 'action' });
             expect(results.length).toBe(1);
             expect(results[0].tags).toContain('action');
@@ -190,14 +179,7 @@ describe('MovieCacheService', () => {
             expect(results[0].userRating).toBe(5);
         });
 
-        test('SVC-CACHE-022: 组合筛选', () => {
-            const results = service.searchMovies(null, { category: 'movie', favorite: true });
-            expect(results.length).toBe(1);
-            expect(results[0].category).toBe('movie');
-            expect(results[0].favorite).toBe(true);
-        });
-
-        test('SVC-CACHE-023: 无匹配返回空', () => {
+        test('SVC-CACHE-022: 无匹配返回空', () => {
             const results = service.searchMovies(null, { rating: 1 });
             expect(results).toEqual([]);
         });
@@ -208,51 +190,35 @@ describe('MovieCacheService', () => {
             service.initializeCache(testMovies, '/movies');
         });
 
-        test('SVC-CACHE-024: 按名称升序', () => {
+        test('SVC-CACHE-022: 按名称升序', () => {
             const results = service.sortMovies([...testMovies], 'name', 'asc');
-            // First two are favorites (Action Movie, TV Show), then non-favorite (Drama Movie)
-            expect(results[0].favorite).toBe(true);
-            expect(results[1].favorite).toBe(true);
-            expect(results[2].favorite).toBe(false);
+            expect(results[0].title).toBe('Action Movie');
         });
 
-        test('SVC-CACHE-025: 按名称降序', () => {
+        test('SVC-CACHE-023: 按名称降序', () => {
             const results = service.sortMovies([...testMovies], 'name', 'desc');
-            // Favorites first
-            expect(results[0].favorite).toBe(true);
-            expect(results[1].favorite).toBe(true);
-            expect(results[2].favorite).toBe(false);
+            expect(results[0].title).toBe('TV Show');
         });
 
-        test('SVC-CACHE-026: 按评分排序', () => {
+        test('SVC-CACHE-024: 按评分排序', () => {
             const results = service.sortMovies([...testMovies], 'rating', 'desc');
-            // Favorites first, then by rating
-            expect(results[0].favorite).toBe(true);
-            expect(results[2].favorite).toBe(false);
+            expect(results[0].userRating).toBe(5);
         });
 
-        test('SVC-CACHE-027: 收藏优先', () => {
-            const results = service.sortMovies([...testMovies], 'name', 'asc');
-            // First two should be favorites
-            expect(results[0].favorite).toBe(true);
-            expect(results[1].favorite).toBe(true);
-            expect(results[2].favorite).toBe(false);
-        });
-
-        test('SVC-CACHE-028: 空列表返回空', () => {
+        test('SVC-CACHE-025: 空列表返回空', () => {
             const results = service.sortMovies([], 'name', 'asc');
             expect(results).toEqual([]);
         });
     });
 
     describe('addMoviesToCache / removeMoviesFromCache', () => {
-        test('SVC-CACHE-029: 批量添加电影', () => {
+        test('SVC-CACHE-026: 批量添加电影', () => {
             service.initializeCache([testMovies[0]], '/movies');
             service.addMoviesToCache([testMovies[1], testMovies[2]]);
             expect(service.getAllMovies()).toHaveLength(3);
         });
 
-        test('SVC-CACHE-030: 批量移除电影', () => {
+        test('SVC-CACHE-027: 批量移除电影', () => {
             service.initializeCache(testMovies, '/movies');
             service.removeMoviesFromCache(['movie-1', 'movie-2']);
             expect(service.getAllMovies()).toHaveLength(1);

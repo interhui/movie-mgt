@@ -356,7 +356,6 @@ program
     .command('stats')
     .description('Show movie library statistics')
     .option('-c, --category <id>', 'Filter by category')
-    .option('--favorite', 'Show favorite stats')
     .option('--playtime', 'Show playtime stats')
     .action(async (cmdOptions) => {
         const services = await getServices(program.opts());

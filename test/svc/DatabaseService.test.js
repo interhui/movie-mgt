@@ -86,9 +86,9 @@ describe('DatabaseService', () => {
     describe('getMovieStats', () => {
         test('SVC-DB-008: 返回全局统计', () => {
             service.data.movies = [
-                { id: '1', status: 'completed', userRating: 5, favorite: 1 },
-                { id: '2', status: 'playing', userRating: 3, favorite: 0 },
-                { id: '3', status: 'unplayed', userRating: 0, favorite: 0 }
+                { id: '1', status: 'completed', userRating: 5 },
+                { id: '2', status: 'playing', userRating: 3 },
+                { id: '3', status: 'unplayed', userRating: 0 }
             ];
             const stats = service.getMovieStats();
             expect(stats.totalMovies).toBe(3);
@@ -150,20 +150,6 @@ describe('DatabaseService', () => {
             service.data.movies = [{ id: 'movie-1' }];
             service.saveUserRating('movie-1', 4, 'Nice');
             expect(service.data.movies[0].userComment).toBe('Nice');
-        });
-    });
-
-    describe('setFavorite', () => {
-        test('SVC-DB-015: 设置收藏', () => {
-            service.data.movies = [{ id: 'movie-1', favorite: 0 }];
-            service.setFavorite('movie-1', true);
-            expect(service.data.movies[0].favorite).toBe(1);
-        });
-
-        test('SVC-DB-016: 取消收藏', () => {
-            service.data.movies = [{ id: 'movie-1', favorite: 1 }];
-            service.setFavorite('movie-1', false);
-            expect(service.data.movies[0].favorite).toBe(0);
         });
     });
 
@@ -232,19 +218,14 @@ describe('DatabaseService', () => {
             service.upsertMovie({ id: 'movie-1', title: 'New Title' });
             expect(service.data.movies[0].title).toBe('New Title');
         });
-
-        test('SVC-DB-024: favorite转01', () => {
-            service.upsertMovie({ id: 'movie-1', favorite: true });
-            expect(service.data.movies[0].favorite).toBe(1);
-        });
     });
 
     describe('searchMovies', () => {
         beforeEach(() => {
             service.data.movies = [
-                { id: '1', name: 'Action Movie', category: 'movie', status: 'completed', favorite: 1, userRating: 5, tags: ['action'] },
-                { id: '2', name: 'Drama Movie', category: 'movie', status: 'playing', favorite: 0, userRating: 3, tags: ['drama'] },
-                { id: '3', name: 'TV Show', category: 'tv', status: 'unplayed', favorite: 0, userRating: 4, tags: ['drama'] }
+                { id: '1', name: 'Action Movie', category: 'movie', status: 'completed', userRating: 5, tags: ['action'] },
+                { id: '2', name: 'Drama Movie', category: 'movie', status: 'playing', userRating: 3, tags: ['drama'] },
+                { id: '3', name: 'TV Show', category: 'tv', status: 'unplayed', userRating: 4, tags: ['drama'] }
             ];
             service.data.movie_tags = [
                 { movie_id: '1', tag_id: 'action' },
@@ -275,18 +256,12 @@ describe('DatabaseService', () => {
             expect(results[0].status).toBe('completed');
         });
 
-        test('SVC-DB-028: 收藏筛选', () => {
-            const results = service.searchMovies('', { favorite: true });
-            expect(results).toHaveLength(1);
-            expect(results[0].favorite).toBe(1);
-        });
-
-        test('SVC-DB-029: 标签筛选', () => {
+        test('SVC-DB-028: 标签筛选', () => {
             const results = service.searchMovies('', { tagId: 'drama' });
             expect(results.length).toBe(2);
         });
 
-        test('SVC-DB-030: 评分筛选', () => {
+        test('SVC-DB-029: 评分筛选', () => {
             const results = service.searchMovies('', { rating: '5' });
             expect(results).toHaveLength(1);
             expect(results[0].userRating).toBe(5);

@@ -200,10 +200,10 @@ function setupIpcHandlers(services) {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-            const { platform, category, status, sortBy, sortOrder, favorite, tagId, rating } = filters || {};
+            const { platform, category, status, sortBy, sortOrder, tagId, rating } = filters || {};
             // 兼容 platform 和 category 参数
             const categoryFilter = category || platform;
-            const movies = await movieService.getMoviesByCategory(categoryFilter, moviesDir, { status, sortBy, sortOrder, favorite, tagId, rating });
+            const movies = await movieService.getMoviesByCategory(categoryFilter, moviesDir, { status, sortBy, sortOrder, tagId, rating });
             return movies;
         } catch (error) {
             console.error('Error getting movies by category:', error);
@@ -230,8 +230,8 @@ function setupIpcHandlers(services) {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-            const { sortBy, sortOrder, favorite, tagId, rating } = filters || {};
-            const movies = await movieService.getAllMovies(moviesDir, { sortBy, sortOrder, favorite, tagId, rating });
+            const { sortBy, sortOrder, tagId, rating } = filters || {};
+            const movies = await movieService.getAllMovies(moviesDir, { sortBy, sortOrder, tagId, rating });
             return movies;
         } catch (error) {
             console.error('Error getting all movies:', error);
@@ -329,20 +329,6 @@ function setupIpcHandlers(services) {
             return { success: true };
         } catch (error) {
             console.error('Error updating playtime:', error);
-            return { error: error.message };
-        }
-    });
-
-    // 标记/取消收藏
-    ipcMain.handle('toggle-favorite', async (event, movieId) => {
-        try {
-            const settings = settingsService.getSettings();
-            const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-            const isFavorite = await movieService.toggleFavorite(movieId, moviesDir);
-            await dbService.setFavorite(movieId, isFavorite);
-            return { favorite: isFavorite };
-        } catch (error) {
-            console.error('Error toggling favorite:', error);
             return { error: error.message };
         }
     });
@@ -508,19 +494,6 @@ function setupIpcHandlers(services) {
 
     // ==================== 批量操作 ====================
 
-    // 批量收藏/取消收藏
-    ipcMain.handle('batch-toggle-favorite', async (event, { movieIds }) => {
-        try {
-            const settings = settingsService.getSettings();
-            const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-            const result = await movieService.batchToggleFavorite(movieIds, moviesDir);
-            return result;
-        } catch (error) {
-            console.error('Error batch toggling favorite:', error);
-            return { error: error.message };
-        }
-    });
-
     // 批量删除电影
     ipcMain.handle('batch-delete-movies', async (event, { movieIds }) => {
         try {
@@ -579,7 +552,6 @@ function setupIpcHandlers(services) {
             existingData.publishDate = movieData.publishDate;
             existingData.status = movieData.status;
             existingData.userRating = movieData.userRating;
-            existingData.favorite = movieData.favorite;
             existingData.tags = movieData.tags;
             existingData.description = movieData.description;
             existingData.userComment = movieData.userComment;

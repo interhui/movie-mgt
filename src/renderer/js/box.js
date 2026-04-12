@@ -16,8 +16,7 @@ const state = {
     selectedMovies: new Set(),
     detailEditModeLocked: false,
     currentTag: '',         // 当前选中的标签筛选
-    currentRating: '',      // 当前选中的评分筛选
-    showFavoritesOnly: ''  // 收藏筛选: ''=全部, '1'=收藏, '0'=未收藏
+    currentRating: ''      // 当前选中的评分筛选
 };
 
 // DOM 元素
@@ -45,7 +44,6 @@ const elements = {
     sortSelect: document.getElementById('sort-select'),
     tagFilter: document.getElementById('tag-filter'),
     ratingFilter: document.getElementById('rating-filter'),
-    favoriteFilter: document.getElementById('favorite-filter'),
     statusModal: document.getElementById('status-modal'),
     statusMovieName: document.getElementById('status-movie-name'),
     confirmStatusBtn: document.getElementById('confirm-status-btn'),
@@ -54,6 +52,7 @@ const elements = {
 
 // 当前正在修改状态的电影
 let currentStatusMovie = null;
+let currentEditingRating = 0;
 
 // 分类缓存
 let categoriesCache = [];
@@ -390,14 +389,6 @@ function bindEvents() {
         renderMovies(state.movies);
     });
 
-    // 收藏筛选
-    elements.favoriteFilter.addEventListener('change', (e) => {
-        state.showFavoritesOnly = e.target.checked ? '1' : '';
-        const filteredMovies = getFilteredMovies(state.movies);
-        updateCategoryListWithFilteredMovies(filteredMovies);
-        renderMovies(state.movies);
-    });
-
     // 批量移除按钮
     elements.batchRemoveBtn.addEventListener('click', async () => {
         await batchRemoveMovies();
@@ -422,6 +413,16 @@ function bindEvents() {
         if (e.target === elements.statusModal) {
             closeStatusModal();
         }
+    });
+
+    // 评分星星点击
+    document.querySelectorAll('.rating-star').forEach(star => {
+        star.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const rating = parseInt(star.dataset.rating, 10);
+            currentEditingRating = currentEditingRating === rating ? 0 : rating;
+            updateRatingDisplay();
+        });
     });
 }
 
@@ -514,11 +515,8 @@ async function loadMoviesFromBox(boxData) {
                 categoriesSet.add(movie.category);
                 movies.push({
                     ...movie,
-                    boxStatus: boxMovie.status,
-                    boxFirstPlayed: boxMovie.firstPlayed,
-                    boxLastPlayed: boxMovie.lastPlayed,
-                    boxTotalPlayTime: boxMovie.totalPlayTime,
-                    boxPlayCount: boxMovie.playCount,
+                    boxStatus: boxMovie.status || 'unplayed',
+                    boxRating: boxMovie.rating || 0,
                     boxComment: boxMovie.comment
                 });
             }
@@ -631,13 +629,6 @@ function getFilteredMovies(movies) {
         filteredMovies = filteredMovies.filter(m => m.boxStatus === state.currentStatus);
     }
 
-    // 收藏过滤
-    if (state.showFavoritesOnly === '1') {
-        filteredMovies = filteredMovies.filter(m => m.favorite === 1 || m.favorite === true);
-    } else if (state.showFavoritesOnly === '0') {
-        filteredMovies = filteredMovies.filter(m => !m.favorite || m.favorite === 0);
-    }
-
     // 标签过滤
     if (state.currentTag) {
         filteredMovies = filteredMovies.filter(m =>
@@ -650,7 +641,7 @@ function getFilteredMovies(movies) {
         const rating = parseInt(state.currentRating, 10);
         if (!isNaN(rating)) {
             filteredMovies = filteredMovies.filter(m =>
-                m.userRating !== undefined && m.userRating === rating
+                m.boxRating !== undefined && m.boxRating === rating
             );
         }
     }
@@ -700,13 +691,6 @@ function renderMovies(movies) {
         filteredMovies = filteredMovies.filter(m => m.boxStatus === state.currentStatus);
     }
 
-    // 收藏过滤
-    if (state.showFavoritesOnly === '1') {
-        filteredMovies = filteredMovies.filter(m => m.favorite === 1 || m.favorite === true);
-    } else if (state.showFavoritesOnly === '0') {
-        filteredMovies = filteredMovies.filter(m => !m.favorite || m.favorite === 0);
-    }
-
     // 标签过滤
     if (state.currentTag) {
         filteredMovies = filteredMovies.filter(m =>
@@ -719,7 +703,7 @@ function renderMovies(movies) {
         const rating = parseInt(state.currentRating, 10);
         if (!isNaN(rating)) {
             filteredMovies = filteredMovies.filter(m =>
-                m.userRating !== undefined && m.userRating === rating
+                m.boxRating !== undefined && m.boxRating === rating
             );
         }
     }
@@ -760,10 +744,9 @@ function renderMovies(movies) {
                 <div class="movie-icon"></div>
                 <div class="movie-id-col">电影ID</div>
                 <div class="movie-name">名称</div>
-                <div class="movie-description-col">描述</div>
-                <div class="movie-publish-date">发行时间</div>
-                <div class="movie-time">观看时间</div>
-                <div class="movie-last-played">最后观看</div>
+                <div class="movie-actors-col">主演</div>
+                <div class="movie-publish-date">上映时间</div>
+                <div class="movie-publisher-col">发行商</div>
                 <div class="movie-status">状态</div>
                 <div class="movie-rating">评分</div>
             </div>
@@ -790,16 +773,12 @@ function renderMovies(movies) {
                         }
                     </div>
                     <div class="movie-id-col">${movie.movieId || ''}</div>
-                    <div class="movie-name">
-                        ${movie.favorite ? '<span class="movie-favorite">❤️</span>' : ''}
-                        ${movie.name}
-                    </div>
-                    <div class="movie-description-col">${movie.description ? (movie.description.length > 20 ? movie.description.substring(0, 20) + '...' : movie.description) : '-'}</div>
+                    <div class="movie-name">${movie.name}</div>
+                    <div class="movie-actors-col">${movie.actors || '-'}</div>
                     <div class="movie-publish-date">${movie.publishDate || '-'}</div>
-                    <div class="movie-time">${formatPlaytime(movie.boxTotalPlayTime)}</div>
-                    <div class="movie-last-played">${movie.boxLastPlayed || '-'}</div>
+                    <div class="movie-publisher-col">${movie.publisher || '-'}</div>
                     <div class="movie-status"><span class="box-list-status ${movie.boxStatus || 'unplayed'}" data-movie-id="${movie.movieId}" data-category="${movie.category}">${getStatusText(movie.boxStatus)}</span></div>
-                    <div class="movie-rating">${movie.userRating ? '⭐'.repeat(movie.userRating) : '-'}</div>
+                    <div class="movie-rating">${movie.boxRating ? '⭐'.repeat(movie.boxRating) : '-'}</div>
                 </div>
             `;
         } else {
@@ -813,11 +792,10 @@ function renderMovies(movies) {
                          <div class="movie-poster-placeholder" style="display:none;">🎬</div>` :
                         `<div class="movie-poster-placeholder">🎬</div>`
                     }
+                    ${movie.boxRating ? `<div class="movie-rating">${'⭐'.repeat(movie.boxRating)}</div>` : ''}
                     <div class="movie-info">
                         <div class="movie-name">${movie.name}</div>
                         <div class="movie-extra">${movie.actors || '-'}</div>
-                        ${movie.boxStatus ? `<div class="box-status-text">${getStatusText(movie.boxStatus)}</div>` : ''}
-                        ${movie.userRating ? `<div class="movie-rating">${'⭐'.repeat(movie.userRating)}</div>` : ''}
                     </div>
                 </div>
             `;
@@ -913,8 +891,8 @@ function sortMovies(movies, sortBy = 'name', sortOrder = 'asc') {
                 valB = b.name.toLowerCase();
                 break;
             case 'rating':
-                valA = a.userRating || 0;
-                valB = b.userRating || 0;
+                valA = a.boxRating || 0;
+                valB = b.boxRating || 0;
                 break;
             default:
                 valA = a.name.toLowerCase();
@@ -923,13 +901,6 @@ function sortMovies(movies, sortBy = 'name', sortOrder = 'asc') {
 
         if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
         if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
-        return 0;
-    });
-
-    // 收藏电影排在前面
-    sorted.sort((a, b) => {
-        if (a.favorite && !b.favorite) return -1;
-        if (!a.favorite && b.favorite) return 1;
         return 0;
     });
 
@@ -943,7 +914,6 @@ function getStatusText(status) {
     const statusMap = {
         'unplayed': '未看',
         'playing': '观看中',
-        'played': '已看',
         'completed': '已完成'
     };
     return statusMap[status] || status;
@@ -1071,6 +1041,10 @@ function openStatusModal(movieId, category) {
         radio.checked = radio.value === currentStatus;
     });
 
+    // 设置评分
+    currentEditingRating = movie.boxRating || 0;
+    updateRatingDisplay();
+
     elements.statusModal.style.display = 'flex';
 }
 
@@ -1080,6 +1054,23 @@ function openStatusModal(movieId, category) {
 function closeStatusModal() {
     elements.statusModal.style.display = 'none';
     currentStatusMovie = null;
+}
+
+/**
+ * 更新评分显示
+ */
+function updateRatingDisplay() {
+    const stars = document.querySelectorAll('.rating-star');
+    stars.forEach(star => {
+        const rating = parseInt(star.dataset.rating, 10);
+        if (rating <= currentEditingRating) {
+            star.textContent = '★';
+            star.classList.add('active');
+        } else {
+            star.textContent = '☆';
+            star.classList.remove('active');
+        }
+    });
 }
 
 /**
@@ -1100,7 +1091,8 @@ async function confirmStatusChange() {
             category: category,
             movieId: movieId,
             movieInfo: {
-                status: newStatus
+                status: newStatus,
+                rating: currentEditingRating
             }
         });
 
@@ -1108,11 +1100,11 @@ async function confirmStatusChange() {
             closeStatusModal();
             await loadBoxData();
         } else {
-            alert('修改状态失败: ' + result.error);
+            alert('修改失败: ' + result.error);
         }
     } catch (error) {
-        console.error('Error updating movie status:', error);
-        alert('修改状态失败: ' + error.message);
+        console.error('Error updating movie:', error);
+        alert('修改失败: ' + error.message);
     }
 }
 
@@ -1143,7 +1135,7 @@ async function openMovieDetail(movieId) {
  */
 function updateStats(movies) {
     elements.statsBar.total.textContent = `电影总数：${movies.length}`;
-    elements.statsBar.played.textContent = `已看：${movies.filter(m => m.boxStatus === 'played').length}`;
+    elements.statsBar.played.textContent = `已完成：${movies.filter(m => m.boxStatus === 'completed').length}`;
     elements.statsBar.playing.textContent = `观看中：${movies.filter(m => m.boxStatus === 'playing').length}`;
     elements.statsBar.unplayed.textContent = `未看：${movies.filter(m => m.boxStatus === 'unplayed').length}`;
 }

@@ -26,7 +26,7 @@ describe('HardCodeService', () => {
         test('SVC-HARDCODED-003: 包含顶层属性', () => {
             const settings = service.getDefaultSettings();
             const topLevelProps = ['appearance', 'layout', 'library', 'shortcuts',
-                'notifications', 'import', 'moviebox', 'igdb', 'version', 'lastUpdate'];
+                'notifications', 'import', 'moviebox', 'version', 'lastUpdate'];
             topLevelProps.forEach(prop => {
                 expect(settings).toHaveProperty(prop);
             });
@@ -63,11 +63,6 @@ describe('HardCodeService', () => {
             expect(settings.moviebox.movieboxDir).toBeDefined();
         });
 
-        test('SVC-HARDCODED-009: igdb属性正确', () => {
-            const settings = service.getDefaultSettings();
-            expect(settings.igdb.clientId).toBe('');
-            expect(settings.igdb.clientSecret).toBe('');
-        });
     });
 
     describe('getDefaultTags', () => {

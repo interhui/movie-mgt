@@ -102,7 +102,6 @@ describe('FileService', () => {
     <actor><name>Actor 2</name></actor>
     <tag>action</tag>
     <tag>drama</tag>
-    <favorite>true</favorite>
     <userRating>5</userRating>
 </movie>`;
             fs.writeFileSync(path.join(movieDir, 'movie.nfo'), nfoContent);
@@ -183,13 +182,11 @@ describe('FileService', () => {
                 director: 'Director',
                 actors: ['Actor 1'],
                 tag: ['action'],
-                favorite: true,
                 userRating: 5
             };
             const xml = service.generateMovieNfo(data);
             expect(xml).toContain('<id>gen-test</id>');
             expect(xml).toContain('<title>Generate Test</title>');
-            expect(xml).toContain('<favorite>true</favorite>');
         });
 
         test('SVC-FILE-018: XML转义特殊字符', () => {

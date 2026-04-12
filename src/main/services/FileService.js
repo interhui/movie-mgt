@@ -130,9 +130,6 @@ class FileService {
             movie.fileinfo = fileinfoMatch[1];
         }
 
-        // 解析 favorite（布尔值）
-        movie.favorite = xmlContent.includes('<favorite>true</favorite>');
-
         // 解析 userRating（数字）
         const ratingMatch = xmlContent.match(/<userRating>(\d+)<\/userRating>/i);
         if (ratingMatch) {
@@ -206,9 +203,6 @@ class FileService {
         if (movieData.fileinfo) {
             xml += `    <fileinfo>${movieData.fileinfo}</fileinfo>\n`;
         }
-
-        // 写入收藏状态
-        xml += `    <favorite>${movieData.favorite ? 'true' : 'false'}</favorite>\n`;
 
         // 写入用户评分
         if (movieData.userRating !== undefined) {
