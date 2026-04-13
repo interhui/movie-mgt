@@ -50,6 +50,9 @@ class IndexService {
      */
     async buildCategoryIndex(category, moviesDir) {
         try {
+            if (!moviesDir) {
+                throw new Error(`moviesDir is undefined for category "${category}"`);
+            }
             const categoryPath = path.join(moviesDir, category);
             const indexPath = this.getIndexPath(category, moviesDir);
 

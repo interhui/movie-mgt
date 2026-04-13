@@ -1019,14 +1019,6 @@ async function openMovieDetail(movieId) {
         // 获取完整的电影详情数据（包含NFO中的所有字段）
         const movie = await window.electronAPI.getMovieDetail(movieId);
         if (movie && !movie.error) {
-            console.log('[DEBUG main.js renderer] openMovieDetail - full movie data:');
-            console.log('[DEBUG] movie.original_filename:', movie.original_filename);
-            console.log('[DEBUG] movie.videoCodec:', movie.videoCodec);
-            console.log('[DEBUG] movie.videoWidth:', movie.videoWidth);
-            console.log('[DEBUG] movie.videoHeight:', movie.videoHeight);
-            console.log('[DEBUG] movie.videoDuration:', movie.videoDuration);
-            console.log('[DEBUG] movie.fileinfo:', movie.fileinfo);
-            console.log('[DEBUG] movie.fileset:', movie.fileset);
             await window.electronAPI.openMovieDetail(movie);
         }
     } catch (error) {
@@ -2471,7 +2463,6 @@ async function startScanDirectory() {
 function showScanResults(movies, platform) {
     const platformName = state.categories.find(c => c.id === platform)?.name || platform;
     elements.scanResultInfo.textContent = `共扫描到 ${movies.length} 个电影（分类：${platformName}）`;
-    elements.scanResultImport.disabled = true;
 
     // 渲染电影列表（table 形式，滚动条仅在 scan-movies-list 内）
     let html = `
@@ -2526,6 +2517,7 @@ function showScanResults(movies, platform) {
     `;
 
     elements.scanMoviesList.innerHTML = html;
+    checkAllMoviesConfirmed();
     elements.scanResultModal.style.display = 'flex';
 }
 

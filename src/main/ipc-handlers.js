@@ -577,7 +577,6 @@ function setupIpcHandlers(services) {
             }
 
             // 保存更新后的数据到 NFO
-            console.log('[DEBUG save-movie-edit] existingData.fileset:', JSON.stringify(existingData.fileset));
             await fileService.writeMovieNfo(moviePath, existingData);
 
             // 重新生成电影数据用于索引和缓存
@@ -1013,12 +1012,15 @@ function setupIpcHandlers(services) {
     // ==================== 电影目录扫描 ====================
 
     // 扫描电影目录
-    ipcMain.handle('scan-movie-directory', async (event, { scanPath, scanType, category }) => {
+    ipcMain.handle('scan-movie-directory', async (event, { scanPath, scanType, category, platform }) => {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
 
-            const result = await movieService.scanMovieDirectory(scanPath, scanType, category, moviesDir);
+            // category 可能是 undefined，使用 platform 作为备选
+            const actualCategory = category || platform;
+
+            const result = await movieService.scanMovieDirectory(scanPath, scanType, actualCategory, moviesDir);
             return result;
         } catch (error) {
             console.error('Error scanning movie directory:', error);
@@ -1076,6 +1078,9 @@ function setupIpcHandlers(services) {
     ipcMain.handle('import-scanned-movies', async (event, tempDir) => {
         try {
             const settings = settingsService.getSettings();
+            if (!settings.library || settings.library.moviesDir === undefined) {
+                throw new Error('Library settings are not configured properly');
+            }
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
 
             const result = await movieService.importScannedMovies(tempDir, moviesDir);

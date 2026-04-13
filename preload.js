@@ -90,7 +90,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
         // 监听主进程请求获取电影详情的通知
         ipcRenderer.on('request-movie-detail', async () => {
             const movieData = await ipcRenderer.invoke('get-pending-movie-detail');
-            console.log('[DEBUG preload.js] get-pending-movie-detail returned:', movieData?.original_filename, movieData?.videoCodec);
             if (movieData) {
                 callback(movieData);
             }

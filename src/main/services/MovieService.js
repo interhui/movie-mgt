@@ -995,6 +995,11 @@ class MovieService {
      */
     async importScannedMovies(tempDir, moviesDir) {
         try {
+            // 验证 moviesDir 参数
+            if (!moviesDir) {
+                throw new Error('moviesDir is required for importing scanned movies');
+            }
+
             // 读取总览文件
             const overviewPath = path.join(tempDir, 'movies.json');
             const overview = await this.fileService.readJson(overviewPath);
