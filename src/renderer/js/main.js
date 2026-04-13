@@ -2473,19 +2473,23 @@ function showScanResults(movies, platform) {
     elements.scanResultInfo.textContent = `共扫描到 ${movies.length} 个电影（分类：${platformName}）`;
     elements.scanResultImport.disabled = true;
 
-    // 渲染电影列表（list-view 形式）
+    // 渲染电影列表（table 形式，滚动条仅在 scan-movies-list 内）
     let html = `
-        <div class="scan-list-header">
-            <div class="scan-movie-id">电影ID</div>
-            <div class="scan-movie-name">电影名称</div>
-            <div class="scan-movie-actors">演员</div>
-            <div class="scan-movie-director">导演</div>
-            <div class="scan-movie-publisher">发行商</div>
-            <div class="scan-movie-runtime">时长</div>
-            <div class="scan-movie-poster">海报</div>
-            <div class="scan-movie-video">视频</div>
-            <div class="scan-movie-actions">操作</div>
-        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th class="scan-movie-id">电影ID</th>
+                    <th class="scan-movie-name">电影名称</th>
+                    <th class="scan-movie-actors">演员</th>
+                    <th class="scan-movie-director">导演</th>
+                    <th class="scan-movie-publisher">发行商</th>
+                    <th class="scan-movie-runtime">时长</th>
+                    <th class="scan-movie-poster">海报</th>
+                    <th class="scan-movie-video">视频</th>
+                    <th class="scan-movie-actions">操作</th>
+                </tr>
+            </thead>
+            <tbody>
     `;
 
     movies.forEach((movie, index) => {
@@ -2500,21 +2504,26 @@ function showScanResults(movies, platform) {
         const videoPath = movie.sourcePath || (movieData.fileset && movieData.fileset[0]?.fullpath) || '-';
 
         html += `
-            <div class="scan-movie-item" data-index="${index}">
-                <div class="scan-movie-id" title="${movieId}">${truncateText(movieId, 20)}</div>
-                <div class="scan-movie-name" title="${title}">${truncateText(title, 20)}</div>
-                <div class="scan-movie-actors" title="${actors}">${truncateText(actors, 15)}</div>
-                <div class="scan-movie-director" title="${director}">${truncateText(director, 10)}</div>
-                <div class="scan-movie-publisher" title="${studio}">${truncateText(studio, 10)}</div>
-                <div class="scan-movie-runtime">${runtime}</div>
-                <div class="scan-movie-poster">${posterPath !== '-' ? '<span class="scan-status-ok">有</span>' : '<span class="scan-status-none">无</span>'}</div>
-                <div class="scan-movie-video" title="${videoPath}">${videoPath !== '-' ? '<span class="scan-status-ok">有</span>' : '<span class="scan-status-none">无</span>'}</div>
-                <div class="scan-movie-actions">
-                    <button class="btn btn-secondary btn-small" onclick="editScanMovie(${index})">编辑</button>
-                </div>
-            </div>
+                <tr data-index="${index}">
+                    <td class="scan-movie-id" title="${movieId}">${truncateText(movieId, 20)}</td>
+                    <td class="scan-movie-name" title="${title}">${truncateText(title, 20)}</td>
+                    <td class="scan-movie-actors" title="${actors}">${truncateText(actors, 15)}</td>
+                    <td class="scan-movie-director" title="${director}">${truncateText(director, 10)}</td>
+                    <td class="scan-movie-publisher" title="${studio}">${truncateText(studio, 10)}</td>
+                    <td class="scan-movie-runtime">${runtime}</td>
+                    <td class="scan-movie-poster">${posterPath !== '-' ? '<span class="scan-status-ok">有</span>' : '<span class="scan-status-none">无</span>'}</td>
+                    <td class="scan-movie-video" title="${videoPath}">${videoPath !== '-' ? '<span class="scan-status-ok">有</span>' : '<span class="scan-status-none">无</span>'}</td>
+                    <td class="scan-movie-actions">
+                        <button class="btn btn-secondary btn-small" onclick="editScanMovie(${index})">编辑</button>
+                    </td>
+                </tr>
         `;
     });
+
+    html += `
+            </tbody>
+        </table>
+    `;
 
     elements.scanMoviesList.innerHTML = html;
     elements.scanResultModal.style.display = 'flex';

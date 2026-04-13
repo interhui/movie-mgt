@@ -1591,7 +1591,7 @@ body {
 }
 
 .scan-result-modal {
-    max-width: 1000px;
+    max-width: 1200px;
     height: 700px;
 }
 
@@ -1625,89 +1625,54 @@ body {
     padding-bottom: 0;
 }
 
-.scan-movies-list {
-    flex: 1;
-    overflow-y: auto;
-    max-height: 520px;
-}
-
-.scan-movie-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px;
-    border-bottom: 1px solid var(--border-color);
-    transition: background-color 0.2s;
-}
-
-.scan-movie-item:hover {
-    background-color: var(--hover-bg);
-}
-
-.scan-movie-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.scan-movie-name {
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.scan-movie-status {
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-
 .scan-movie-status.confirmed {
     color: var(--success-color);
 }
 
-.scan-movie-actions {
-    display: flex;
-    gap: 8px;
-}
-
-/* 扫描结果表格样式 - 使用 list-view 模式 */
+/* 扫描结果表格样式 */
 .scan-movies-list {
-    display: table;
     width: 100%;
-    border-collapse: collapse;
+    max-height: 520px;
+    overflow-y: auto;
     font-size: 13px;
 }
 
+.scan-movies-list table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
 /* 扫描结果表头 */
-.scan-list-header {
-    display: table-row;
+.scan-movies-list thead tr {
     background-color: var(--sidebar-bg);
     height: 40px;
 }
 
-.scan-list-header > * {
-    display: table-cell;
-    vertical-align: middle;
+.scan-movies-list th {
     padding: 8px 12px;
     font-size: 13px;
     font-weight: 600;
     color: var(--text-secondary);
     border-bottom: 2px solid var(--border-color);
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* 扫描结果行 */
-.scan-movie-item {
-    display: table-row;
+.scan-movies-list tbody tr {
     height: 50px;
     cursor: pointer;
 }
 
-.scan-movie-item:hover {
+.scan-movies-list tbody tr:hover {
     background-color: var(--hover-bg);
 }
 
-.scan-movie-item > * {
-    display: table-cell;
-    vertical-align: middle;
+.scan-movies-list td {
     padding: 8px 12px;
     border-bottom: 1px solid var(--border-color);
     overflow: hidden;
@@ -1717,50 +1682,43 @@ body {
 
 /* 扫描结果各列宽度 */
 .scan-movies-list .scan-movie-id {
-    width: 150px;
-    font-size: 13px;
+    width: 130px;
 }
 
 .scan-movies-list .scan-movie-name {
-    width: 220px;
+    width: 210px;
     font-size: 14px;
     font-weight: 500;
 }
 
 .scan-movies-list .scan-movie-actors {
     width: 150px;
-    font-size: 13px;
     color: var(--text-secondary);
 }
 
 .scan-movies-list .scan-movie-director {
     width: 100px;
-    font-size: 13px;
     color: var(--text-secondary);
 }
 
 .scan-movies-list .scan-movie-publisher {
-    width: 100px;
-    font-size: 13px;
+    width: 90px;
     color: var(--text-secondary);
 }
 
 .scan-movies-list .scan-movie-runtime {
-    width: 70px;
-    font-size: 13px;
+    width: 60px;
     color: var(--text-secondary);
     text-align: center;
 }
 
 .scan-movies-list .scan-movie-poster {
     width: 60px;
-    font-size: 13px;
     text-align: center;
 }
 
 .scan-movies-list .scan-movie-video {
     width: 60px;
-    font-size: 13px;
     text-align: center;
 }
 
@@ -1829,7 +1787,7 @@ body {
 
 /* 扫描电影描述输入框 */
 .scan-movie-description {
-    height: 150px;
+    height: 60px;
     resize: vertical;
 }
 
