@@ -1591,7 +1591,12 @@ body {
 }
 
 .scan-result-modal {
-    max-width: 900px;
+    max-width: 1000px;
+    height: 700px;
+}
+
+.scan-result-modal .modal-content {
+    max-height: 680px;
 }
 
 .scan-result-toolbar {
@@ -1613,9 +1618,17 @@ body {
     gap: 8px;
 }
 
+.scan-result-modal .modal-body {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(700px - 120px);
+    padding-bottom: 0;
+}
+
 .scan-movies-list {
-    max-height: 500px;
+    flex: 1;
     overflow-y: auto;
+    max-height: 520px;
 }
 
 .scan-movie-item {
@@ -1656,9 +1669,118 @@ body {
     gap: 8px;
 }
 
+/* 扫描结果表格样式 - 使用 list-view 模式 */
+.scan-movies-list {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+/* 扫描结果表头 */
+.scan-list-header {
+    display: table-row;
+    background-color: var(--sidebar-bg);
+    height: 40px;
+}
+
+.scan-list-header > * {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--border-color);
+}
+
+/* 扫描结果行 */
+.scan-movie-item {
+    display: table-row;
+    height: 50px;
+    cursor: pointer;
+}
+
+.scan-movie-item:hover {
+    background-color: var(--hover-bg);
+}
+
+.scan-movie-item > * {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 扫描结果各列宽度 */
+.scan-movies-list .scan-movie-id {
+    width: 150px;
+    font-size: 13px;
+}
+
+.scan-movies-list .scan-movie-name {
+    width: 220px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.scan-movies-list .scan-movie-actors {
+    width: 150px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.scan-movies-list .scan-movie-director {
+    width: 100px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.scan-movies-list .scan-movie-publisher {
+    width: 100px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.scan-movies-list .scan-movie-runtime {
+    width: 70px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.scan-movies-list .scan-movie-poster {
+    width: 60px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.scan-movies-list .scan-movie-video {
+    width: 60px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.scan-movies-list .scan-movie-actions {
+    width: 80px;
+    text-align: center;
+}
+
+.scan-status-ok {
+    color: var(--success-color);
+}
+
+.scan-status-none {
+    color: var(--text-secondary);
+}
+
 /* 单个电影编辑样式 */
 .scan-movie-edit-modal .modal-content {
     max-width: 900px;
+    max-height: calc(100vh - 90px);
 }
 
 .scan-movie-edit-content {

@@ -402,4 +402,157 @@ describe('MovieService', () => {
             // This is covered by the previous test implicitly
         });
     });
+
+    describe('sanitizeFolderName', () => {
+        test('SVC-MOVIE-042: 中文和字母数字保留', () => {
+            expect(service.sanitizeFolderName('星际穿越-2014')).toBe('星际穿越-2014');
+        });
+
+        test('SVC-MOVIE-043: 特殊字符转为连字符', () => {
+            expect(service.sanitizeFolderName('Movie: Title?')).toBe('movie-title');
+        });
+
+        test('SVC-MOVIE-044: 多个连字符合并为一个', () => {
+            expect(service.sanitizeFolderName('Movie---Title')).toBe('movie-title');
+        });
+
+        test('SVC-MOVIE-045: 首尾连字符去除', () => {
+            expect(service.sanitizeFolderName('-Movie Title-')).toBe('movie-title');
+        });
+
+        test('SVC-MOVIE-046: 大写转小写', () => {
+            expect(service.sanitizeFolderName('MOVIETITLE')).toBe('movietitle');
+        });
+    });
+
+    describe('scanMovieDirectory - 目录扫描模式', () => {
+        test('SVC-MOVIE-047: 目录扫描提取movie.nfo和海报', async () => {
+            // 创建测试目录结构
+            const scanDir = path.join(testDataDir, 'scanDir');
+            const movieDir = path.join(scanDir, 'test-movie');
+            fs.mkdirSync(movieDir, { recursive: true });
+
+            // 创建 movie.nfo
+            const movieNfo = `<?xml version="1.0"?>
+<movie>
+    <id>test-movie-001</id>
+    <title>测试电影</title>
+    <year>2024</year>
+    <director>测试导演</director>
+    <actor><name>演员1</name></actor>
+    <actor><name>演员2</name></actor>
+    <studio>测试制片商</studio>
+</movie>`;
+            fs.writeFileSync(path.join(movieDir, 'movie.nfo'), movieNfo);
+            fs.writeFileSync(path.join(movieDir, 'poster.jpg'), Buffer.from([0xFF, 0xD8]));
+
+            const result = await service.scanMovieDirectory(scanDir, 'directory', 'movie', moviesDir);
+
+            expect(result.success).toBe(true);
+            expect(result.movies.length).toBe(1);
+            expect(result.movies[0].movieData.title).toBe('测试电影');
+            expect(result.movies[0].movieData.director).toBe('测试导演');
+            expect(result.movies[0].movieData.actors).toEqual(['演员1', '演员2']);
+        });
+
+        test('SVC-MOVIE-048: 目录扫描支持嵌套文件夹', async () => {
+            // 创建嵌套目录结构
+            const scanDir = path.join(testDataDir, 'scanDirNested');
+            const subDir = path.join(scanDir, 'subfolder');
+            const nestedMovieDir = path.join(subDir, 'nested-movie');
+            fs.mkdirSync(nestedMovieDir, { recursive: true });
+
+            const movieNfo = `<?xml version="1.0"?>
+<movie>
+    <title>嵌套电影</title>
+</movie>`;
+            fs.writeFileSync(path.join(nestedMovieDir, 'movie.nfo'), movieNfo);
+
+            const result = await service.scanMovieDirectory(scanDir, 'directory', 'movie', moviesDir);
+
+            expect(result.success).toBe(true);
+            expect(result.movies.length).toBe(1);
+            expect(result.movies[0].movieData.title).toBe('嵌套电影');
+        });
+    });
+
+    describe('scanMovieDirectory - CSV扫描模式', () => {
+        test('SVC-MOVIE-049: CSV扫描解析电影数据', async () => {
+            // 创建CSV文件
+            const csvDir = path.join(testDataDir, 'csvScan');
+            fs.mkdirSync(csvDir, { recursive: true });
+            const csvPath = path.join(csvDir, 'movies.csv');
+
+            const csvContent = `电影ID,电影名称,电影描述,排序标题,演员,导演,上映时间,发行商,电影时长,标签,文件地址,视频编码,视频宽度,视频高度,视频时间
+csv-movie-001,CSV电影,CSV描述,CSV电影,演员A|演员B,CSV导演,2024,CSV发行商,120,标签A|标签B,D:/Movies/csv.mp4,H264,1920,1080,7200`;
+
+            fs.writeFileSync(csvPath, csvContent);
+
+            const result = await service.scanMovieDirectory(csvPath, 'file', 'movie', moviesDir);
+
+            expect(result.success).toBe(true);
+            expect(result.movies.length).toBe(1);
+            expect(result.movies[0].movieData.movieId).toBe('csv-movie-001');
+            expect(result.movies[0].movieData.title).toBe('CSV电影');
+            expect(result.movies[0].movieData.director).toBe('CSV导演');
+            expect(result.movies[0].movieData.actors).toEqual(['演员A', '演员B']);
+            expect(result.movies[0].movieData.runtime).toBe('120');
+        });
+    });
+
+    describe('updateTempMovie', () => {
+        test('SVC-MOVIE-050: 更新临时电影信息', async () => {
+            // 创建临时电影目录
+            const tempDir = path.join(testDataDir, 'tempUpdate');
+            fs.mkdirSync(tempDir, { recursive: true });
+
+            const movieNfo = `<?xml version="1.0"?>
+<movie>
+    <id>update-test-001</id>
+    <title>原始标题</title>
+    <director>原始导演</director>
+</movie>`;
+            fs.writeFileSync(path.join(tempDir, 'movie.nfo'), movieNfo);
+
+            const updatedData = {
+                title: '新标题',
+                director: '新导演',
+                year: '2024',
+                actors: ['新演员1', '新演员2'],
+                studio: '新制片商',
+                runtime: '150',
+                description: '新描述',
+                tags: ['新标签1', '新标签2']
+            };
+
+            const result = await service.updateTempMovie(tempDir, updatedData, null);
+
+            expect(result.success).toBe(true);
+            expect(result.movieData.title).toBe('新标题');
+            expect(result.movieData.director).toBe('新导演');
+            expect(result.movieData.actors).toEqual(['新演员1', '新演员2']);
+        });
+    });
+
+    describe('updateSourceNfoOriginalFilename', () => {
+        test('SVC-MOVIE-051: 更新源NFO的original_filename', async () => {
+            // 创建源电影目录
+            const sourceDir = path.join(testDataDir, 'sourceMovie');
+            fs.mkdirSync(sourceDir, { recursive: true });
+
+            const movieNfo = `<?xml version="1.0"?>
+<movie>
+    <id>source-001</id>
+    <title>源电影</title>
+    <original_filename>原始路径.mp4</original_filename>
+</movie>`;
+            fs.writeFileSync(path.join(sourceDir, 'movie.nfo'), movieNfo);
+
+            await service.updateSourceNfoOriginalFilename(sourceDir, 'D:/Scan/源目录');
+
+            // 读取更新后的NFO内容
+            const content = fs.readFileSync(path.join(sourceDir, 'movie.nfo'), 'utf-8');
+            expect(content).toContain('D:/Scan/源目录');
+        });
+    });
 });

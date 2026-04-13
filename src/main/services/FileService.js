@@ -737,6 +737,283 @@ class FileService {
             }
         }
     }
+
+    /**
+     * 递归扫描目录，查找包含movie.nfo的文件夹
+     * @param {string} dirPath - 目录路径
+     * @returns {Promise<object[]>} 包含movie.nfo的文件夹信息数组
+     */
+    async scanDirectoryRecursively(dirPath) {
+        const movieFolders = [];
+
+        /**
+         * 递归扫描函数
+         * @param {string} currentDir - 当前目录
+         */
+        async function scanRecursive(currentDir) {
+            try {
+                const exists = await this.fileExists(currentDir);
+                if (!exists) {
+                    return;
+                }
+
+                const entries = await fs.readdir(currentDir, { withFileTypes: true });
+
+                for (const entry of entries) {
+                    const fullPath = path.join(currentDir, entry.name);
+
+                    if (entry.isDirectory()) {
+                        // 检查是否是电影文件夹（包含movie.nfo）
+                        const nfoPath = path.join(fullPath, 'movie.nfo');
+                        const hasNfo = await this.fileExists(nfoPath);
+
+                        if (hasNfo) {
+                            // 找到电影文件夹，查找海报文件
+                            const posterInfo = await this.findMoviePoster(fullPath);
+                            movieFolders.push({
+                                folderPath: fullPath,
+                                folderName: entry.name,
+                                nfoPath: nfoPath,
+                                posterPath: posterInfo.posterPath,
+                                posterExt: posterInfo.posterExt
+                            });
+                        } else {
+                            // 继续递归扫描子文件夹
+                            await scanRecursive.call(this, fullPath);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error scanning directory recursively:', error);
+            }
+        }
+
+        await scanRecursive.call(this, dirPath);
+        return movieFolders;
+    }
+
+    /**
+     * 查找文件夹中的海报文件
+     * 支持的命名模式：*-poster.jpg, poster.jpg, cover.jpg, folder.jpg
+     * @param {string} folderPath - 文件夹路径
+     * @returns {Promise<object>} 海报信息 {posterPath, posterExt}
+     */
+    async findMoviePoster(folderPath) {
+        const posterPatterns = [
+            /-poster\.jpg$/i,
+            /-poster\.jpeg$/i,
+            /-poster\.png$/i,
+            /-poster\.webp$/i,
+            /^poster\.jpg$/i,
+            /^poster\.jpeg$/i,
+            /^cover\.jpg$/i,
+            /^cover\.jpeg$/i,
+            /^folder\.jpg$/i,
+            /^folder\.jpeg$/i
+        ];
+
+        try {
+            const exists = await this.fileExists(folderPath);
+            if (!exists) {
+                return { posterPath: null, posterExt: null };
+            }
+
+            const entries = await fs.readdir(folderPath, { withFileTypes: true });
+
+            for (const entry of entries) {
+                if (entry.isFile()) {
+                    for (const pattern of posterPatterns) {
+                        if (pattern.test(entry.name)) {
+                            const posterPath = path.join(folderPath, entry.name);
+                            const ext = path.extname(entry.name).toLowerCase();
+                            return { posterPath, posterExt: ext };
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error finding movie poster:', error);
+        }
+
+        return { posterPath: null, posterExt: null };
+    }
+
+    /**
+     * 解析CSV格式的电影数据文件
+     * CSV列：电影ID、电影名称、电影描述、排序标题、演员(|分割)、导演、上映时间、发行商、电影时长(分钟)、标签、文件地址、视频编码、视频宽度、视频高度、视频时间
+     * @param {string} filePath - CSV文件路径
+     * @returns {Promise<object[]>} 电影数据数组
+     */
+    async parseCsvFile(filePath) {
+        const movies = [];
+
+        try {
+            const exists = await this.fileExists(filePath);
+            if (!exists) {
+                return movies;
+            }
+
+            const content = await fs.readFile(filePath, 'utf-8');
+            const lines = content.split(/\r?\n/).filter(line => line.trim().length > 0);
+
+            // 跳过表头
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+
+                // 简单CSV解析（处理带引号的值）
+                const values = this.parseCsvLine(line);
+
+                if (values.length >= 14) {
+                    const [
+                        movieId,
+                        title,
+                        description,
+                        sortTitle,
+                        actorsStr,
+                        director,
+                        year,
+                        studio,
+                        runtime,
+                        tagsStr,
+                        fileAddress,
+                        videoCodec,
+                        videoWidth,
+                        videoHeight,
+                        videoDuration
+                    ] = values;
+
+                    // 解析演员数组
+                    const actors = actorsStr ? actorsStr.split('|').map(a => a.trim()).filter(a => a) : [];
+
+                    // 解析标签数组
+                    const tags = tagsStr ? tagsStr.split('|').map(t => t.trim()).filter(t => t) : [];
+
+                    movies.push({
+                        movieId: movieId?.trim() || '',
+                        title: title?.trim() || '',
+                        description: description?.trim() || '',
+                        sortTitle: sortTitle?.trim() || '',
+                        actors: actors,
+                        director: director?.trim() || '',
+                        year: year?.trim() || '',
+                        studio: studio?.trim() || '',
+                        runtime: runtime?.trim() || '',
+                        tags: tags,
+                        fileAddress: fileAddress?.trim() || '',
+                        videoCodec: videoCodec?.trim() || '',
+                        videoWidth: videoWidth?.trim() || '',
+                        videoHeight: videoHeight?.trim() || '',
+                        videoDuration: videoDuration?.trim() || '',
+                        // 内部使用字段
+                        fileset: fileAddress ? [{
+                            type: 'Main',
+                            fullpath: fileAddress.trim(),
+                            filename: path.basename(fileAddress.trim()),
+                            videoCodec: videoCodec?.trim() || '',
+                            videoWidth: videoWidth?.trim() || '',
+                            videoHeight: videoHeight?.trim() || '',
+                            videoDuration: videoDuration?.trim() || ''
+                        }] : []
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Error parsing CSV file:', error);
+        }
+
+        return movies;
+    }
+
+    /**
+     * 解析CSV行，支持带引号的值
+     * @param {string} line - CSV行
+     * @returns {string[]} 解析后的值数组
+     */
+    parseCsvLine(line) {
+        const values = [];
+        let current = '';
+        let inQuotes = false;
+
+        for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            const nextChar = line[i + 1];
+
+            if (inQuotes) {
+                if (char === '"' && nextChar === '"') {
+                    // 转义的双引号
+                    current += '"';
+                    i++;
+                } else if (char === '"') {
+                    // 结束引号
+                    inQuotes = false;
+                } else {
+                    current += char;
+                }
+            } else {
+                if (char === '"') {
+                    // 开始引号
+                    inQuotes = true;
+                } else if (char === ',') {
+                    // 分隔符
+                    values.push(current);
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+        }
+
+        values.push(current);
+        return values;
+    }
+
+    /**
+     * 复制文件到目标路径
+     * @param {string} srcPath - 源文件路径
+     * @param {string} destPath - 目标文件路径
+     * @returns {Promise<string>} 目标文件路径
+     */
+    async copyFile(srcPath, destPath) {
+        try {
+            const destDir = path.dirname(destPath);
+            await this.ensureDir(destDir);
+            await fs.copyFile(srcPath, destPath);
+            return destPath;
+        } catch (error) {
+            console.error('Error copying file:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * 读取文件内容
+     * @param {string} filePath - 文件路径
+     * @returns {Promise<string>} 文件内容
+     */
+    async readFile(filePath) {
+        try {
+            return await fs.readFile(filePath, 'utf-8');
+        } catch (error) {
+            console.error('Error reading file:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * 写入文件内容
+     * @param {string} filePath - 文件路径
+     * @param {string} content - 文件内容
+     */
+    async writeFile(filePath, content) {
+        try {
+            await this.ensureDir(path.dirname(filePath));
+            await fs.writeFile(filePath, content, 'utf-8');
+        } catch (error) {
+            console.error('Error writing file:', error);
+            throw error;
+        }
+    }
 }
 
 module.exports = FileService;

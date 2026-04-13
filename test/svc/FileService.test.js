@@ -492,4 +492,175 @@ describe('FileService', () => {
             expect(fs.existsSync(srcDir)).toBe(false);
         });
     });
+
+    describe('scanDirectoryRecursively', () => {
+        test('SVC-FILE-049: 递归扫描返回包含movie.nfo的文件夹', async () => {
+            // 创建测试结构
+            const movieDir1 = path.join(testDataDir, 'movie1');
+            const movieDir2 = path.join(testDataDir, 'movie2');
+            const subDir = path.join(testDataDir, 'subfolder');
+            const nestedMovieDir = path.join(subDir, 'nestedMovie');
+
+            fs.mkdirSync(movieDir1, { recursive: true });
+            fs.mkdirSync(movieDir2, { recursive: true });
+            fs.mkdirSync(nestedMovieDir, { recursive: true });
+
+            // movie1 有 movie.nfo
+            fs.writeFileSync(path.join(movieDir1, 'movie.nfo'), '<?xml version="1.0"?><movie><title>Movie 1</title></movie>');
+            fs.writeFileSync(path.join(movieDir1, 'poster.jpg'), Buffer.from([0xFF, 0xD8]));
+
+            // movie2 有 movie.nfo
+            fs.writeFileSync(path.join(movieDir2, 'movie.nfo'), '<?xml version="1.0"?><movie><title>Movie 2</title></movie>');
+
+            // nestedMovie 有 movie.nfo
+            fs.writeFileSync(path.join(nestedMovieDir, 'movie.nfo'), '<?xml version="1.0"?><movie><title>Nested Movie</title></movie>');
+
+            const result = await service.scanDirectoryRecursively(testDataDir);
+
+            expect(result.length).toBe(3);
+            expect(result.some(m => m.folderName === 'movie1')).toBe(true);
+            expect(result.some(m => m.folderName === 'movie2')).toBe(true);
+            expect(result.some(m => m.folderName === 'nestedMovie')).toBe(true);
+        });
+
+        test('SVC-FILE-050: 无movie.nfo的文件夹被跳过', async () => {
+            const emptyDir = path.join(testDataDir, 'emptyDir');
+            const movieDir = path.join(testDataDir, 'validMovie');
+
+            fs.mkdirSync(emptyDir);
+            fs.mkdirSync(movieDir);
+            fs.writeFileSync(path.join(movieDir, 'movie.nfo'), '<?xml version="1.0"?><movie></movie>');
+
+            const result = await service.scanDirectoryRecursively(testDataDir);
+
+            expect(result.length).toBe(1);
+            expect(result[0].folderName).toBe('validMovie');
+        });
+
+        test('SVC-FILE-051: 目录不存在返回空数组', async () => {
+            const result = await service.scanDirectoryRecursively(path.join(testDataDir, 'notExists'));
+            expect(result).toEqual([]);
+        });
+    });
+
+    describe('findMoviePoster', () => {
+        test('SVC-FILE-052: 查找-poster.jpg文件', async () => {
+            const movieDir = path.join(testDataDir, 'testMovie');
+            fs.mkdirSync(movieDir);
+            fs.writeFileSync(path.join(movieDir, 'movie.nfo'), '<?xml version="1.0"?><movie></movie>');
+            fs.writeFileSync(path.join(movieDir, '星际穿越-poster.jpg'), Buffer.from([0xFF, 0xD8]));
+
+            const result = await service.findMoviePoster(movieDir);
+
+            expect(result.posterPath).toContain('星际穿越-poster.jpg');
+            expect(result.posterExt).toBe('.jpg');
+        });
+
+        test('SVC-FILE-053: 查找poster.jpg文件', async () => {
+            const movieDir = path.join(testDataDir, 'testMovie2');
+            fs.mkdirSync(movieDir);
+            fs.writeFileSync(path.join(movieDir, 'movie.nfo'), '<?xml version="1.0"?><movie></movie>');
+            fs.writeFileSync(path.join(movieDir, 'poster.jpg'), Buffer.from([0xFF, 0xD8]));
+
+            const result = await service.findMoviePoster(movieDir);
+
+            expect(result.posterPath).toContain('poster.jpg');
+            expect(result.posterExt).toBe('.jpg');
+        });
+
+        test('SVC-FILE-054: 查找cover.jpg文件', async () => {
+            const movieDir = path.join(testDataDir, 'testMovie3');
+            fs.mkdirSync(movieDir);
+            fs.writeFileSync(path.join(movieDir, 'movie.nfo'), '<?xml version="1.0"?><movie></movie>');
+            fs.writeFileSync(path.join(movieDir, 'cover.jpg'), Buffer.from([0xFF, 0xD8]));
+
+            const result = await service.findMoviePoster(movieDir);
+
+            expect(result.posterPath).toContain('cover.jpg');
+        });
+
+        test('SVC-FILE-055: 无海报文件返回null', async () => {
+            const movieDir = path.join(testDataDir, 'noPosterMovie');
+            fs.mkdirSync(movieDir);
+            fs.writeFileSync(path.join(movieDir, 'movie.nfo'), '<?xml version="1.0"?><movie></movie>');
+
+            const result = await service.findMoviePoster(movieDir);
+
+            expect(result.posterPath).toBeNull();
+            expect(result.posterExt).toBeNull();
+        });
+    });
+
+    describe('parseCsvFile', () => {
+        test('SVC-FILE-056: 解析CSV文件返回电影数组', async () => {
+            const csvContent = `电影ID,电影名称,电影描述,排序标题,演员,导演,上映时间,发行商,电影时长,标签,文件地址,视频编码,视频宽度,视频高度,视频时间
+movie-001,星际穿越,科幻电影,星际穿越,马修·麦康纳|安妮·海瑟薇,克里斯托弗·诺兰,2014,派拉蒙,169,科幻|冒险,D:/Movies/星际穿越.mp4,H264,1920,1080,10140`;
+
+            const csvPath = path.join(testDataDir, 'movies.csv');
+            fs.writeFileSync(csvPath, csvContent);
+
+            const result = await service.parseCsvFile(csvPath);
+
+            expect(result.length).toBe(1);
+            expect(result[0].movieId).toBe('movie-001');
+            expect(result[0].title).toBe('星际穿越');
+            expect(result[0].director).toBe('克里斯托弗·诺兰');
+            expect(result[0].actors).toEqual(['马修·麦康纳', '安妮·海瑟薇']);
+            expect(result[0].runtime).toBe('169');
+            expect(result[0].videoCodec).toBe('H264');
+        });
+
+        test('SVC-FILE-057: CSV文件不存在返回空数组', async () => {
+            const result = await service.parseCsvFile(path.join(testDataDir, 'notexists.csv'));
+            expect(result).toEqual([]);
+        });
+
+        test('SVC-FILE-058: 解析多行CSV', async () => {
+            const csvContent = `电影ID,电影名称,电影描述,排序标题,演员,导演,上映时间,发行商,电影时长,标签,文件地址,视频编码,视频宽度,视频高度,视频时间
+movie-001,电影1,描述1,标题1,演员1|演员2,导演1,2020,发行商1,120,标签1,D:/1.mp4,H264,1920,1080,7200
+movie-002,电影2,描述2,标题2,演员3,导演2,2021,发行商2,100,标签2,D:/2.mp4,H265,1280,720,6000`;
+
+            const csvPath = path.join(testDataDir, 'movies2.csv');
+            fs.writeFileSync(csvPath, csvContent);
+
+            const result = await service.parseCsvFile(csvPath);
+
+            expect(result.length).toBe(2);
+            expect(result[0].title).toBe('电影1');
+            expect(result[1].title).toBe('电影2');
+        });
+    });
+
+    describe('parseCsvLine', () => {
+        test('SVC-FILE-059: 解析简单CSV行', () => {
+            const line = 'value1,value2,value3';
+            const result = service.parseCsvLine(line);
+            expect(result).toEqual(['value1', 'value2', 'value3']);
+        });
+
+        test('SVC-FILE-060: 解析带引号的CSV行', () => {
+            const line = '"value with, comma","normal value"';
+            const result = service.parseCsvLine(line);
+            expect(result).toEqual(['value with, comma', 'normal value']);
+        });
+
+        test('SVC-FILE-061: 解析转义引号', () => {
+            const line = '"value ""with"" quotes","normal"';
+            const result = service.parseCsvLine(line);
+            expect(result[0]).toBe('value "with" quotes');
+        });
+    });
+
+    describe('copyFile', () => {
+        test('SVC-FILE-062: 复制文件成功', async () => {
+            const srcFile = path.join(testDataDir, 'copySrc.txt');
+            const destFile = path.join(testDataDir, 'copyDest.txt');
+            fs.writeFileSync(srcFile, 'test content');
+
+            await service.copyFile(srcFile, destFile);
+
+            expect(fs.existsSync(destFile)).toBe(true);
+            expect(fs.readFileSync(destFile, 'utf-8')).toBe('test content');
+        });
+    });
 });

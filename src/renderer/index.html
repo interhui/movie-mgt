@@ -542,17 +542,37 @@
                         <form id="scan-movie-edit-form">
                             <input type="hidden" id="scan-movie-temp-path">
                             <div class="form-group">
+                                <label>电影ID</label>
+                                <input type="text" id="scan-movie-id" class="form-input" placeholder="电影ID（自动生成或手动输入）">
+                            </div>
+                            <div class="form-group">
                                 <label>电影名称 *</label>
                                 <input type="text" id="scan-movie-name" class="form-input" placeholder="输入电影名称" required>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
+                                    <label>导演</label>
+                                    <input type="text" id="scan-movie-director" class="form-input" placeholder="输入导演">
+                                </div>
+                                <div class="form-group">
                                     <label>上映日期</label>
                                     <input type="number" id="scan-movie-publish-date" class="form-input" placeholder="年份" min="1900" max="2100">
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <label>演员</label>
+                                <div id="scan-movie-actors" class="actors-input">
+                                    <!-- 演员将通过 JS 动态生成 -->
+                                </div>
+                            </div>
+                            <div class="form-row">
                                 <div class="form-group">
                                     <label>制片商</label>
                                     <input type="text" id="scan-movie-publisher" class="form-input" placeholder="输入制片商">
+                                </div>
+                                <div class="form-group">
+                                    <label>电影时长(分钟)</label>
+                                    <input type="number" id="scan-movie-runtime" class="form-input" placeholder="时长" min="1">
                                 </div>
                             </div>
                             <div class="form-group">

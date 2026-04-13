@@ -170,11 +170,13 @@ const elements = {
     scanMovieEditModal: document.getElementById('scan-movie-edit-modal'),
     closeScanMovieEdit: document.getElementById('close-scan-movie-edit'),
     scanMovieTempPath: document.getElementById('scan-movie-temp-path'),
+    scanMovieId: document.getElementById('scan-movie-id'),
     scanMovieName: document.getElementById('scan-movie-name'),
     scanMoviePublishDate: document.getElementById('scan-movie-publish-date'),
-    scanMovieDirector: document.getElementById('scan-movie-publisher'),
-    scanMovieActors: null,
-    scanMovieStudio: null,
+    scanMovieDirector: document.getElementById('scan-movie-director'),
+    scanMovieActors: document.getElementById('scan-movie-actors'),
+    scanMoviePublisher: document.getElementById('scan-movie-publisher'),
+    scanMovieRuntime: document.getElementById('scan-movie-runtime'),
     scanMovieDescription: document.getElementById('scan-movie-description'),
     scanSelectCoverBtn: document.getElementById('scan-select-cover-btn'),
     scanMovieCoverInput: document.getElementById('scan-movie-cover-input'),
@@ -2395,7 +2397,7 @@ async function handleSelectScanPath() {
         }
     } else {
         const result = await window.electronAPI.selectFile([
-            { name: 'Text Files', extensions: ['txt', 'lst', 'movie'] }
+            { name: 'Text Files', extensions: ['txt', 'csv'] }
         ]);
         if (!result.canceled && result.path) {
             elements.scanPathInput.value = result.path;
@@ -2464,21 +2466,49 @@ async function startScanDirectory() {
 
 /**
  * 显示扫描结果列表
+ * 展示：电影ID、电影名称、演员、导演、发行商、电影时长、海报地址、视频文件地址
  */
 function showScanResults(movies, platform) {
     const platformName = state.categories.find(c => c.id === platform)?.name || platform;
     elements.scanResultInfo.textContent = `共扫描到 ${movies.length} 个电影（分类：${platformName}）`;
     elements.scanResultImport.disabled = true;
 
-    // 渲染电影列表
-    let html = '';
+    // 渲染电影列表（list-view 形式）
+    let html = `
+        <div class="scan-list-header">
+            <div class="scan-movie-id">电影ID</div>
+            <div class="scan-movie-name">电影名称</div>
+            <div class="scan-movie-actors">演员</div>
+            <div class="scan-movie-director">导演</div>
+            <div class="scan-movie-publisher">发行商</div>
+            <div class="scan-movie-runtime">时长</div>
+            <div class="scan-movie-poster">海报</div>
+            <div class="scan-movie-video">视频</div>
+            <div class="scan-movie-actions">操作</div>
+        </div>
+    `;
+
     movies.forEach((movie, index) => {
+        const movieData = movie.movieData || {};
+        const movieId = movieData.id || movieData.movieId || '-';
+        const title = movieData.title || movie.name || '-';
+        const actors = Array.isArray(movieData.actors) ? movieData.actors.join(', ') : '-';
+        const director = movieData.director || '-';
+        const studio = movieData.studio || '-';
+        const runtime = movieData.runtime || '-';
+        const posterPath = movie.posterPath || movieData.poster || '-';
+        const videoPath = movie.sourcePath || (movieData.fileset && movieData.fileset[0]?.fullpath) || '-';
+
         html += `
             <div class="scan-movie-item" data-index="${index}">
-                <div class="scan-movie-info">
-                    <span class="scan-movie-name">${movie.name}</span>
-                    <span class="scan-movie-status" id="status-${index}">待确认</span>
-                </div>
+                <div class="scan-movie-id" title="${movieId}">${truncateText(movieId, 20)}</div>
+                <div class="scan-movie-name" title="${title}">${truncateText(title, 20)}</div>
+                <div class="scan-movie-actors" title="${actors}">${truncateText(actors, 15)}</div>
+                <div class="scan-movie-director" title="${director}">${truncateText(director, 10)}</div>
+                <div class="scan-movie-publisher" title="${studio}">${truncateText(studio, 10)}</div>
+                <div class="scan-movie-runtime">${runtime}</div>
+                <div class="scan-movie-poster">${posterPath !== '-' ? '<span class="scan-status-ok">有</span>' : '<span class="scan-status-none">无</span>'}</div>
+                <div class="scan-movie-video" title="${videoPath}">${videoPath !== '-' ? '<span class="scan-status-ok">有</span>' : '<span class="scan-status-none">无</span>'}</div>
                 <div class="scan-movie-actions">
                     <button class="btn btn-secondary btn-small" onclick="editScanMovie(${index})">编辑</button>
                 </div>
@@ -2488,6 +2518,18 @@ function showScanResults(movies, platform) {
 
     elements.scanMoviesList.innerHTML = html;
     elements.scanResultModal.style.display = 'flex';
+}
+
+/**
+ * 截断文本并添加省略号
+ * @param {string} text - 原始文本
+ * @param {number} maxLength - 最大长度
+ * @returns {string} 截断后的文本
+ */
+function truncateText(text, maxLength) {
+    if (!text || text === '-') return text;
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
 }
 
 /**
@@ -2518,11 +2560,25 @@ async function editScanMovie(index) {
         }
     }
 
-    // 填充表单数据
-    if (elements.scanMovieName) elements.scanMovieName.value = movieData?.name || movie.name;
-    if (elements.scanMoviePublishDate) elements.scanMoviePublishDate.value = movieData?.publishDate || '';
-    // scanMoviePublisher 在 HTML 中是 scan-movie-publisher,但我们将其映射到 scanMovieDirector
-    if (elements.scanMovieDirector) elements.scanMovieDirector.value = movieData?.publisher || '';
+    // 填充表单数据 - 电影ID
+    if (elements.scanMovieId) elements.scanMovieId.value = movieData?.id || movieData?.movieId || '';
+
+    // 填充表单数据 - 电影名称
+    if (elements.scanMovieName) elements.scanMovieName.value = movieData?.title || movie.name || '';
+
+    // 填充表单数据 - 上映日期
+    if (elements.scanMoviePublishDate) elements.scanMoviePublishDate.value = movieData?.year || '';
+
+    // 填充表单数据 - 导演
+    if (elements.scanMovieDirector) elements.scanMovieDirector.value = movieData?.director || '';
+
+    // 填充表单数据 - 制片商
+    if (elements.scanMoviePublisher) elements.scanMoviePublisher.value = movieData?.studio || '';
+
+    // 填充表单数据 - 电影时长
+    if (elements.scanMovieRuntime) elements.scanMovieRuntime.value = movieData?.runtime || '';
+
+    // 填充表单数据 - 电影描述
     if (elements.scanMovieDescription) elements.scanMovieDescription.value = movieData?.description || '';
 
     // 加载封面图片 - 查找 tempPath 下的 cover 文件
@@ -2562,11 +2618,85 @@ async function editScanMovie(index) {
     }
     delete elements.scanMovieCoverInput.dataset.icon;
 
+    // 初始化演员 - 支持字符串或数组
+    const actorsData = movieData?.actors;
+    if (typeof actorsData === 'string') {
+        state.scanEditActors = actorsData.split(',').map(a => a.trim()).filter(a => a);
+    } else if (Array.isArray(actorsData)) {
+        state.scanEditActors = [...actorsData];
+    } else {
+        state.scanEditActors = [];
+    }
+    renderScanEditActors();
+
     // 初始化标签
-    state.scanEditTags = movieData?.tags || [];
+    state.scanEditTags = movieData?.tags || movieData?.tag || [];
     renderScanEditTags();
 
     elements.scanMovieEditModal.style.display = 'flex';
+}
+
+/**
+ * 渲染扫描电影编辑的演员
+ */
+function renderScanEditActors() {
+    let html = '';
+
+    // 渲染已选中的演员
+    state.scanEditActors.forEach(actorName => {
+        html += `
+            <span class="tag tag-with-remove" data-actor-name="${escapeHtml(actorName)}">
+                ${escapeHtml(actorName)}
+                <span class="tag-remove" onclick="removeScanEditActor('${escapeHtml(actorName)}'); return false;">&times;</span>
+            </span>
+        `;
+    });
+
+    // 添加+按钮（打开演员输入）
+    html += `<button class="tag-add-btn" id="scan-actor-add-btn">+</button>`;
+
+    if (elements.scanMovieActors) {
+        elements.scanMovieActors.innerHTML = html;
+    }
+
+    // 绑定添加演员按钮事件
+    const addButton = document.getElementById('scan-actor-add-btn');
+    if (addButton) {
+        const newButton = addButton.cloneNode(true);
+        addButton.parentNode.replaceChild(newButton, addButton);
+        newButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const actorName = prompt('请输入演员名称：');
+            if (actorName && actorName.trim()) {
+                if (!state.scanEditActors.includes(actorName.trim())) {
+                    state.scanEditActors.push(actorName.trim());
+                    renderScanEditActors();
+                }
+            }
+        });
+    }
+}
+
+/**
+ * 从扫描电影编辑中移除演员
+ */
+function removeScanEditActor(actorName) {
+    const index = state.scanEditActors.indexOf(actorName);
+    if (index > -1) {
+        state.scanEditActors.splice(index, 1);
+        renderScanEditActors();
+    }
+}
+
+/**
+ * HTML转义
+ */
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 /**
@@ -2759,14 +2889,18 @@ async function confirmScanMovieEdit() {
     const tempPath = movie.tempPath;
 
     const movieData = {
-        name: elements.scanMovieName ? elements.scanMovieName.value.trim() : '',
-        publishDate: elements.scanMoviePublishDate ? elements.scanMoviePublishDate.value : '',
-        publisher: elements.scanMovieDirector ? elements.scanMovieDirector.value : '',  // HTML中是publisher,映射到scanMovieDirector
+        id: elements.scanMovieId ? elements.scanMovieId.value.trim() : '',
+        title: elements.scanMovieName ? elements.scanMovieName.value.trim() : '',
+        year: elements.scanMoviePublishDate ? elements.scanMoviePublishDate.value : '',
+        director: elements.scanMovieDirector ? elements.scanMovieDirector.value.trim() : '',
+        studio: elements.scanMoviePublisher ? elements.scanMoviePublisher.value.trim() : '',
+        runtime: elements.scanMovieRuntime ? elements.scanMovieRuntime.value : '',
         description: elements.scanMovieDescription ? elements.scanMovieDescription.value : '',
+        actors: [...state.scanEditActors],
         tags: [...state.scanEditTags]
     };
 
-    if (!movieData.name) {
+    if (!movieData.title) {
         alert('请输入电影名称');
         return;
     }
@@ -2788,7 +2922,7 @@ async function confirmScanMovieEdit() {
         }
 
         // 更新本地状态
-        state.scanMovies[index].name = movieData.name;
+        state.scanMovies[index].name = movieData.title;
         state.scanMovies[index].movieData = result.movieData;
 
         // 更新列表显示

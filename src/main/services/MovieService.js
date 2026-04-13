@@ -714,24 +714,14 @@ class MovieService {
 
     /**
      * 扫描电影目录
-     * @param {string} scanPath - 扫描路径（目录或文件）
-     * @param {string} scanType - 扫描类型：'directory' 或 'file'
+     * @param {string} scanPath - 扫描路径（目录或CSV文件）
+     * @param {string} scanType - 扫描类型：'directory' 或 'file' (CSV)
      * @param {string} category - 分类
      * @param {string} moviesDir - 电影目录
      * @returns {Promise<object>} 扫描结果
      */
     async scanMovieDirectory(scanPath, scanType, category, moviesDir) {
         try {
-            let movieNames = [];
-
-            if (scanType === 'directory') {
-                // 扫描目录，将子文件夹作为电影名称
-                movieNames = await this.fileService.scanDirectoryForMovies(scanPath);
-            } else if (scanType === 'file') {
-                // 读取文件，每行作为一个电影名称
-                movieNames = await this.fileService.readMovieNamesFromFile(scanPath);
-            }
-
             // 生成临时目录路径
             const timestamp = Date.now();
             const tempDir = path.join(moviesDir, `tmp-${timestamp}`);
@@ -739,37 +729,14 @@ class MovieService {
             // 创建临时目录
             await this.fileService.ensureDir(tempDir);
 
-            // 为每个电影创建临时目录和 movies.json
-            const scannedMovies = [];
-            for (const name of movieNames) {
-                const folderName = this.generateFolderName(name);
-                const movieTempDir = path.join(tempDir, folderName);
-                await this.fileService.ensureDir(movieTempDir);
+            let scannedMovies = [];
 
-                const movieData = {
-                    id: this.generateMovieId(category, name),
-                    title: name,
-                    category: category,
-                    folderName: folderName,
-                    userRating: 0,
-                    userComment: '',
-                    description: '',
-                    year: '',
-                    director: '',
-                    actors: [],
-                    studio: '',
-                    tags: [],
-                    fileset: []
-                };
-
-                await this.fileService.writeMovieNfo(movieTempDir, movieData);
-
-                scannedMovies.push({
-                    name: name,
-                    folderName: folderName,
-                    tempPath: movieTempDir,
-                    movieData: movieData
-                });
+            if (scanType === 'directory') {
+                // 目录扫描模式：递归扫描所有子文件夹，提取movie.nfo和海报
+                scannedMovies = await this.scanDirectoryMode(scanPath, tempDir, category);
+            } else if (scanType === 'file') {
+                // 文件扫描模式（CSV）：解析CSV文件
+                scannedMovies = await this.scanCsvMode(scanPath, tempDir, category);
             }
 
             // 写入总览文件
@@ -780,8 +747,11 @@ class MovieService {
                 category: category,
                 totalMovies: scannedMovies.length,
                 movies: scannedMovies.map(m => ({
-                    name: m.name,
-                    folderName: m.folderName
+                    id: m.movieData.id,
+                    name: m.movieData.title,
+                    folderName: m.folderName,
+                    sourcePath: m.sourcePath,
+                    posterPath: m.movieData.poster || null
                 }))
             };
             await this.fileService.writeJson(path.join(tempDir, 'movies.json'), overviewData);
@@ -795,6 +765,161 @@ class MovieService {
             console.error('Error scanning movie directory:', error);
             throw error;
         }
+    }
+
+    /**
+     * 目录扫描模式：递归扫描目录，提取movie.nfo和海报
+     * @param {string} scanPath - 扫描路径
+     * @param {string} tempDir - 临时目录
+     * @param {string} category - 分类
+     * @returns {Promise<object[]>} 扫描结果
+     */
+    async scanDirectoryMode(scanPath, tempDir, category) {
+        const scannedMovies = [];
+
+        // 递归扫描目录，查找包含movie.nfo的文件夹
+        const movieFolders = await this.fileService.scanDirectoryRecursively(scanPath);
+
+        for (const folderInfo of movieFolders) {
+            try {
+                // 读取movie.nfo内容
+                const movieData = await this.fileService.readMovieNfo(folderInfo.folderPath);
+
+                if (!movieData) {
+                    console.warn(`Skipping folder without valid NFO: ${folderInfo.folderPath}`);
+                    continue;
+                }
+
+                // 使用现有ID或生成新ID
+                const movieId = movieData.id || this.generateMovieId(category, movieData.title || folderInfo.folderName);
+                const folderName = this.sanitizeFolderName(movieId);
+                const movieTempDir = path.join(tempDir, folderName);
+                await this.fileService.ensureDir(movieTempDir);
+
+                // 构建完整的电影数据
+                const completeMovieData = {
+                    id: movieId,
+                    movieId: movieId,
+                    title: movieData.title || movieData.name || folderInfo.folderName,
+                    description: movieData.description || movieData.outline || '',
+                    sortTitle: movieData.sorttitle || '',
+                    year: movieData.year || '',
+                    director: movieData.director || '',
+                    actors: movieData.actors || [],
+                    studio: movieData.studio || '',
+                    runtime: movieData.runtime || '',
+                    tags: movieData.tag || movieData.tags || [],
+                    category: category,
+                    userRating: movieData.userRating || 0,
+                    userComment: movieData.userComment || '',
+                    original_filename: movieData.original_filename || '',
+                    fileset: movieData.fileset || [],
+                    videoCodec: movieData.videoCodec || '',
+                    videoWidth: movieData.videoWidth || '',
+                    videoHeight: movieData.videoHeight || '',
+                    videoDuration: movieData.videoDuration || ''
+                };
+
+                // 写入movie.nfo到临时目录
+                await this.fileService.writeMovieNfo(movieTempDir, completeMovieData);
+
+                // 复制海报文件（如果有）
+                let posterDestPath = null;
+                if (folderInfo.posterPath) {
+                    posterDestPath = path.join(movieTempDir, `cover${folderInfo.posterExt}`);
+                    await this.fileService.copyFile(folderInfo.posterPath, posterDestPath);
+                    completeMovieData.poster = posterDestPath;
+                }
+
+                scannedMovies.push({
+                    folderName: folderName,
+                    tempPath: movieTempDir,
+                    sourcePath: folderInfo.folderPath,
+                    posterPath: posterDestPath,
+                    movieData: completeMovieData
+                });
+            } catch (error) {
+                console.error(`Error processing movie folder ${folderInfo.folderPath}:`, error);
+            }
+        }
+
+        return scannedMovies;
+    }
+
+    /**
+     * CSV扫描模式：解析CSV文件导入电影
+     * @param {string} csvPath - CSV文件路径
+     * @param {string} tempDir - 临时目录
+     * @param {string} category - 分类
+     * @returns {Promise<object[]>} 扫描结果
+     */
+    async scanCsvMode(csvPath, tempDir, category) {
+        const scannedMovies = [];
+
+        // 解析CSV文件
+        const csvMovies = await this.fileService.parseCsvFile(csvPath);
+
+        for (const movieInfo of csvMovies) {
+            try {
+                // 使用CSV中的movieId或生成新ID
+                const movieId = movieInfo.movieId || this.generateMovieId(category, movieInfo.title);
+                const folderName = this.sanitizeFolderName(movieId);
+                const movieTempDir = path.join(tempDir, folderName);
+                await this.fileService.ensureDir(movieTempDir);
+
+                // 构建完整的电影数据
+                const completeMovieData = {
+                    id: movieId,
+                    movieId: movieId,
+                    title: movieInfo.title || '',
+                    description: movieInfo.description || '',
+                    sortTitle: movieInfo.sortTitle || '',
+                    year: movieInfo.year || '',
+                    director: movieInfo.director || '',
+                    actors: movieInfo.actors || [],
+                    studio: movieInfo.studio || '',
+                    runtime: movieInfo.runtime || '',
+                    tags: movieInfo.tags || [],
+                    category: category,
+                    userRating: 0,
+                    userComment: '',
+                    original_filename: movieInfo.fileAddress || '',
+                    fileset: movieInfo.fileset || [],
+                    videoCodec: movieInfo.videoCodec || '',
+                    videoWidth: movieInfo.videoWidth || '',
+                    videoHeight: movieInfo.videoHeight || '',
+                    videoDuration: movieInfo.videoDuration || ''
+                };
+
+                // 写入movie.nfo到临时目录
+                await this.fileService.writeMovieNfo(movieTempDir, completeMovieData);
+
+                scannedMovies.push({
+                    folderName: folderName,
+                    tempPath: movieTempDir,
+                    sourcePath: movieInfo.fileAddress || '',
+                    posterPath: null,
+                    movieData: completeMovieData
+                });
+            } catch (error) {
+                console.error(`Error processing CSV movie ${movieInfo.title}:`, error);
+            }
+        }
+
+        return scannedMovies;
+    }
+
+    /**
+     * 清理文件夹名称，只允许字母、数字、中文和连字符
+     * @param {string} name - 原始名称
+     * @returns {string} 清理后的名称
+     */
+    sanitizeFolderName(name) {
+        return name
+            .toLowerCase()
+            .replace(/[^a-z0-9\u4e00-\u9fa5]/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '');
     }
 
     /**
@@ -813,15 +938,29 @@ class MovieService {
             const updatedData = {
                 ...existingData,
                 ...movieData,
-                id: existingData.id || this.generateMovieId(existingData.category, movieData.title || existingData.title),
-                title: movieData.title || existingData.title,
-                description: movieData.description || existingData.description || '',
-                year: movieData.year || existingData.year || '',
-                director: movieData.director || existingData.director || '',
-                actors: movieData.actors || existingData.actors || [],
-                studio: movieData.studio || existingData.studio || '',
-                tags: movieData.tags || existingData.tags || [],
-                category: movieData.category || existingData.category
+                // 电影ID：优先使用传入的ID，否则使用现有ID，否则生成新ID
+                id: movieData.id || existingData?.id || this.generateMovieId(movieData.category || existingData?.category || 'movie', movieData.title || existingData?.title || ''),
+                movieId: movieData.id || movieData.movieId || existingData?.movieId || '',
+                // 标题
+                title: movieData.title || existingData?.title || '',
+                // 排序标题
+                sorttitle: movieData.sortTitle || existingData?.sorttitle || '',
+                // 描述
+                description: movieData.description || existingData?.description || '',
+                // 年份/上映时间
+                year: movieData.year || existingData?.year || '',
+                // 导演
+                director: movieData.director || existingData?.director || '',
+                // 演员
+                actors: movieData.actors || existingData?.actors || [],
+                // 制片商
+                studio: movieData.studio || existingData?.studio || '',
+                // 电影时长
+                runtime: movieData.runtime || existingData?.runtime || '',
+                // 标签
+                tags: movieData.tags || movieData.tag || existingData?.tags || existingData?.tag || [],
+                // 分类
+                category: movieData.category || existingData?.category
             };
 
             // 写入更新后的数据
@@ -849,6 +988,7 @@ class MovieService {
 
     /**
      * 导入扫描的电影到正式目录
+     * 使用电影ID作为文件夹名称，拷贝NFO和海报文件到目标目录
      * @param {string} tempDir - 临时目录路径
      * @param {string} moviesDir - 电影目录
      * @returns {Promise<object>} 导入结果
@@ -882,8 +1022,13 @@ class MovieService {
                         continue;
                     }
 
-                    // 移动目录到目标位置
-                    await this.fileService.moveDir(srcPath, destPath);
+                    // 拷贝目录到目标位置（保留源文件）
+                    await this.fileService.copyDir(srcPath, destPath);
+
+                    // 更新源文件夹中NFO的original_filename（如果存在源路径）
+                    if (movieInfo.sourcePath) {
+                        await this.updateSourceNfoOriginalFilename(movieInfo.sourcePath, overview.scanPath);
+                    }
 
                     // 读取电影数据
                     const movieData = await this.fileService.readMovieNfo(destPath);
@@ -910,10 +1055,46 @@ class MovieService {
             // 删除临时目录
             await this.fileService.deleteDir(tempDir);
 
+            // 重建分类的index.json（确保索引完整）
+            await this.indexService.buildCategoryIndex(overview.category, moviesDir);
+
             return results;
         } catch (error) {
             console.error('Error importing scanned movies:', error);
             throw error;
+        }
+    }
+
+    /**
+     * 更新源NFO文件的original_filename字段
+     * 在导入电影后，将扫描路径拼入源NFO文件的original_filename
+     * @param {string} sourcePath - 源电影文件夹路径
+     * @param {string} scanPath - 扫描路径
+     * @returns {Promise<void>}
+     */
+    async updateSourceNfoOriginalFilename(sourcePath, scanPath) {
+        try {
+            const nfoPath = path.join(sourcePath, 'movie.nfo');
+            const nfoExists = await this.fileService.fileExists(nfoPath);
+
+            if (!nfoExists) {
+                return;
+            }
+
+            // 读取源NFO文件
+            const movieData = await this.fileService.readMovieNfo(sourcePath);
+
+            if (movieData) {
+                // 拼接新的original_filename：扫描路径 + 原始文件名
+                const originalPath = movieData.original_filename || '';
+                const newOriginalFilename = `${scanPath}${originalPath ? '/' + originalPath : ''}`;
+                movieData.original_filename = newOriginalFilename;
+
+                // 写回NFO文件
+                await this.fileService.writeMovieNfo(sourcePath, movieData);
+            }
+        } catch (error) {
+            console.error('Error updating source NFO original_filename:', error);
         }
     }
 
