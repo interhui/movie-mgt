@@ -1079,7 +1079,7 @@ function setupIpcHandlers(services) {
     });
 
     // 导入扫描的电影
-    ipcMain.handle('import-scanned-movies', async (event, tempDir) => {
+    ipcMain.handle('import-scanned-movies', async (event, tempDir, excludeIds = []) => {
         try {
             const settings = settingsService.getSettings();
             if (!settings.library || settings.library.moviesDir === undefined) {
@@ -1087,7 +1087,7 @@ function setupIpcHandlers(services) {
             }
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
 
-            const result = await movieService.importScannedMovies(tempDir, moviesDir);
+            const result = await movieService.importScannedMovies(tempDir, moviesDir, excludeIds);
 
             // 通知主窗口刷新
             const mainWindow = getMainWindow();

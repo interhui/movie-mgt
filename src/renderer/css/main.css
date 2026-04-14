@@ -1694,6 +1694,10 @@ body {
 .scan-movies-list .scan-movie-actors {
     width: 150px;
     color: var(--text-secondary);
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .scan-movies-list .scan-movie-director {
@@ -1722,8 +1726,13 @@ body {
     text-align: center;
 }
 
+.scan-movies-list .scan-movie-status {
+    width: 70px;
+    text-align: center;
+}
+
 .scan-movies-list .scan-movie-actions {
-    width: 80px;
+    width: 120px;
     text-align: center;
 }
 
@@ -1733,6 +1742,26 @@ body {
 
 .scan-status-none {
     color: var(--text-secondary);
+}
+
+.scan-status-existing {
+    color: var(--warning-color);
+    font-weight: 500;
+}
+
+.scan-status-new {
+    color: var(--success-color);
+    font-weight: 500;
+}
+
+.actor-unknown {
+    color: var(--danger-color);
+    font-weight: 500;
+}
+
+.scan-movie-row-deleted {
+    background-color: var(--hover-bg);
+    opacity: 0.5;
 }
 
 /* 单个电影编辑样式 */

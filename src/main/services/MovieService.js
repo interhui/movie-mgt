@@ -1012,7 +1012,7 @@ class MovieService {
      * @param {string} moviesDir - 电影目录
      * @returns {Promise<object>} 导入结果
      */
-    async importScannedMovies(tempDir, moviesDir) {
+    async importScannedMovies(tempDir, moviesDir, excludeIds = []) {
         try {
             // 验证 moviesDir 参数
             if (!moviesDir) {
@@ -1030,10 +1030,17 @@ class MovieService {
             const results = {
                 success: 0,
                 failed: 0,
+                skipped: 0,
                 errors: []
             };
 
             for (const movieInfo of overview.movies) {
+                // 跳过被排除的电影
+                if (excludeIds.includes(movieInfo.id)) {
+                    results.skipped++;
+                    continue;
+                }
+
                 try {
                     const srcPath = path.join(tempDir, movieInfo.folderName);
                     const destPath = path.join(moviesDir, overview.category, movieInfo.folderName);

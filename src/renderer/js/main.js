@@ -2489,11 +2489,35 @@ async function startScanDirectory() {
 
 /**
  * 显示扫描结果列表
- * 展示：电影ID、电影名称、演员、导演、发行商、电影时长、海报地址、视频文件地址
+ * 展示：电影ID、电影名称、演员、发行商、电影时长、海报地址、视频文件地址、状态
  */
-function showScanResults(movies, platform) {
+async function showScanResults(movies, platform) {
     const platformName = state.categories.find(c => c.id === platform)?.name || platform;
     elements.scanResultInfo.textContent = `共扫描到 ${movies.length} 个电影（分类：${platformName}）`;
+
+    // 获取电影库中已有的电影ID
+    const existingMovieIds = new Set();
+    try {
+        const allMovies = await window.electronAPI.getAllMoviesFromIndex({});
+        allMovies.forEach(m => {
+            if (m.id) existingMovieIds.add(m.id);
+        });
+    } catch (error) {
+        console.error('Error fetching existing movies:', error);
+    }
+
+    // 获取演员列表用于校验
+    const actorNames = new Set();
+    try {
+        const actorData = await window.electronAPI.getActors();
+        if (actorData && actorData.actors) {
+            actorData.actors.forEach(a => {
+                if (a.name) actorNames.add(a.name);
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching actors:', error);
+    }
 
     // 渲染电影列表（table 形式，滚动条仅在 scan-movies-list 内）
     let html = `
@@ -2503,11 +2527,11 @@ function showScanResults(movies, platform) {
                     <th class="scan-movie-id">电影ID</th>
                     <th class="scan-movie-name">电影名称</th>
                     <th class="scan-movie-actors">演员</th>
-                    <th class="scan-movie-director">导演</th>
                     <th class="scan-movie-publisher">发行商</th>
                     <th class="scan-movie-runtime">时长</th>
                     <th class="scan-movie-poster">海报</th>
                     <th class="scan-movie-video">视频</th>
+                    <th class="scan-movie-status">状态</th>
                     <th class="scan-movie-actions">操作</th>
                 </tr>
             </thead>
@@ -2518,25 +2542,43 @@ function showScanResults(movies, platform) {
         const movieData = movie.movieData || {};
         const movieId = movieData.id || movieData.movieId || '-';
         const title = movieData.title || movie.name || '-';
-        const actors = Array.isArray(movieData.actors) ? movieData.actors.join(', ') : '-';
-        const director = movieData.director || '-';
         const studio = movieData.studio || '-';
         const runtime = movieData.runtime || '-';
         const posterPath = movie.posterPath || movieData.poster || '-';
         const videoPath = movie.sourcePath || (movieData.fileset && movieData.fileset[0]?.fullpath) || '-';
 
+        // 检查电影是否已存在
+        const isExisting = existingMovieIds.has(movieId);
+        const statusText = isExisting ? '已存在' : '新电影';
+        const statusClass = isExisting ? 'scan-status-existing' : 'scan-status-new';
+
+        // 处理演员显示，未知演员标红
+        const actorsArray = Array.isArray(movieData.actors) ? movieData.actors : [];
+        const actorsHtml = actorsArray.map(actor => {
+            const isKnownActor = actorNames.has(actor);
+            const actorClass = isKnownActor ? '' : 'actor-unknown';
+            return `<span class="${actorClass}">${actor}</span>`;
+        }).join(', ');
+
+        // 用于显示的文本（未知的演员会标红）
+        const actorsDisplay = actorsArray.length > 0 ? actorsHtml : '-';
+
+        // 如果电影已存在或已删除，显示灰色背景
+        const rowClass = (isExisting || movie.deleted) ? 'scan-movie-row-deleted' : '';
+
         html += `
-                <tr data-index="${index}">
+                <tr data-index="${index}" class="${rowClass}" ${movie.deleted ? 'style="display:none;"' : ''}>
                     <td class="scan-movie-id" title="${movieId}">${truncateText(movieId, 20)}</td>
                     <td class="scan-movie-name" title="${title}">${truncateText(title, 20)}</td>
-                    <td class="scan-movie-actors" title="${actors}">${truncateText(actors, 15)}</td>
-                    <td class="scan-movie-director" title="${director}">${truncateText(director, 10)}</td>
+                    <td class="scan-movie-actors" title="${actorsArray.join(', ')}">${actorsDisplay}</td>
                     <td class="scan-movie-publisher" title="${studio}">${truncateText(studio, 10)}</td>
                     <td class="scan-movie-runtime">${runtime}</td>
                     <td class="scan-movie-poster">${posterPath !== '-' ? '<span class="scan-status-ok">有</span>' : '<span class="scan-status-none">无</span>'}</td>
                     <td class="scan-movie-video" title="${videoPath}">${videoPath !== '-' ? '<span class="scan-status-ok">有</span>' : '<span class="scan-status-none">无</span>'}</td>
+                    <td class="scan-movie-status"><span class="${statusClass}">${statusText}</span></td>
                     <td class="scan-movie-actions">
-                        <button class="btn btn-secondary btn-small" onclick="editScanMovie(${index})">编辑</button>
+                        <button class="btn btn-secondary btn-small" onclick="editScanMovie(${index})">✎</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteScanMovie(${index})">✖︎</button>
                     </td>
                 </tr>
         `;
@@ -2666,6 +2708,23 @@ async function editScanMovie(index) {
     renderScanEditTags();
 
     elements.scanMovieEditModal.style.display = 'flex';
+}
+
+/**
+ * 删除扫描电影
+ */
+function deleteScanMovie(index) {
+    const movie = state.scanMovies[index];
+    if (!movie) return;
+
+    if (confirm(`确定要删除电影 "${movie.movieData?.title || movie.name || '未知'}" 吗？`)) {
+        movie.deleted = true;
+        // 隐藏对应行
+        const row = document.querySelector(`tr[data-index="${index}"]`);
+        if (row) {
+            row.style.display = 'none';
+        }
+    }
 }
 
 /**
@@ -2997,7 +3056,27 @@ async function importAllScannedMovies() {
         elements.scanResultImport.disabled = true;
         elements.scanResultImport.textContent = '导入中...';
 
-        const result = await window.electronAPI.importScannedMovies(state.scanTempDir);
+        // 获取电影库中已有的电影ID，用于排除
+        const existingMovieIds = new Set();
+        try {
+            const allMovies = await window.electronAPI.getAllMoviesFromIndex({});
+            allMovies.forEach(m => {
+                if (m.id) existingMovieIds.add(m.id);
+            });
+        } catch (error) {
+            console.error('Error fetching existing movies:', error);
+        }
+
+        // 收集需要排除的电影ID（已删除的电影 + 电影库中已存在的电影）
+        const excludeIds = [];
+        state.scanMovies.forEach(movie => {
+            const movieId = movie.movieData?.id || movie.movieData?.movieId;
+            if (movie.deleted || (movieId && existingMovieIds.has(movieId))) {
+                if (movieId) excludeIds.push(movieId);
+            }
+        });
+
+        const result = await window.electronAPI.importScannedMovies(state.scanTempDir, excludeIds);
 
         if (result.error) {
             alert('导入失败: ' + result.error);
@@ -3006,6 +3085,9 @@ async function importAllScannedMovies() {
 
         // 显示导入结果
         let message = `导入完成！成功: ${result.success} 个`;
+        if (result.skipped > 0) {
+            message += `，跳过: ${result.skipped} 个`;
+        }
         if (result.failed > 0) {
             message += `，失败: ${result.failed} 个`;
         }
