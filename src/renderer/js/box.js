@@ -797,6 +797,7 @@ function renderMovies(movies) {
                         <div class="movie-name">${movie.name}</div>
                         <div class="movie-extra">${movie.actors || '-'}</div>
                     </div>
+                    ${(movie.year || movie.publishDate) ? `<div class="movie-year">${movie.year || movie.publishDate}</div>` : ''}
                 </div>
             `;
         }
@@ -913,6 +914,7 @@ function sortMovies(movies, sortBy = 'name', sortOrder = 'asc') {
 function getStatusText(status) {
     const statusMap = {
         'unplayed': '未看',
+        'unwatched': '未看',
         'playing': '观看中',
         'completed': '已完成'
     };

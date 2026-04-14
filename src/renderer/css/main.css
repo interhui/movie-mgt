@@ -481,6 +481,7 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    width: calc(100% - 55px);
 }
 
 .box-status-text {
