@@ -190,8 +190,14 @@ const elements = {
     confirmScanTagSelection: document.getElementById('confirm-scan-tag-selection'),
     cancelScanTagSelection: document.getElementById('cancel-scan-tag-selection'),
 
+    // 刷新进度相关
+    refreshProgressModal: document.getElementById('refresh-progress-modal'),
+    refreshProgressText: document.getElementById('refresh-progress-text'),
+    refreshProgressBar: document.getElementById('refresh-progress-bar'),    
+
     confirmScanMovieEdit: document.getElementById('confirm-scan-movie-edit'),
     cancelScanMovieEdit: document.getElementById('cancel-scan-movie-edit')
+    
 };
 
 /**
@@ -1133,12 +1139,39 @@ function bindEvents() {
         document.querySelectorAll('.box-item').forEach(i => i.classList.remove('active'));
     }
 
+     // 刷新电影库（带进度弹窗）
+    async function refreshLibraryWithProgress() {
+        // 显示进度弹窗
+        elements.refreshProgressModal.style.display = 'flex';
+        elements.refreshProgressText.textContent = '正在重建索引...';
+        elements.refreshProgressBar.style.width = '0%';
+
+        // 监听进度更新
+        window.electronAPI.onRefreshLibraryProgress(({ current, total, movieName }) => {
+            const percent = total > 0 ? Math.round((current / total) * 100) : 0;
+            elements.refreshProgressText.textContent = `正在重建索引，总计${total}个电影，当前第${current}个电影`;
+            elements.refreshProgressBar.style.width = percent + '%';
+        });
+
+        try {
+            await window.electronAPI.refreshMovieLibrary();
+        } catch (error) {
+            console.error('Error refreshing movie library:', error);
+        }
+
+        // 关闭进度弹窗
+        elements.refreshProgressModal.style.display = 'none';
+
+        // 刷新界面数据
+        clearAllFilters();
+        await loadCategories();
+        await loadMovies();
+        await loadStats();
+    }
+
     // 刷新电影库按钮
     elements.refreshBtn.addEventListener('click', () => {
-        clearAllFilters();
-        loadCategories();
-        loadMovies();
-        loadStats();
+        refreshLibraryWithProgress();
     });
 
     // 设置按钮
@@ -1176,10 +1209,8 @@ function bindEvents() {
 
     // 监听刷新事件
     window.electronAPI.onRefreshLibrary(() => {
-        clearAllFilters();
-        loadCategories();
-        loadMovies();
-        loadStats();
+        refreshLibraryWithProgress();
+
     });
 
     // 监听详情窗口编辑模式变化（锁定/解锁电影卡片点击）

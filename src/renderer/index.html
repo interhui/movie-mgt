@@ -613,6 +613,21 @@
         </div>
     </div>
 
+    <!-- 刷新进度弹窗 -->
+    <div id="refresh-progress-modal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2>正在刷新电影库</h2>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <p id="refresh-progress-text" style="margin-bottom: 16px;">正在重建索引...</p>
+                <div id="refresh-progress-bar-container" style="background: #e0e0e0; border-radius: 4px; height: 8px; overflow: hidden;">
+                    <div id="refresh-progress-bar" style="background: #4CAF50; height: 100%; width: 0%; transition: width 0.2s;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="js/main.js"></script>
 </body>
 </html>

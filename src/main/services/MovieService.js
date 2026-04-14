@@ -52,14 +52,15 @@ class MovieService {
     /**
      * 刷新电影库缓存
      * @param {string} moviesDir - 电影目录
+     * @param {Function} onProgress - 进度回调 (current, total, movieName) => void
      * @returns {Promise<object>} 缓存信息
      */
-    async refreshCache(moviesDir) {
+    async refreshCache(moviesDir, onProgress) {
         // 清空缓存
         this.cacheService.clearCache();
 
         // 重新加载所有电影
-        const allMovies = await this.loadAllMoviesFromFiles(moviesDir);
+        const allMovies = await this.loadAllMoviesFromFiles(moviesDir, onProgress);
 
         // 初始化缓存
         this.cacheService.initializeCache(allMovies, moviesDir);
@@ -73,22 +74,40 @@ class MovieService {
     /**
      * 从文件加载所有电影
      * @param {string} moviesDir - 电影目录
+     * @param {Function} onProgress - 进度回调 (current, total, movieName) => void
      * @returns {Promise<Array>} 电影列表
      */
-    async loadAllMoviesFromFiles(moviesDir) {
+    async loadAllMoviesFromFiles(moviesDir, onProgress) {
         const categories = await this.fileService.getSimulatorFolders(moviesDir);
         const allMovies = [];
 
+        // 先统计总电影数
+        let totalMovies = 0;
+        for (const category of categories) {
+            const categoryPath = path.join(moviesDir, category);
+            const movieFolders = await this.fileService.getMovieFolders(categoryPath);
+            totalMovies += Object.keys(movieFolders).length;
+        }
+
+        let currentMovie = 0;
         for (const category of categories) {
             const categoryPath = path.join(moviesDir, category);
             const movieFolders = await this.fileService.getMovieFolders(categoryPath);
 
             for (const [folderName, folderPath] of Object.entries(movieFolders)) {
+                currentMovie++;
                 const movieData = await this.fileService.readMovieNfo(folderPath);
                 if (movieData) {
                     const movie = this.generateMovieData(movieData, folderName, category, folderPath);
                     movie.poster = await this.getMoviePoster(folderPath);
                     allMovies.push(movie);
+                    if (onProgress) {
+                        onProgress(currentMovie, totalMovies, movie.title || folderName);
+                    }
+                } else {
+                    if (onProgress) {
+                        onProgress(currentMovie, totalMovies, folderName);
+                    }
                 }
             }
         }
