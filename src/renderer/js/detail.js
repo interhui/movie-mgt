@@ -291,47 +291,6 @@ function getTagNameById(tagId) {
 }
 
 /**
- * 加载主题设置
- */
-async function loadTheme() {
-    try {
-        const settings = await window.electronAPI.getSettings();
-        if (settings && settings.appearance) {
-            applyTheme(settings.appearance.theme);
-        }
-    } catch (error) {
-        console.error('Error loading theme:', error);
-    }
-}
-
-/**
- * 应用主题
- */
-function applyTheme(theme) {
-    const links = document.querySelectorAll('link[rel="stylesheet"]');
-    let themeLink = null;
-    for (const link of links) {
-        const href = link.getAttribute('href') || '';
-        if (href.includes('themes/dark') || href.includes('themes/light')) {
-            themeLink = link;
-            break;
-        }
-    }
-    console.log('applyTheme called, theme:', theme, 'themeLink found:', themeLink ? themeLink.href : 'null');
-    if (themeLink) {
-        const currentHref = themeLink.getAttribute('href');
-        let newHref;
-        if (theme === 'light') {
-            newHref = currentHref.replace(/themes\/dark\.css$/, 'themes/light.css');
-        } else {
-            newHref = currentHref.replace(/themes\/light\.css$/, 'themes/dark.css');
-        }
-        console.log('Theme CSS href changed from:', currentHref, 'to:', newHref);
-        themeLink.setAttribute('href', newHref);
-    }
-}
-
-/**
  * Tab 切换事件
  */
 function bindTabEvents() {
@@ -731,25 +690,6 @@ function confirmTagSelection() {
 }
 
 /**
- * 获取分类名称
- */
-function getCategoryName(categoryId) {
-    if (categoriesCache.length > 0) {
-        const category = categoriesCache.find(c => c.id === categoryId);
-        if (category) {
-            return category.name;
-        }
-    }
-    const categoryNames = {
-        'movie': '电影',
-        'tv': '电视剧',
-        'anime': '动漫',
-        'documentary': '纪录片'
-    };
-    return categoryNames[categoryId] || categoryId;
-}
-
-/**
  * 获取状态文本
  */
 function getStatusText(status) {
@@ -983,18 +923,6 @@ function bindEditModeEvents() {
             }
         }
     };
-}
-
-/**
- * 将文件转换为 base64
- */
-function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
 }
 
 /**
@@ -1235,27 +1163,6 @@ function formatFileSize(bytes) {
     const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
-
-/**
- * 格式化视频时长（秒转为 HH:MM:SS 或 MM:SS 格式）
- * @param {string|number} seconds - 秒数
- * @returns {string} 格式化后的时长字符串
- */
-function formatDuration(seconds) {
-    if (!seconds) return '';
-    const totalSeconds = parseInt(seconds, 10);
-    if (isNaN(totalSeconds) || totalSeconds <= 0) return '';
-
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const secs = totalSeconds % 60;
-
-    if (hours > 0) {
-        return `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    } else {
-        return `${minutes}:${String(secs).padStart(2, '0')}`;
-    }
 }
 
 /**

@@ -340,33 +340,6 @@ async function loadSettings() {
 }
 
 /**
- * 应用主题
- */
-function applyTheme(theme) {
-    // 找到所有 link 标签并找到主题 CSS
-    const links = document.querySelectorAll('link[rel="stylesheet"]');
-    let themeLink = null;
-    for (const link of links) {
-        const href = link.getAttribute('href') || '';
-        if (href.includes('themes/dark') || href.includes('themes/light')) {
-            themeLink = link;
-            break;
-        }
-    }
-    if (themeLink) {
-        // 替换 href 中的主题文件名
-        const currentHref = themeLink.getAttribute('href');
-        let newHref;
-        if (theme === 'light') {
-            newHref = currentHref.replace(/themes\/dark\.css$/, 'themes/light.css');
-        } else {
-            newHref = currentHref.replace(/themes\/light\.css$/, 'themes/dark.css');
-        }
-        themeLink.setAttribute('href', newHref);
-    }
-}
-
-/**
  * 显示Toast提示
  */
 function showToast(message, duration = 3000) {
@@ -742,10 +715,10 @@ async function loadMovies() {
  */
 function updateSidebarWithSearchResults(movies) {
     // 按分类分组统计电影数量
-    const platformCounts = {};
+    const categoryCounts = {};
     movies.forEach(movie => {
         const categoryId = movie.category;
-        platformCounts[platformId] = (platformCounts[platformId] || 0) + 1;
+        categoryCounts[categoryId] = (categoryCounts[categoryId] || 0) + 1;
     });
 
     // 构建更新后的分类列表
@@ -770,7 +743,7 @@ function updateSidebarWithSearchResults(movies) {
         }
     });
 
-    elements.platformList.innerHTML = html;
+    elements.categoryList.innerHTML = html;
 
     // 重新绑定点击事件
     document.querySelectorAll('.category-item').forEach(item => {
@@ -778,17 +751,6 @@ function updateSidebarWithSearchResults(movies) {
             setCurrentCategory(item.dataset.category);
         });
     });
-}
-
-/**
- * 根据分类ID获取分类名称
- * @param {string} categoryId - 分类ID
- * @returns {string} 分类名称
- */
-function getCategoryName(categoryId) {
-    if (!categoryId) return '';
-    const category = state.categories.find(c => c.id === categoryId);
-    return category ? category.name : categoryId;
 }
 
 /**
@@ -1009,8 +971,8 @@ function updateBatchDeleteButtonVisibility() {
  * 获取分类名称
  */
 function getPlatformName(platformId) {
-    const category = state.categories.find(c => c.id === categoryId);
-    return category ? category.shortName : categoryId;
+    const category = state.categories.find(c => c.id === platformId);
+    return category ? category.shortName : platformId;
 }
 
 /**
@@ -1913,27 +1875,6 @@ function formatFileSize(bytes) {
 }
 
 /**
- * 格式化视频时长（秒转为 HH:MM:SS 或 MM:SS 格式）
- * @param {string|number} seconds - 秒数
- * @returns {string} 格式化后的时长字符串
- */
-function formatDuration(seconds) {
-    if (!seconds) return '';
-    const totalSeconds = parseInt(seconds, 10);
-    if (isNaN(totalSeconds) || totalSeconds <= 0) return '';
-
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const secs = totalSeconds % 60;
-
-    if (hours > 0) {
-        return `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    } else {
-        return `${minutes}:${String(secs).padStart(2, '0')}`;
-    }
-}
-
-/**
  * 渲染文件列表
  */
 function renderFileList() {
@@ -2312,18 +2253,6 @@ async function loadActors() {
         console.error('Error loading actors:', error);
         state.actors = [];
     }
-}
-
-/**
- * 将文件转换为 base64
- */
-function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
 }
 
 /**

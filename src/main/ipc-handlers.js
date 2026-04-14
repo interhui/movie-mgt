@@ -18,19 +18,15 @@ const APP_ROOT = path.join(__dirname, '..', '..');
  */
 function downloadFileToTemp(url) {
     return new Promise((resolve, reject) => {
-        console.log('[Cover Download] Starting download:', url);
         const ext = path.extname(url) || '.jpg';
         const tempPath = path.join(APP_ROOT, `temp_cover_${Date.now()}${ext}`);
-        console.log('[Cover Download] Temp path:', tempPath);
         const file = fs.createWriteStream(tempPath);
 
         const protocol = url.startsWith('https:') ? https : http;
 
         protocol.get(url, (response) => {
-            console.log('[Cover Download] Response status:', response.statusCode);
             // 处理重定向
             if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
-                console.log('[Cover Download] Redirect to:', response.headers.location);
                 file.close();
                 fs.unlinkSync(tempPath);
                 downloadFileToTemp(response.headers.location).then(resolve).catch(reject);
@@ -38,7 +34,6 @@ function downloadFileToTemp(url) {
             }
 
             if (response.statusCode !== 200) {
-                console.log('[Cover Download] Non-200 status, rejecting');
                 file.close();
                 fs.unlinkSync(tempPath);
                 reject(new Error(`Failed to download: ${response.statusCode}`));
@@ -48,11 +43,9 @@ function downloadFileToTemp(url) {
             response.pipe(file);
             file.on('finish', () => {
                 file.close();
-                console.log('[Cover Download] Download complete:', tempPath);
                 resolve(tempPath);
             });
         }).on('error', (err) => {
-            console.log('[Cover Download] Error:', err.message);
             file.close();
             if (fs.existsSync(tempPath)) {
                 fs.unlinkSync(tempPath);
@@ -71,10 +64,8 @@ function downloadFileToTemp(url) {
  */
 function downloadCoverToMovieFolder(url, destPath, fileName = 'cover') {
     return new Promise((resolve, reject) => {
-        console.log('[Cover Download] Starting download to movie folder:', url);
         const ext = path.extname(url) || '.jpg';
         const destFilePath = path.join(destPath, `${fileName}${ext}`);
-        console.log('[Cover Download] Dest path:', destFilePath);
         const file = fs.createWriteStream(destFilePath);
 
         const protocol = url.startsWith('https:') ? https : http;
@@ -86,10 +77,8 @@ function downloadCoverToMovieFolder(url, destPath, fileName = 'cover') {
         }
 
         protocol.get(downloadUrl, (response) => {
-            console.log('[Cover Download] Response status:', response.statusCode);
             // 处理重定向
             if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
-                console.log('[Cover Download] Redirect to:', response.headers.location);
                 file.close();
                 fs.unlinkSync(destFilePath);
                 downloadCoverToMovieFolder(response.headers.location, destPath, fileName).then(resolve).catch(reject);
@@ -97,7 +86,6 @@ function downloadCoverToMovieFolder(url, destPath, fileName = 'cover') {
             }
 
             if (response.statusCode !== 200) {
-                console.log('[Cover Download] Non-200 status, rejecting');
                 file.close();
                 if (fs.existsSync(destFilePath)) {
                     fs.unlinkSync(destFilePath);
@@ -109,11 +97,9 @@ function downloadCoverToMovieFolder(url, destPath, fileName = 'cover') {
             response.pipe(file);
             file.on('finish', () => {
                 file.close();
-                console.log('[Cover Download] Download complete:', destFilePath);
                 resolve(destFilePath);
             });
         }).on('error', (err) => {
-            console.log('[Cover Download] Error:', err.message);
             file.close();
             if (fs.existsSync(destFilePath)) {
                 fs.unlinkSync(destFilePath);
@@ -321,18 +307,6 @@ function setupIpcHandlers(services) {
             return { success: true };
         } catch (error) {
             console.error('Error updating movie status:', error);
-            return { error: error.message };
-        }
-    });
-
-    // 更新电影时长
-    ipcMain.handle('update-movie-playtime', async (event, data) => {
-        try {
-            const { movieId, duration } = data;
-            await dbService.updatePlayTime(movieId, duration);
-            return { success: true };
-        } catch (error) {
-            console.error('Error updating playtime:', error);
             return { error: error.message };
         }
     });
@@ -958,12 +932,9 @@ function setupIpcHandlers(services) {
                     coverImagePath = tempPath;
                 } else if (movieData.coverImage.startsWith('http:') || movieData.coverImage.startsWith('https:')) {
                     // URL，需要下载到临时文件
-                    console.log('[Add Movie] Detected cover URL:', movieData.coverImage);
                     try {
                         coverImagePath = await downloadFileToTemp(movieData.coverImage);
-                        console.log('[Add Movie] Downloaded to:', coverImagePath);
                     } catch (downloadError) {
-                        console.error('[Add Movie] Failed to download cover image:', downloadError);
                         // 下载失败不影响电影添加，只是不保存封面
                     }
                 } else {
@@ -988,27 +959,6 @@ function setupIpcHandlers(services) {
             return result;
         } catch (error) {
             console.error('Error adding movie:', error);
-            return { error: error.message };
-        }
-    });
-
-    // 批量导入电影
-    ipcMain.handle('batch-import-movies', async (event, moviesData) => {
-        try {
-            const settings = settingsService.getSettings();
-            const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-
-            const result = await movieService.batchImportMovies(moviesData, moviesDir);
-
-            // 通知主窗口刷新
-            const mainWindow = getMainWindow();
-            if (mainWindow) {
-                mainWindow.webContents.send('refresh-library');
-            }
-
-            return result;
-        } catch (error) {
-            console.error('Error batch importing movies:', error);
             return { error: error.message };
         }
     });

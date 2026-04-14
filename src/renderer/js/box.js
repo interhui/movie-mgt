@@ -58,27 +58,6 @@ let currentEditingRating = 0;
 let categoriesCache = [];
 
 /**
- * 获取分类名称
- */
-function getCategoryName(categoryId) {
-    // 优先从缓存获取
-    if (categoriesCache.length > 0) {
-        const category = categoriesCache.find(c => c.id === categoryId);
-        if (category) {
-            return category.shortName || category.name;
-        }
-    }
-    // 如果缓存为空，使用硬编码的默认值
-    const categoryNames = {
-        'movie': '电影',
-        'tv': '电视剧',
-        'documentary': '纪录片',
-        'anime': '动漫'
-    };
-    return categoryNames[categoryId] || categoryId;
-}
-
-/**
  * 加载分类缓存
  */
 async function loadCategories() {
@@ -270,35 +249,6 @@ function getPosterMaxSize(size) {
         large: '280px'
     };
     return sizes[size] || sizes.medium;
-}
-
-/**
- * 应用主题
- */
-function applyTheme(theme) {
-    // 找到所有 link 标签并找到主题 CSS
-    const links = document.querySelectorAll('link[rel="stylesheet"]');
-    let themeLink = null;
-    for (const link of links) {
-        const href = link.getAttribute('href') || '';
-        if (href.includes('themes/dark') || href.includes('themes/light')) {
-            themeLink = link;
-            break;
-        }
-    }
-    console.log('applyTheme called, theme:', theme, 'themeLink found:', themeLink ? themeLink.href : 'null');
-    if (themeLink) {
-        // 替换 href 中的主题文件名
-        const currentHref = themeLink.getAttribute('href');
-        let newHref;
-        if (theme === 'light') {
-            newHref = currentHref.replace(/themes\/dark\.css$/, 'themes/light.css');
-        } else {
-            newHref = currentHref.replace(/themes\/light\.css$/, 'themes/dark.css');
-        }
-        console.log('Theme CSS href changed from:', currentHref, 'to:', newHref);
-        themeLink.setAttribute('href', newHref);
-    }
 }
 
 /**
