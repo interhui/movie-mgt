@@ -592,6 +592,14 @@ class MovieService {
                     valA = a.year || 0;
                     valB = b.year || 0;
                     break;
+                case 'actor':
+                    valA = (a.actors && a.actors.length > 0) ? a.actors[0].toLowerCase() : '';
+                    valB = (b.actors && b.actors.length > 0) ? b.actors[0].toLowerCase() : '';
+                    break;
+                case 'releasedate':
+                    valA = a.year || 0;
+                    valB = b.year || 0;
+                    break;
                 default:
                     valA = a.title.toLowerCase();
                     valB = b.title.toLowerCase();
