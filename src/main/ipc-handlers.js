@@ -283,11 +283,15 @@ function setupIpcHandlers(services) {
     });
 
     // 刷新电影库缓存
-    ipcMain.handle('refresh-movie-library', async () => {
+    ipcMain.handle('refresh-movie-library', async (event) => {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-            const cacheInfo = await movieService.refreshCache(moviesDir);
+            const webContents = event.sender;
+
+            const cacheInfo = await movieService.refreshCache(moviesDir, (current, total, movieName) => {
+                webContents.send('refresh-library-progress', { current, total, movieName });
+            });
             return { success: true, cacheInfo };
         } catch (error) {
             console.error('Error refreshing movie library:', error);

@@ -39,6 +39,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // 电影编辑与删除
     saveMovieEdit: (movieData) => ipcRenderer.invoke('save-movie-edit', movieData),
     deleteMovie: (movieData) => ipcRenderer.invoke('delete-movie', movieData),
+    refreshMovieLibrary: () => ipcRenderer.invoke('refresh-movie-library'),
 
     // 电影盒子管理
     getAllBoxes: () => ipcRenderer.invoke('get-all-boxes'),
@@ -79,6 +80,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // 事件监听
     onRefreshLibrary: (callback) => {
         ipcRenderer.on('refresh-library', callback);
+    },
+    onRefreshLibraryProgress: (callback) => {
+        ipcRenderer.on('refresh-library-progress', (event, data) => callback(data));
     },
     onBoxUpdated: (callback) => {
         ipcRenderer.on('box-updated', callback);

@@ -1301,6 +1301,7 @@ function bindEvents() {
         if (confirmed) {
             try {
                 const result = await window.electronAPI.deleteMovie({
+                    id: currentMovie.id,
                     category: currentMovie.category,
                     folderName: currentMovie.folderName
                 });
