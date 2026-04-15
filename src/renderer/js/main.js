@@ -785,7 +785,6 @@ function renderMovies(movies) {
                 <div class="movie-category-info">分类</div>
                 <div class="movie-director-col">导演</div>
                 <div class="movie-files-col">文件</div>
-                <div class="movie-rating">评分</div>
             </div>
         `;
     }
@@ -808,7 +807,7 @@ function renderMovies(movies) {
                         }
                     </div>
                     <div class="movie-id-col">
-                        ${movie.movieId || ''}
+                        ${movie.id || ''}
                     </div>
                     <div class="movie-name">
                         ${movie.name}
@@ -820,7 +819,6 @@ function renderMovies(movies) {
                     <div class="movie-category-info">${getCategoryName(movie.category)}</div>
                     <div class="movie-director-col">${movie.director || '-'}</div>
                     <div class="movie-files-col">${fileCount > 0 ? '📁 ' + fileCount : '-'}</div>
-                    <div class="movie-rating">${movie.userRating ? '⭐'.repeat(movie.userRating) : '-'}</div>
                 </div>
             `;
         } else {
@@ -2444,6 +2442,9 @@ async function startScanDirectory() {
     const scanType = elements.scanPathInput.dataset.type;
     const category = elements.scanCategorySelect.value;
 
+    // 获取目录命名方式选项
+    const dirNamingOption = document.querySelector('input[name="dir-naming"]:checked').value;
+
     if (!scanPath || !category) {
         alert('请选择扫描路径和目标分类');
         return;
@@ -2456,7 +2457,8 @@ async function startScanDirectory() {
         const result = await window.electronAPI.scanMovieDirectory({
             scanPath: scanPath,
             scanType: scanType,
-            category: category
+            category: category,
+            dirNaming: dirNamingOption
         });
 
         if (result.error) {

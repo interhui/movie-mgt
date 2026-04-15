@@ -471,6 +471,8 @@ class MovieService {
         // 生成 movieId：格式为 "分类-电影名称"，小写字母
         const movieId = movieData.movieId || this.generateMovieId(category, movieData.title || safeFolderName);
 
+        const fileCount = (movieData.fileset && Array.isArray(movieData.fileset)) ? movieData.fileset.length + (movieData.original_filename ? 1 : 0) : (movieData.original_filename ? 1 : 0);
+
         return {
             id: movieData.id || `${category}-${safeFolderName}`,
             movieId: movieId,
@@ -501,6 +503,7 @@ class MovieService {
             path: folderPath,
             folderName: safeFolderName,
             fileset: movieData.fileset || [],
+            fileCount: fileCount,
             poster: movieData.poster || null
         };
     }
@@ -643,21 +646,6 @@ class MovieService {
     }
 
     /**
-     * 生成电影文件夹名称
-     * @param {string} movieName - 电影名称
-     * @returns {string} 文件夹名称
-     */
-    generateFolderName(movieName) {
-        // 将电影名称转换为小写，去除特殊字符，只保留字母、数字和连字符
-        const normalizedName = movieName.toLowerCase()
-            .replace(/[^a-z0-9\u4e00-\u9fa5]/g, '-') // 非字母数字中文转为连字符
-            .replace(/-+/g, '-') // 多个连字符合并为一个
-            .replace(/^-|-$/g, ''); // 去除首尾连字符
-
-        return normalizedName;
-    }
-
-    /**
      * 添加单个电影
      * @param {object} movieData - 电影数据
      * @param {string} movieData.title - 电影名称
@@ -679,7 +667,7 @@ class MovieService {
 
             // 生成电影ID和文件夹名称
             const movieId = customId || this.generateMovieId(category, title);
-            const folderName = this.generateFolderName(title);
+            const folderName = this.generateFolderName(movieId, title, year, 'movieId');
 
             // 确保分类目录存在
             const categoryPath = path.join(moviesDir, category);
@@ -745,9 +733,10 @@ class MovieService {
      * @param {string} scanType - 扫描类型：'directory' 或 'file' (CSV)
      * @param {string} category - 分类
      * @param {string} moviesDir - 电影目录
+     * @param {string} dirNaming - 目录命名方式：'movieId'（电影ID）或 'movieName'（电影名称/年份）
      * @returns {Promise<object>} 扫描结果
      */
-    async scanMovieDirectory(scanPath, scanType, category, moviesDir) {
+    async scanMovieDirectory(scanPath, scanType, category, moviesDir, dirNaming = 'movieId') {
         try {
             // 生成临时目录路径
             const timestamp = Date.now();
@@ -760,10 +749,10 @@ class MovieService {
 
             if (scanType === 'directory') {
                 // 目录扫描模式：递归扫描所有子文件夹，提取movie.nfo和海报
-                scannedMovies = await this.scanDirectoryMode(scanPath, tempDir, category);
+                scannedMovies = await this.scanDirectoryMode(scanPath, tempDir, category, dirNaming);
             } else if (scanType === 'file') {
                 // 文件扫描模式（CSV）：解析CSV文件
-                scannedMovies = await this.scanCsvMode(scanPath, tempDir, category);
+                scannedMovies = await this.scanCsvMode(scanPath, tempDir, category, dirNaming);
             }
 
             // 写入总览文件
@@ -799,9 +788,10 @@ class MovieService {
      * @param {string} scanPath - 扫描路径
      * @param {string} tempDir - 临时目录
      * @param {string} category - 分类
+     * @param {string} dirNaming - 目录命名方式：'movieId'（电影ID）或 'movieName'（电影名称/年份）
      * @returns {Promise<object[]>} 扫描结果
      */
-    async scanDirectoryMode(scanPath, tempDir, category) {
+    async scanDirectoryMode(scanPath, tempDir, category, dirNaming) {
         const scannedMovies = [];
 
         // 递归扫描目录，查找包含movie.nfo的文件夹
@@ -819,7 +809,9 @@ class MovieService {
 
                 // 使用现有ID或生成新ID
                 const movieId = movieData.id || this.generateMovieId(category, movieData.title || folderInfo.folderName);
-                const folderName = this.sanitizeFolderName(movieId);
+
+                // 根据目录命名方式生成文件夹名称
+                const folderName = this.generateFolderName(movieId, movieData.title || movieData.name || folderInfo.folderName, movieData.year, dirNaming);
                 const movieTempDir = path.join(tempDir, folderName);
                 await this.fileService.ensureDir(movieTempDir);
 
@@ -837,8 +829,6 @@ class MovieService {
                     runtime: movieData.runtime || '',
                     tags: movieData.tag || movieData.tags || [],
                     category: category,
-                    userRating: movieData.userRating || 0,
-                    userComment: movieData.userComment || '',
                     original_filename: movieData.original_filename || '',
                     fileset: movieData.fileset || [],
                     videoCodec: movieData.videoCodec || '',
@@ -878,9 +868,10 @@ class MovieService {
      * @param {string} csvPath - CSV文件路径
      * @param {string} tempDir - 临时目录
      * @param {string} category - 分类
+     * @param {string} dirNaming - 目录命名方式：'movieId'（电影ID）或 'movieName'（电影名称/年份）
      * @returns {Promise<object[]>} 扫描结果
      */
-    async scanCsvMode(csvPath, tempDir, category) {
+    async scanCsvMode(csvPath, tempDir, category, dirNaming) {
         const scannedMovies = [];
 
         // 解析CSV文件
@@ -890,7 +881,9 @@ class MovieService {
             try {
                 // 使用CSV中的movieId或生成新ID
                 const movieId = movieInfo.movieId || this.generateMovieId(category, movieInfo.title);
-                const folderName = this.sanitizeFolderName(movieId);
+
+                // 根据目录命名方式生成文件夹名称
+                const folderName = this.generateFolderName(movieId, movieInfo.title, movieInfo.year, dirNaming);
                 const movieTempDir = path.join(tempDir, folderName);
                 await this.fileService.ensureDir(movieTempDir);
 
@@ -937,14 +930,33 @@ class MovieService {
     }
 
     /**
-     * 清理文件夹名称，只允许字母、数字、中文和连字符
+     * 根据目录命名方式生成文件夹名称
+     * @param {string} movieId - 电影ID
+     * @param {string} title - 电影标题
+     * @param {string} year - 电影年份
+     * @param {string} dirNaming - 目录命名方式：'movieId'（电影ID）或 'movieName'（电影名称/年份）
+     * @returns {string} 生成的文件夹名称
+     */
+    generateFolderName(movieId, title, year, dirNaming) {
+        // 使用电影名称/年份作为目录名，格式：电影名(发行年份)
+        if (dirNaming === 'movieName' && title) {
+            const nameWithYear = year ? `${title}(${year})` : title;
+            return this.sanitizeFolderName(nameWithYear);
+            
+        }
+        // 默认使用电影ID作为目录名
+        return this.sanitizeFolderName(movieId);
+    }
+
+    /**
+     * 清理文件夹名称，只允许字母、数字、中文、括号和连字符
      * @param {string} name - 原始名称
      * @returns {string} 清理后的名称
      */
     sanitizeFolderName(name) {
         return name
             .toLowerCase()
-            .replace(/[^a-z0-9\u4e00-\u9fa5]/g, '-')
+            .replace(/[^a-z0-9\u4e00-\u9fa5()]/g, '-')
             .replace(/-+/g, '-')
             .replace(/^-|-$/g, '');
     }

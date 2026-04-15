@@ -26,6 +26,7 @@ class IndexService {
      * @returns {object} 用于 index.json 的电影数据
      */
     extractIndexMovieData(movie) {
+        const fileCount = (movie.fileset && Array.isArray(movie.fileset)) ? movie.fileset.length + (movie.original_filename ? 1 : 0) : movie.original_filename ? 1 : 0;
         return {
             id: movie.id,
             name: movie.title || movie.name || '',
@@ -36,9 +37,8 @@ class IndexService {
             director: movie.director || '',
             actors: movie.actors || [],
             studio: movie.studio || '',
-            userRating: movie.userRating || 0,
-            tags: movie.tag || movie.tags || [],
-            fileCount: (movie.fileset && Array.isArray(movie.fileset)) ? movie.fileset.length : 0
+            tags: movie.tag || [],
+            fileCount: fileCount
         };
     }
 
@@ -61,7 +61,7 @@ class IndexService {
             const movies = [];
 
             for (const [folderName, folderPath] of Object.entries(movieFolders)) {
-                const movieData = await this.fileService.readMovieNfo(folderPath);
+                const movieData = await this.fileService.readMovieNfo(folderPath); 
                 if (movieData) {
                     movies.push(this.extractIndexMovieData(movieData));
                 }

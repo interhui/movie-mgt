@@ -967,12 +967,12 @@ function setupIpcHandlers(services) {
     // ==================== 电影目录扫描 ====================
 
     // 扫描电影目录
-    ipcMain.handle('scan-movie-directory', async (event, { scanPath, scanType, category }) => {
+    ipcMain.handle('scan-movie-directory', async (event, { scanPath, scanType, category, dirNaming }) => {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
 
-            const result = await movieService.scanMovieDirectory(scanPath, scanType, category, moviesDir);
+            const result = await movieService.scanMovieDirectory(scanPath, scanType, category, moviesDir, dirNaming);
             return result;
         } catch (error) {
             console.error('Error scanning movie directory:', error);

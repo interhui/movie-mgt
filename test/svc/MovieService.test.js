@@ -257,9 +257,34 @@ describe('MovieService', () => {
     });
 
     describe('generateFolderName', () => {
-        test('SVC-MOVIE-030: 正确生成文件夹名', () => {
-            const folderName = service.generateFolderName('Test Movie 2024');
+        test('SVC-MOVIE-030: 使用movieId作为目录名', () => {
+            const folderName = service.generateFolderName('movie-123', 'Test Movie', '2024', 'movieId');
+            expect(folderName).toBe('movie-123');
+        });
+
+        test('SVC-MOVIE-030a: 使用movieName作为目录名，带年份', () => {
+            const folderName = service.generateFolderName('movie-123', 'Test Movie', '2024', 'movieName');
             expect(folderName).toBe('test-movie-2024');
+        });
+
+        test('SVC-MOVIE-030b: 使用movieName作为目录名，不带年份', () => {
+            const folderName = service.generateFolderName('movie-123', 'Test Movie', '', 'movieName');
+            expect(folderName).toBe('test-movie');
+        });
+
+        test('SVC-MOVIE-030c: 电影名称含特殊字符', () => {
+            const folderName = service.generateFolderName('movie-123', 'Avatar: The Way of Water', '2022', 'movieName');
+            expect(folderName).toBe('avatar-the-way-of-water-2022');
+        });
+
+        test('SVC-MOVIE-030d: 电影名称为中文', () => {
+            const folderName = service.generateFolderName('movie-456', '星际穿越', '2014', 'movieName');
+            expect(folderName).toBe('星际穿越-2014');
+        });
+
+        test('SVC-MOVIE-030e: 默认使用movieId方式', () => {
+            const folderName = service.generateFolderName('movie-789', 'Test Movie', '2024');
+            expect(folderName).toBe('movie-789');
         });
     });
 
