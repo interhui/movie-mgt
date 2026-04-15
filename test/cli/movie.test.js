@@ -91,8 +91,8 @@ describe('CLI Movie Commands', () => {
     describe('movie list', () => {
         test('CLI-MOVIE-LIST-001: 列出所有电影', async () => {
             const mockMovies = [
-                { id: 'movie-test1', name: 'Test Movie 1', category: 'movie', userRating: 5, status: 'unplayed' },
-                { id: 'movie-test2', name: 'Test Movie 2', category: 'movie', userRating: 3, status: 'playing' }
+                { id: 'movie-test1', name: 'Test Movie 1', category: 'movie', userRating: 5, status: 'unwatched' },
+                { id: 'movie-test2', name: 'Test Movie 2', category: 'movie', userRating: 3, status: 'watching' }
             ];
             mockMovieService.getAllMovies.mockResolvedValue(mockMovies);
 
@@ -109,7 +109,7 @@ describe('CLI Movie Commands', () => {
 
         test('CLI-MOVIE-LIST-002: 按分类筛选', async () => {
             mockMovieService.getMoviesByCategory.mockResolvedValue([
-                { id: 'movie-test1', name: 'Test Movie', category: 'movie', userRating: 5, status: 'unplayed' }
+                { id: 'movie-test1', name: 'Test Movie', category: 'movie', userRating: 5, status: 'unwatched' }
             ]);
 
             const services = {
@@ -124,7 +124,7 @@ describe('CLI Movie Commands', () => {
 
         test('CLI-MOVIE-LIST-007: JSON格式输出', async () => {
             const mockMovies = [
-                { id: 'movie-test1', name: 'Test Movie', category: 'movie', userRating: 5, status: 'unplayed' }
+                { id: 'movie-test1', name: 'Test Movie', category: 'movie', userRating: 5, status: 'unwatched' }
             ];
             mockMovieService.getAllMovies.mockResolvedValue(mockMovies);
 
@@ -178,7 +178,7 @@ describe('CLI Movie Commands', () => {
                 name: 'Test Movie',
                 category: 'movie',
                 userRating: 5,
-                status: 'unplayed'
+                status: 'unwatched'
             });
 
             const services = {
@@ -392,14 +392,14 @@ describe('CLI Movie Commands', () => {
     });
 
     describe('movie status', () => {
-        test('CLI-MOVIE-STATUS-001: 更新为unplayed', async () => {
+        test('CLI-MOVIE-STATUS-001: 更新为unwatched', async () => {
             mockMovieService.getMovieDetail.mockResolvedValue({
                 id: 'movie-test1',
                 name: 'Test Movie',
                 category: 'movie',
                 path: path.join(MOVIES_DIR, 'movie', 'test1', 'movie.nfo')
             });
-            mockFileService.readMovieNfo.mockResolvedValue({ name: 'Test Movie', status: 'playing' });
+            mockFileService.readMovieNfo.mockResolvedValue({ name: 'Test Movie', status: 'watching' });
             mockFileService.writeMovieNfo.mockResolvedValue();
             mockMovieService.refreshCache.mockResolvedValue();
 
@@ -409,7 +409,7 @@ describe('CLI Movie Commands', () => {
                 getMoviesDir: () => MOVIES_DIR
             };
 
-            await movieCommands.updateStatus(services, 'movie-test1', 'unplayed');
+            await movieCommands.updateStatus(services, 'movie-test1', 'unwatched');
 
             expect(consoleLogSpy).toHaveBeenCalledWith(expect.stringContaining('已更新'));
         });

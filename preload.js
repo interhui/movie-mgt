@@ -8,7 +8,6 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('electronAPI', {
     // 电影查询
     getCategories: () => ipcRenderer.invoke('get-categories'),
-    getPlatforms: () => ipcRenderer.invoke('get-categories'),  // 兼容旧代码,使用categories作为platforms
     getMoviesByCategory: (filters) => ipcRenderer.invoke('get-movies-by-category', filters),
     searchMovies: (params) => ipcRenderer.invoke('search-movies', params),
     getAllMovies: (filters) => ipcRenderer.invoke('get-all-movies', filters),

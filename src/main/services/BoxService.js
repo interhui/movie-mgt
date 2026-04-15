@@ -315,7 +315,7 @@ class BoxService {
                 // 添加新电影，使用新属性：status, rating
                 boxData.movie.push({
                     id: movieInfo.id,
-                    status: movieInfo.status || 'unplayed',
+                    status: movieInfo.status || 'unwatched',
                     rating: movieInfo.rating || 0,
                     comment: movieInfo.comment || ''
                 });

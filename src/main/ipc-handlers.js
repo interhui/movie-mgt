@@ -62,7 +62,7 @@ function downloadFileToTemp(url) {
  * @param {string} fileName - 文件名（不含扩展名）
  * @returns {Promise<string>} 下载后的文件路径
  */
-function downloadCoverToMovieFolder(url, destPath, fileName = 'cover') {
+function downloadCoverToMovieFolder(url, destPath, fileName = 'poster') {
     return new Promise((resolve, reject) => {
         const ext = path.extname(url) || '.jpg';
         const destFilePath = path.join(destPath, `${fileName}${ext}`);
@@ -172,7 +172,7 @@ function setupIpcHandlers(services) {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-            const categories = await fileService.getSimulatorFolders(moviesDir);
+            const categories = await fileService.getCategoryFolders(moviesDir);
             const stats = await movieService.getCategoryStats(categories, moviesDir);
             return stats;
         } catch (error) {
@@ -186,9 +186,8 @@ function setupIpcHandlers(services) {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-            const { platform, category, status, sortBy, sortOrder, tagId, rating } = filters || {};
-            // 兼容 platform 和 category 参数
-            const categoryFilter = category || platform;
+            const { category, status, sortBy, sortOrder, tagId, rating } = filters || {};
+            const categoryFilter = category;
             const movies = await movieService.getMoviesByCategory(categoryFilter, moviesDir, { status, sortBy, sortOrder, tagId, rating });
             return movies;
         } catch (error) {
@@ -244,9 +243,8 @@ function setupIpcHandlers(services) {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-            const { platform, category, sortBy, sortOrder } = filters || {};
-            // 兼容 platform 和 category 参数
-            const categoryFilter = category || platform;
+            const { category, sortBy, sortOrder } = filters || {};
+            const categoryFilter = category;
             const movies = await movieService.getMoviesByCategoryFromIndex(categoryFilter, moviesDir, { sortBy, sortOrder });
             return movies;
         } catch (error) {
@@ -329,11 +327,11 @@ function setupIpcHandlers(services) {
     // ==================== 统计数据 ====================
 
     // 获取电影统计数据
-    ipcMain.handle('get-movie-stats', async (event, platform) => {
+    ipcMain.handle('get-movie-stats', async (event, category) => {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-            const stats = await movieService.getStats(platform, moviesDir);
+            const stats = await movieService.getStats(category, moviesDir);
             return stats;
         } catch (error) {
             console.error('Error getting movie stats:', error);
@@ -429,7 +427,7 @@ function setupIpcHandlers(services) {
     // 获取分类配置
     ipcMain.handle('get-category-config', async () => {
         try {
-            const config = await fileService.getPlatformConfig();
+            const config = await fileService.getCategoryConfig();
             return config;
         } catch (error) {
             console.error('Error getting category config:', error);
@@ -440,10 +438,10 @@ function setupIpcHandlers(services) {
     // 从缓存获取分类列表（用于渲染进程获取分类信息）
     ipcMain.handle('get-categories-from-cache', async () => {
         try {
-            const platforms = await categoryService.loadCategories();
-            return platforms;
+            const categories = await categoryService.loadCategories();
+            return categories;
         } catch (error) {
-            console.error('Error getting platforms from cache:', error);
+            console.error('Error getting categories from cache:', error);
             return { error: error.message };
         }
     });
@@ -492,8 +490,7 @@ function setupIpcHandlers(services) {
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
 
             // 获取 category 和 folderName
-            // 优先使用 platform（兼容旧代码），其次使用 category
-            let category = movieData.platform || movieData.category;
+            let category = movieData.category;
             let folderName = movieData.folderName;
 
             // 如果 id 存在但 category 或 folderName 缺失，从 id 中提取
@@ -540,6 +537,9 @@ function setupIpcHandlers(services) {
             existingData.videoWidth = movieData.videoWidth || existingData.videoWidth || '';
             existingData.videoHeight = movieData.videoHeight || existingData.videoHeight || '';
             existingData.videoDuration = movieData.videoDuration || existingData.videoDuration || '';
+            existingData.director = movieData.director || existingData.director || '';
+            existingData.studio = movieData.studio || existingData.studio || '';
+            existingData.actors = movieData.actors || existingData.actors || [];
 
             // 如果有封面路径，更新
             if (movieData.coverPath) {
@@ -549,8 +549,8 @@ function setupIpcHandlers(services) {
             // 如果有封面图片数据（base64），保存为 poster.jpg
             if (movieData.coverImage && movieData.coverImage.startsWith('data:')) {
                 const base64Data = movieData.coverImage.replace(/^data:image\/\w+;base64,/, '');
-                const posterPath = path.join(moviePath, 'poster.jpg');
-                fs.writeFileSync(posterPath, Buffer.from(base64Data, 'base64'));
+                const coverPath = path.join(moviePath, 'poster.jpg');
+                fs.writeFileSync(coverPath, Buffer.from(base64Data, 'base64'));
                 existingData.poster = 'poster.jpg';
             }
 
@@ -559,6 +559,9 @@ function setupIpcHandlers(services) {
 
             // 重新生成电影数据用于索引和缓存
             const updatedMovie = movieService.generateMovieData(existingData, folderName, category, moviePath);
+
+            // 获取完整的海报路径
+            updatedMovie.poster = await movieService.getMoviePoster(moviePath);
 
             // 更新索引
             await indexService.updateMovieIndex(updatedMovie, category, moviesDir);
@@ -598,7 +601,7 @@ function setupIpcHandlers(services) {
             }
 
             // 下载封面到电影目录
-            const coverPath = await downloadCoverToMovieFolder(coverUrl, movieFolderPath, 'cover');
+            const coverPath = await downloadCoverToMovieFolder(coverUrl, movieFolderPath, 'poster');
 
             return { success: true, path: coverPath };
         } catch (error) {
@@ -613,8 +616,7 @@ function setupIpcHandlers(services) {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
 
-            // 获取 category 和 folderName
-            let category = movieData.platform || movieData.category;
+            let category = movieData.category;
             let folderName = movieData.folderName;
 
             // 如果 id 存在但 category 或 folderName 缺失，从 id 中提取
@@ -926,7 +928,7 @@ function setupIpcHandlers(services) {
                 if (movieData.coverImage.startsWith('data:')) {
                     // base64 数据，需要保存到文件
                     const base64Data = movieData.coverImage.replace(/^data:image\/\w+;base64,/, '');
-                    const ext = movieData.coverImage.match(/^data:image\/(\w+);base64,/)?.[1] || 'png';
+                    const ext = movieData.coverImage.match(/^data:image\/(\w+);base64,/)?.[1] || 'jpg';
                     const tempPath = path.join(APP_ROOT, 'temp_cover_' + Date.now() + '.' + ext);
                     fs.writeFileSync(tempPath, Buffer.from(base64Data, 'base64'));
                     coverImagePath = tempPath;
@@ -966,15 +968,12 @@ function setupIpcHandlers(services) {
     // ==================== 电影目录扫描 ====================
 
     // 扫描电影目录
-    ipcMain.handle('scan-movie-directory', async (event, { scanPath, scanType, category, platform }) => {
+    ipcMain.handle('scan-movie-directory', async (event, { scanPath, scanType, category }) => {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
 
-            // category 可能是 undefined，使用 platform 作为备选
-            const actualCategory = category || platform;
-
-            const result = await movieService.scanMovieDirectory(scanPath, scanType, actualCategory, moviesDir);
+            const result = await movieService.scanMovieDirectory(scanPath, scanType, category, moviesDir);
             return result;
         } catch (error) {
             console.error('Error scanning movie directory:', error);
@@ -990,7 +989,7 @@ function setupIpcHandlers(services) {
             if (coverImage) {
                 if (coverImage.startsWith('data:')) {
                     const base64Data = coverImage.replace(/^data:image\/\w+;base64,/, '');
-                    const ext = coverImage.match(/^data:image\/(\w+);base64,/)?.[1] || 'png';
+                    const ext = coverImage.match(/^data:image\/(\w+);base64,/)?.[1] || 'jpg';
                     const tempImgPath = path.join(APP_ROOT, 'temp_cover_' + Date.now() + '.' + ext);
                     fs.writeFileSync(tempImgPath, Buffer.from(base64Data, 'base64'));
                     coverImagePath = tempImgPath;

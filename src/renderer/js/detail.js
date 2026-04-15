@@ -409,7 +409,7 @@ function loadMovieDetail(movie) {
         elements.boxActions.style.display = 'flex';
         elements.boxInfoSection.style.display = 'block';
 
-        const status = movie.boxStatus || 'unplayed';
+        const status = movie.boxStatus || 'unwatched';
         elements.boxStatus.textContent = getStatusText(status);
         elements.boxStatus.className = `value box-status-tag-display ${status}`;
 
@@ -694,9 +694,8 @@ function confirmTagSelection() {
  */
 function getStatusText(status) {
     const statusMap = {
-        'unplayed': '未看',
         'unwatched': '未看',
-        'playing': '观看中',
+        'watching': '观看中',
         'completed': '已完成'
     };
     return statusMap[status] || status;
@@ -736,7 +735,7 @@ function formatPlaytime(minutes) {
 function openStatusModal() {
     if (!fromBox) return;
 
-    const status = currentMovie.boxStatus || 'unplayed';
+    const status = currentMovie.boxStatus || 'unwatched';
     const radioButtons = document.querySelectorAll('input[name="edit-status"]');
     radioButtons.forEach(radio => {
         radio.checked = radio.value === status;
@@ -837,6 +836,8 @@ function enterEditMode() {
     elements.boxActions.style.display = 'none';
     elements.detailFooter.style.display = 'flex';
     elements.uploadPosterBtn.style.display = 'block';
+    elements.moviePoster.style.cursor = 'pointer';
+    elements.moviePoster.title = '点击上传新海报';
 
     if (currentTab === 'movie-files') {
         elements.addFileBtn.style.display = 'block';
@@ -886,6 +887,10 @@ function exitEditMode() {
     elements.detailFooter.style.display = 'none';
     elements.addFileBtn.style.display = 'none';
     elements.uploadPosterBtn.style.display = 'none';
+    elements.moviePoster.style.cursor = 'default';
+    elements.moviePoster.title = '';
+    elements.moviePoster.onclick = null;
+    elements.posterPlaceholder.onclick = null;
 
     if (fromBox) {
         elements.boxActions.style.display = 'flex';
@@ -909,6 +914,14 @@ function bindEditModeEvents() {
         elements.posterUploadInput.click();
     };
 
+    elements.moviePoster.onclick = () => {
+        elements.posterUploadInput.click();
+    };
+
+    elements.posterPlaceholder.onclick = () => {
+        elements.posterUploadInput.click();
+    };
+
     elements.posterUploadInput.onchange = async (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -916,6 +929,7 @@ function bindEditModeEvents() {
                 const base64 = await fileToBase64(file);
                 editData.coverImage = base64;
                 elements.moviePoster.src = base64;
+                elements.moviePoster.style.display = 'block';
                 elements.posterPlaceholder.style.display = 'none';
             } catch (error) {
                 console.error('Error converting image to base64:', error);
@@ -1265,7 +1279,7 @@ function bindEvents() {
                 category: currentMovie.category,
                 movieInfo: {
                     id: currentMovie.movieId,
-                    status: 'unplayed',
+                    status: 'unwatched',
                     rating: 0
                 }
             });

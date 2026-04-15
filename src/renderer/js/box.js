@@ -465,7 +465,7 @@ async function loadMoviesFromBox(boxData) {
                 categoriesSet.add(movie.category);
                 movies.push({
                     ...movie,
-                    boxStatus: boxMovie.status || 'unplayed',
+                    boxStatus: boxMovie.status || 'unwatched',
                     boxRating: boxMovie.rating || 0,
                     boxComment: boxMovie.comment
                 });
@@ -727,7 +727,7 @@ function renderMovies(movies) {
                     <div class="movie-actors-col">${movie.actors || '-'}</div>
                     <div class="movie-publish-date">${movie.publishDate || '-'}</div>
                     <div class="movie-publisher-col">${movie.publisher || '-'}</div>
-                    <div class="movie-status"><span class="box-list-status ${movie.boxStatus || 'unplayed'}" data-movie-id="${movie.movieId}" data-category="${movie.category}">${getStatusText(movie.boxStatus)}</span></div>
+                    <div class="movie-status"><span class="box-list-status ${movie.boxStatus || 'unwatched'}" data-movie-id="${movie.movieId}" data-category="${movie.category}">${getStatusText(movie.boxStatus)}</span></div>
                     <div class="movie-rating">${movie.boxRating ? '⭐'.repeat(movie.boxRating) : '-'}</div>
                 </div>
             `;
@@ -736,7 +736,7 @@ function renderMovies(movies) {
             return `
                 <div class="box-movie-card movie-card" data-movie-id="${movie.movieId}">
                     <button class="remove-btn" data-movie-id="${movie.movieId}" title="从盒子中移除">✕</button>
-                    <span class="box-status-tag ${movie.boxStatus || 'unplayed'}" data-movie-id="${movie.movieId}" data-category="${movie.category}">${getStatusText(movie.boxStatus)}</span>
+                    <span class="box-status-tag ${movie.boxStatus || 'unwatched'}" data-movie-id="${movie.movieId}" data-category="${movie.category}">${getStatusText(movie.boxStatus)}</span>
                     ${movie.poster ?
                         `<img class="movie-poster" src="${movie.poster}" alt="${movie.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                          <div class="movie-poster-placeholder" style="display:none;">🎬</div>` :
@@ -863,9 +863,9 @@ function sortMovies(movies, sortBy = 'name', sortOrder = 'asc') {
  */
 function getStatusText(status) {
     const statusMap = {
-        'unplayed': '未看',
+        'unwanted': '未看',
         'unwatched': '未看',
-        'playing': '观看中',
+        'watching': '观看中',
         'completed': '已完成'
     };
     return statusMap[status] || status;
@@ -987,7 +987,7 @@ function openStatusModal(movieId, category) {
     elements.statusMovieName.textContent = movie.name;
 
     // 设置单选框的选中状态
-    const currentStatus = movie.boxStatus || 'unplayed';
+    const currentStatus = movie.boxStatus || 'unwatched';
     const radioButtons = document.querySelectorAll('input[name="status"]');
     radioButtons.forEach(radio => {
         radio.checked = radio.value === currentStatus;
@@ -1088,8 +1088,8 @@ async function openMovieDetail(movieId) {
 function updateStats(movies) {
     elements.statsBar.total.textContent = `电影总数：${movies.length}`;
     elements.statsBar.played.textContent = `已完成：${movies.filter(m => m.boxStatus === 'completed').length}`;
-    elements.statsBar.playing.textContent = `观看中：${movies.filter(m => m.boxStatus === 'playing').length}`;
-    elements.statsBar.unplayed.textContent = `未看：${movies.filter(m => m.boxStatus === 'unplayed').length}`;
+    elements.statsBar.playing.textContent = `观看中：${movies.filter(m => m.boxStatus === 'watching').length}`;
+    elements.statsBar.unplayed.textContent = `未看：${movies.filter(m => m.boxStatus === 'unwatched').length}`;
 }
 
 // 初始化

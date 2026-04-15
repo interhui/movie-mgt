@@ -78,7 +78,7 @@ class MovieService {
      * @returns {Promise<Array>} 电影列表
      */
     async loadAllMoviesFromFiles(moviesDir, onProgress) {
-        const categories = await this.fileService.getSimulatorFolders(moviesDir);
+        const categories = await this.fileService.getCategoryFolders(moviesDir);
         const allMovies = [];
 
         // 先统计总电影数
@@ -127,7 +127,7 @@ class MovieService {
                 await this.refreshCache(moviesDir);
             }
 
-            const categories = await this.fileService.getSimulatorFolders(moviesDir);
+            const categories = await this.fileService.getCategoryFolders(moviesDir);
             const categoryData = {};
 
             for (const category of categories) {
@@ -712,7 +712,7 @@ class MovieService {
             let poster = null;
             if (coverImagePath) {
                 const ext = this.fileService.getFileExtension(coverImagePath);
-                const coverDestPath = path.join(moviePath, `cover${ext}`);
+                const coverDestPath = path.join(moviePath, `poster${ext}`);
                 await this.fileService.copyFile(coverImagePath, coverDestPath);
                 poster = coverDestPath;
             }
@@ -853,7 +853,7 @@ class MovieService {
                 // 复制海报文件（如果有）
                 let posterDestPath = null;
                 if (folderInfo.posterPath) {
-                    posterDestPath = path.join(movieTempDir, `cover${folderInfo.posterExt}`);
+                    posterDestPath = path.join(movieTempDir, `poster${folderInfo.posterExt}`);
                     await this.fileService.copyFile(folderInfo.posterPath, posterDestPath);
                     completeMovieData.poster = posterDestPath;
                 }
@@ -997,7 +997,7 @@ class MovieService {
             let poster = null;
             if (coverImagePath) {
                 const ext = this.fileService.getFileExtension(coverImagePath);
-                const coverDestPath = path.join(tempPath, `cover${ext}`);
+                const coverDestPath = path.join(tempPath, `poster${ext}`);
                 await this.fileService.copyFile(coverImagePath, coverDestPath);
                 poster = coverDestPath;
             }

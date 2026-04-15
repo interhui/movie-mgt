@@ -294,7 +294,7 @@ async function updateStatus(services, movieId, status) {
         }
 
         if (!validateStatus(status)) {
-            outputError('无效的状态值', '有效值: unplayed, playing, completed');
+            outputError('无效的状态值', '有效值: unwatched, watching, completed');
             return;
         }
 

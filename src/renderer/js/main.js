@@ -525,8 +525,8 @@ function setCurrentCategory(category) {
 /**
  * 获取电影总数
  */
-function getTotalMovieCount(platforms) {
-    return platforms.reduce((sum, p) => sum + p.movieCount, 0);
+function getTotalMovieCount(categories) {
+    return categories.reduce((sum, c) => sum + c.movieCount, 0);
 }
 
 /**
@@ -970,9 +970,9 @@ function updateBatchDeleteButtonVisibility() {
 /**
  * 获取分类名称
  */
-function getPlatformName(platformId) {
-    const category = state.categories.find(c => c.id === platformId);
-    return category ? category.shortName : platformId;
+function getCategoryName(categoryId) {
+    const category = state.categories.find(c => c.id === categoryId);
+    return category ? category.shortName : categoryId;
 }
 
 /**
@@ -1090,7 +1090,7 @@ function bindEvents() {
 
         // 更新左侧栏分类选中状态为"全部分类"
         document.querySelectorAll('.category-item').forEach(item => {
-            if (item.dataset.platform === '') {
+            if (item.dataset.category === '') {
                 item.classList.add('active');
             } else {
                 item.classList.remove('active');
@@ -1418,7 +1418,7 @@ function bindEvents() {
                 if (movie) {
                     const result = await window.electronAPI.addMovieToBox({
                         boxName: boxName,
-                        platform: movie.platform,
+                        category: movie.category,
                         movieInfo: {
                             id: movie.movieId,
                             status: 'unwatched',
@@ -1497,12 +1497,12 @@ function bindEvents() {
                 // 从所有盒子中移除该电影
                 for (const box of boxes) {
                     const boxDetail = await window.electronAPI.getBoxDetail(box.name);
-                    if (boxDetail && boxDetail.data && boxDetail.data[movie.platform]) {
-                        const movieInBox = boxDetail.data[movie.platform].find(m => m.id === movie.movieId);
+                    if (boxDetail && boxDetail.data && boxDetail.data[movie.category]) {
+                        const movieInBox = boxDetail.data[movie.category].find(m => m.id === movie.movieId);
                         if (movieInBox) {
                             await window.electronAPI.removeMovieFromBox({
                                 boxName: box.name,
-                                platform: movie.platform,
+category: movie.category,
                                 movieId: movie.movieId
                             });
                         }
@@ -1701,21 +1701,21 @@ function bindEvents() {
     // 确认添加电影
     elements.confirmAddMovie.addEventListener('click', async () => {
         const name = elements.movieNameInput.value.trim();
-        const platform = elements.movieCategorySelect.value;
+        const category = elements.movieCategorySelect.value;
 
         if (!name) {
             alert('请输入电影名称');
             return;
         }
 
-        if (!platform) {
+        if (!category) {
             alert('请选择分类');
             return;
         }
 
         // 检查是否有同名电影（同分类）
         const existingMovie = state.movies.find(m =>
-            m.name.toLowerCase() === name.toLowerCase() && m.platform === platform
+            m.name.toLowerCase() === name.toLowerCase() && m.category === category
         );
 
         if (existingMovie) {
@@ -1728,7 +1728,7 @@ function bindEvents() {
         // 获取表单数据
         const movieData = {
             title: name,
-            category: platform,
+            category: category,
             description: elements.movieDescription ? elements.movieDescription.value.trim() : '',
             year: elements.moviePublishDate ? elements.moviePublishDate.value : '',
             director: elements.movieDirector ? elements.movieDirector.value.trim() : '',
@@ -2365,8 +2365,8 @@ async function handleSelectScanPath() {
  */
 function updateScanConfirmButton() {
     const path = elements.scanPathInput.dataset.path;
-    const platform = elements.scanCategorySelect.value;
-    elements.confirmScanDir.disabled = !path || !platform;
+    const category = elements.scanCategorySelect.value;
+    elements.confirmScanDir.disabled = !path || !category;
 }
 
 /**
@@ -2375,9 +2375,9 @@ function updateScanConfirmButton() {
 async function startScanDirectory() {
     const scanPath = elements.scanPathInput.dataset.path;
     const scanType = elements.scanPathInput.dataset.type;
-    const platform = elements.scanCategorySelect.value;
+    const category = elements.scanCategorySelect.value;
 
-    if (!scanPath || !platform) {
+    if (!scanPath || !category) {
         alert('请选择扫描路径和目标分类');
         return;
     }
@@ -2389,7 +2389,7 @@ async function startScanDirectory() {
         const result = await window.electronAPI.scanMovieDirectory({
             scanPath: scanPath,
             scanType: scanType,
-            platform: platform
+            category: category
         });
 
         if (result.error) {
@@ -2405,7 +2405,7 @@ async function startScanDirectory() {
         closeScanDirModal();
 
         // 显示扫描结果
-        showScanResults(result.movies, platform);
+        showScanResults(result.movies, category);
 
     } catch (error) {
         console.error('Error scanning directory:', error);
@@ -2420,9 +2420,9 @@ async function startScanDirectory() {
  * 显示扫描结果列表
  * 展示：电影ID、电影名称、演员、发行商、电影时长、海报地址、视频文件地址、状态
  */
-async function showScanResults(movies, platform) {
-    const platformName = state.categories.find(c => c.id === platform)?.name || platform;
-    elements.scanResultInfo.textContent = `共扫描到 ${movies.length} 个电影（分类：${platformName}）`;
+async function showScanResults(movies, category) {
+    const categoryName = state.categories.find(c => c.id === category)?.name || category;
+    elements.scanResultInfo.textContent = `共扫描到 ${movies.length} 个电影（分类：${categoryName}）`;
 
     // 获取电影库中已有的电影ID
     const existingMovieIds = new Set();

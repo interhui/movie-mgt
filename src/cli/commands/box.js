@@ -184,7 +184,7 @@ async function addMovieToBox(services, boxName, movieId) {
 
         const movieInfo = {
             id: movieDetail.id,
-            status: 'unplayed',
+            status: 'unwatched',
             rating: 0
         };
 

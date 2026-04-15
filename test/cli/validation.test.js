@@ -76,12 +76,12 @@ describe('CLI Validation Utils', () => {
     });
 
     describe('validateStatus', () => {
-        test('CLI-VALIDATE-STATUS-001: unplayed应返回true', () => {
-            expect(validateStatus('unplayed')).toBe(true);
+        test('CLI-VALIDATE-STATUS-001: unwatched应返回true', () => {
+            expect(validateStatus('unwatched')).toBe(true);
         });
 
-        test('CLI-VALIDATE-STATUS-002: playing应返回true', () => {
-            expect(validateStatus('playing')).toBe(true);
+        test('CLI-VALIDATE-STATUS-002: watching应返回true', () => {
+            expect(validateStatus('watching')).toBe(true);
         });
 
         test('CLI-VALIDATE-STATUS-003: completed应返回true', () => {
