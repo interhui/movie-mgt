@@ -115,6 +115,23 @@ async function init() {
         applyTheme(theme);
     });
 
+    // 监听电影更新事件，刷新海报显示
+    window.electronAPI.onMovieUpdated((updatedMovie) => {
+        if (currentMovie && currentMovie.id === updatedMovie.id) {
+            currentMovie = updatedMovie;
+            if (updatedMovie.poster) {
+                // 添加时间戳强制刷新缓存
+                const posterUrl = updatedMovie.poster + (updatedMovie.poster.includes('?') ? '&' : '?') + 't=' + Date.now();
+                elements.moviePoster.src = posterUrl;
+                elements.moviePoster.style.display = 'block';
+                elements.posterPlaceholder.style.display = 'none';
+            } else {
+                elements.moviePoster.style.display = 'none';
+                elements.posterPlaceholder.style.display = 'flex';
+            }
+        }
+    });
+
     await loadTags();
     await loadCategories();
     await loadActors();
@@ -353,7 +370,9 @@ function loadMovieDetail(movie) {
     elements.movieId.textContent = movie.movieId || '';
 
     if (movie.poster) {
-        elements.moviePoster.src = movie.poster;
+        // 添加时间戳强制刷新缓存
+        const posterUrl = movie.poster + (movie.poster.includes('?') ? '&' : '?') + 't=' + Date.now();
+        elements.moviePoster.src = posterUrl;
         elements.moviePoster.style.display = 'block';
         elements.posterPlaceholder.style.display = 'none';
     } else {

@@ -861,6 +861,64 @@ function renderMovies(movies) {
 }
 
 /**
+ * 更新单个电影卡片的海报
+ */
+function updateMovieCard(updatedMovie) {
+    if (!updatedMovie || !updatedMovie.id) return;
+
+    // 更新 state.movies 中的对应电影数据
+    const movieIndex = state.movies.findIndex(m => m.id === updatedMovie.id);
+    if (movieIndex !== -1) {
+        state.movies[movieIndex] = { ...state.movies[movieIndex], ...updatedMovie };
+    }
+
+    // 查找对应的电影卡片元素
+    const movieCard = document.querySelector(`.movie-card[data-movie-id="${updatedMovie.id}"]`);
+    if (!movieCard) return;
+
+    // 更新网格视图中的海报图片
+    const posterImg = movieCard.querySelector('.movie-poster');
+    const posterPlaceholder = movieCard.querySelector('.movie-poster-placeholder');
+
+    if (updatedMovie.poster) {
+        // 添加时间戳强制刷新缓存
+        const posterUrl = updatedMovie.poster + (updatedMovie.poster.includes('?') ? '&' : '?') + 't=' + Date.now();
+        if (posterImg) {
+            posterImg.src = posterUrl;
+            posterImg.style.display = 'block';
+            posterImg.onerror = function() {
+                this.style.display = 'none';
+                if (posterPlaceholder) posterPlaceholder.style.display = 'flex';
+            };
+        }
+        if (posterPlaceholder) {
+            posterPlaceholder.style.display = 'none';
+        }
+    } else {
+        if (posterImg) posterImg.style.display = 'none';
+        if (posterPlaceholder) posterPlaceholder.style.display = 'flex';
+    }
+
+    // 更新列表视图中的图标
+    const movieIconImg = movieCard.querySelector('.movie-icon img');
+    const movieIconPlaceholder = movieCard.querySelector('.movie-icon-placeholder');
+
+    if (updatedMovie.poster) {
+        const posterUrl = updatedMovie.poster + (updatedMovie.poster.includes('?') ? '&' : '?') + 't=' + Date.now();
+        if (movieIconImg) {
+            movieIconImg.src = posterUrl;
+            movieIconImg.style.display = 'block';
+        }
+        if (movieIconPlaceholder) {
+            movieIconPlaceholder.style.display = 'none';
+        }
+    } else {
+        if (movieIconImg) movieIconImg.style.display = 'none';
+        if (movieIconPlaceholder) movieIconPlaceholder.style.display = 'flex';
+    }
+}
+
+/**
  * 绑定复选框事件
  */
 function bindCheckboxEvents(movies) {
@@ -1173,6 +1231,11 @@ function bindEvents() {
     window.electronAPI.onRefreshLibrary(() => {
         refreshLibraryWithProgress();
 
+    });
+
+    // 监听电影更新事件（海报更新等）
+    window.electronAPI.onMovieUpdated((updatedMovie) => {
+        updateMovieCard(updatedMovie);
     });
 
     // 监听详情窗口编辑模式变化（锁定/解锁电影卡片点击）

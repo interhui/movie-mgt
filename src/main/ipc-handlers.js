@@ -571,11 +571,10 @@ function setupIpcHandlers(services) {
                 movieCacheService.updateMovieInCache(updatedMovie);
             }
 
-            // 通知主窗口刷新
-            const mainWindow = getMainWindow();
-            if (mainWindow) {
-                mainWindow.webContents.send('refresh-library');
-            }
+            // 广播电影更新事件给所有窗口
+            BrowserWindow.getAllWindows().forEach(win => {
+                win.webContents.send('movie-updated', updatedMovie);
+            });
 
             return { success: true };
         } catch (error) {
