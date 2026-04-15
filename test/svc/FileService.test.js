@@ -57,17 +57,17 @@ describe('FileService', () => {
         });
     });
 
-    describe('getSimulatorFolders', () => {
+    describe('getCategoryFolders', () => {
         test('SVC-FILE-006: 返回文件夹列表', async () => {
             fs.mkdirSync(path.join(testDataDir, 'folder1'));
             fs.mkdirSync(path.join(testDataDir, 'folder2'));
-            const result = await service.getSimulatorFolders(testDataDir);
+            const result = await service.getCategoryFolders(testDataDir);
             expect(result).toContain('folder1');
             expect(result).toContain('folder2');
         });
 
         test('SVC-FILE-007: 目录不存在返回空', async () => {
-            const result = await service.getSimulatorFolders(path.join(testDataDir, 'notexists'));
+            const result = await service.getCategoryFolders(path.join(testDataDir, 'notexists'));
             expect(result).toEqual([]);
         });
     });

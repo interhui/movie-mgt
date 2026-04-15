@@ -18,19 +18,15 @@ const APP_ROOT = path.join(__dirname, '..', '..');
  */
 function downloadFileToTemp(url) {
     return new Promise((resolve, reject) => {
-        console.log('[Cover Download] Starting download:', url);
         const ext = path.extname(url) || '.jpg';
         const tempPath = path.join(APP_ROOT, `temp_cover_${Date.now()}${ext}`);
-        console.log('[Cover Download] Temp path:', tempPath);
         const file = fs.createWriteStream(tempPath);
 
         const protocol = url.startsWith('https:') ? https : http;
 
         protocol.get(url, (response) => {
-            console.log('[Cover Download] Response status:', response.statusCode);
             // 处理重定向
             if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
-                console.log('[Cover Download] Redirect to:', response.headers.location);
                 file.close();
                 fs.unlinkSync(tempPath);
                 downloadFileToTemp(response.headers.location).then(resolve).catch(reject);
@@ -38,7 +34,6 @@ function downloadFileToTemp(url) {
             }
 
             if (response.statusCode !== 200) {
-                console.log('[Cover Download] Non-200 status, rejecting');
                 file.close();
                 fs.unlinkSync(tempPath);
                 reject(new Error(`Failed to download: ${response.statusCode}`));
@@ -48,11 +43,9 @@ function downloadFileToTemp(url) {
             response.pipe(file);
             file.on('finish', () => {
                 file.close();
-                console.log('[Cover Download] Download complete:', tempPath);
                 resolve(tempPath);
             });
         }).on('error', (err) => {
-            console.log('[Cover Download] Error:', err.message);
             file.close();
             if (fs.existsSync(tempPath)) {
                 fs.unlinkSync(tempPath);
@@ -69,12 +62,10 @@ function downloadFileToTemp(url) {
  * @param {string} fileName - 文件名（不含扩展名）
  * @returns {Promise<string>} 下载后的文件路径
  */
-function downloadCoverToMovieFolder(url, destPath, fileName = 'cover') {
+function downloadCoverToMovieFolder(url, destPath, fileName = 'poster') {
     return new Promise((resolve, reject) => {
-        console.log('[Cover Download] Starting download to movie folder:', url);
         const ext = path.extname(url) || '.jpg';
         const destFilePath = path.join(destPath, `${fileName}${ext}`);
-        console.log('[Cover Download] Dest path:', destFilePath);
         const file = fs.createWriteStream(destFilePath);
 
         const protocol = url.startsWith('https:') ? https : http;
@@ -86,10 +77,8 @@ function downloadCoverToMovieFolder(url, destPath, fileName = 'cover') {
         }
 
         protocol.get(downloadUrl, (response) => {
-            console.log('[Cover Download] Response status:', response.statusCode);
             // 处理重定向
             if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
-                console.log('[Cover Download] Redirect to:', response.headers.location);
                 file.close();
                 fs.unlinkSync(destFilePath);
                 downloadCoverToMovieFolder(response.headers.location, destPath, fileName).then(resolve).catch(reject);
@@ -97,7 +86,6 @@ function downloadCoverToMovieFolder(url, destPath, fileName = 'cover') {
             }
 
             if (response.statusCode !== 200) {
-                console.log('[Cover Download] Non-200 status, rejecting');
                 file.close();
                 if (fs.existsSync(destFilePath)) {
                     fs.unlinkSync(destFilePath);
@@ -109,11 +97,9 @@ function downloadCoverToMovieFolder(url, destPath, fileName = 'cover') {
             response.pipe(file);
             file.on('finish', () => {
                 file.close();
-                console.log('[Cover Download] Download complete:', destFilePath);
                 resolve(destFilePath);
             });
         }).on('error', (err) => {
-            console.log('[Cover Download] Error:', err.message);
             file.close();
             if (fs.existsSync(destFilePath)) {
                 fs.unlinkSync(destFilePath);
@@ -186,7 +172,7 @@ function setupIpcHandlers(services) {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-            const categories = await fileService.getSimulatorFolders(moviesDir);
+            const categories = await fileService.getCategoryFolders(moviesDir);
             const stats = await movieService.getCategoryStats(categories, moviesDir);
             return stats;
         } catch (error) {
@@ -200,9 +186,8 @@ function setupIpcHandlers(services) {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-            const { platform, category, status, sortBy, sortOrder, tagId, rating } = filters || {};
-            // 兼容 platform 和 category 参数
-            const categoryFilter = category || platform;
+            const { category, status, sortBy, sortOrder, tagId, rating } = filters || {};
+            const categoryFilter = category;
             const movies = await movieService.getMoviesByCategory(categoryFilter, moviesDir, { status, sortBy, sortOrder, tagId, rating });
             return movies;
         } catch (error) {
@@ -258,9 +243,8 @@ function setupIpcHandlers(services) {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-            const { platform, category, sortBy, sortOrder } = filters || {};
-            // 兼容 platform 和 category 参数
-            const categoryFilter = category || platform;
+            const { category, sortBy, sortOrder } = filters || {};
+            const categoryFilter = category;
             const movies = await movieService.getMoviesByCategoryFromIndex(categoryFilter, moviesDir, { sortBy, sortOrder });
             return movies;
         } catch (error) {
@@ -325,18 +309,6 @@ function setupIpcHandlers(services) {
         }
     });
 
-    // 更新电影时长
-    ipcMain.handle('update-movie-playtime', async (event, data) => {
-        try {
-            const { movieId, duration } = data;
-            await dbService.updatePlayTime(movieId, duration);
-            return { success: true };
-        } catch (error) {
-            console.error('Error updating playtime:', error);
-            return { error: error.message };
-        }
-    });
-
     // 保存用户评分
     ipcMain.handle('save-movie-rating', async (event, data) => {
         try {
@@ -355,11 +327,11 @@ function setupIpcHandlers(services) {
     // ==================== 统计数据 ====================
 
     // 获取电影统计数据
-    ipcMain.handle('get-movie-stats', async (event, platform) => {
+    ipcMain.handle('get-movie-stats', async (event, category) => {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-            const stats = await movieService.getStats(platform, moviesDir);
+            const stats = await movieService.getStats(category, moviesDir);
             return stats;
         } catch (error) {
             console.error('Error getting movie stats:', error);
@@ -455,7 +427,7 @@ function setupIpcHandlers(services) {
     // 获取分类配置
     ipcMain.handle('get-category-config', async () => {
         try {
-            const config = await fileService.getPlatformConfig();
+            const config = await fileService.getCategoryConfig();
             return config;
         } catch (error) {
             console.error('Error getting category config:', error);
@@ -466,10 +438,10 @@ function setupIpcHandlers(services) {
     // 从缓存获取分类列表（用于渲染进程获取分类信息）
     ipcMain.handle('get-categories-from-cache', async () => {
         try {
-            const platforms = await categoryService.loadCategories();
-            return platforms;
+            const categories = await categoryService.loadCategories();
+            return categories;
         } catch (error) {
-            console.error('Error getting platforms from cache:', error);
+            console.error('Error getting categories from cache:', error);
             return { error: error.message };
         }
     });
@@ -518,8 +490,7 @@ function setupIpcHandlers(services) {
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
 
             // 获取 category 和 folderName
-            // 优先使用 platform（兼容旧代码），其次使用 category
-            let category = movieData.platform || movieData.category;
+            let category = movieData.category;
             let folderName = movieData.folderName;
 
             // 如果 id 存在但 category 或 folderName 缺失，从 id 中提取
@@ -566,6 +537,9 @@ function setupIpcHandlers(services) {
             existingData.videoWidth = movieData.videoWidth || existingData.videoWidth || '';
             existingData.videoHeight = movieData.videoHeight || existingData.videoHeight || '';
             existingData.videoDuration = movieData.videoDuration || existingData.videoDuration || '';
+            existingData.director = movieData.director || existingData.director || '';
+            existingData.studio = movieData.studio || existingData.studio || '';
+            existingData.actors = movieData.actors || existingData.actors || [];
 
             // 如果有封面路径，更新
             if (movieData.coverPath) {
@@ -575,8 +549,8 @@ function setupIpcHandlers(services) {
             // 如果有封面图片数据（base64），保存为 poster.jpg
             if (movieData.coverImage && movieData.coverImage.startsWith('data:')) {
                 const base64Data = movieData.coverImage.replace(/^data:image\/\w+;base64,/, '');
-                const posterPath = path.join(moviePath, 'poster.jpg');
-                fs.writeFileSync(posterPath, Buffer.from(base64Data, 'base64'));
+                const coverPath = path.join(moviePath, 'poster.jpg');
+                fs.writeFileSync(coverPath, Buffer.from(base64Data, 'base64'));
                 existingData.poster = 'poster.jpg';
             }
 
@@ -586,6 +560,9 @@ function setupIpcHandlers(services) {
             // 重新生成电影数据用于索引和缓存
             const updatedMovie = movieService.generateMovieData(existingData, folderName, category, moviePath);
 
+            // 获取完整的海报路径
+            updatedMovie.poster = await movieService.getMoviePoster(moviePath);
+
             // 更新索引
             await indexService.updateMovieIndex(updatedMovie, category, moviesDir);
 
@@ -594,11 +571,10 @@ function setupIpcHandlers(services) {
                 movieCacheService.updateMovieInCache(updatedMovie);
             }
 
-            // 通知主窗口刷新
-            const mainWindow = getMainWindow();
-            if (mainWindow) {
-                mainWindow.webContents.send('refresh-library');
-            }
+            // 广播电影更新事件给所有窗口
+            BrowserWindow.getAllWindows().forEach(win => {
+                win.webContents.send('movie-updated', updatedMovie);
+            });
 
             return { success: true };
         } catch (error) {
@@ -624,7 +600,7 @@ function setupIpcHandlers(services) {
             }
 
             // 下载封面到电影目录
-            const coverPath = await downloadCoverToMovieFolder(coverUrl, movieFolderPath, 'cover');
+            const coverPath = await downloadCoverToMovieFolder(coverUrl, movieFolderPath, 'poster');
 
             return { success: true, path: coverPath };
         } catch (error) {
@@ -639,8 +615,7 @@ function setupIpcHandlers(services) {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
 
-            // 获取 category 和 folderName
-            let category = movieData.platform || movieData.category;
+            let category = movieData.category;
             let folderName = movieData.folderName;
 
             // 如果 id 存在但 category 或 folderName 缺失，从 id 中提取
@@ -952,18 +927,15 @@ function setupIpcHandlers(services) {
                 if (movieData.coverImage.startsWith('data:')) {
                     // base64 数据，需要保存到文件
                     const base64Data = movieData.coverImage.replace(/^data:image\/\w+;base64,/, '');
-                    const ext = movieData.coverImage.match(/^data:image\/(\w+);base64,/)?.[1] || 'png';
+                    const ext = movieData.coverImage.match(/^data:image\/(\w+);base64,/)?.[1] || 'jpg';
                     const tempPath = path.join(APP_ROOT, 'temp_cover_' + Date.now() + '.' + ext);
                     fs.writeFileSync(tempPath, Buffer.from(base64Data, 'base64'));
                     coverImagePath = tempPath;
                 } else if (movieData.coverImage.startsWith('http:') || movieData.coverImage.startsWith('https:')) {
                     // URL，需要下载到临时文件
-                    console.log('[Add Movie] Detected cover URL:', movieData.coverImage);
                     try {
                         coverImagePath = await downloadFileToTemp(movieData.coverImage);
-                        console.log('[Add Movie] Downloaded to:', coverImagePath);
                     } catch (downloadError) {
-                        console.error('[Add Movie] Failed to download cover image:', downloadError);
                         // 下载失败不影响电影添加，只是不保存封面
                     }
                 } else {
@@ -992,39 +964,15 @@ function setupIpcHandlers(services) {
         }
     });
 
-    // 批量导入电影
-    ipcMain.handle('batch-import-movies', async (event, moviesData) => {
-        try {
-            const settings = settingsService.getSettings();
-            const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-
-            const result = await movieService.batchImportMovies(moviesData, moviesDir);
-
-            // 通知主窗口刷新
-            const mainWindow = getMainWindow();
-            if (mainWindow) {
-                mainWindow.webContents.send('refresh-library');
-            }
-
-            return result;
-        } catch (error) {
-            console.error('Error batch importing movies:', error);
-            return { error: error.message };
-        }
-    });
-
     // ==================== 电影目录扫描 ====================
 
     // 扫描电影目录
-    ipcMain.handle('scan-movie-directory', async (event, { scanPath, scanType, category, platform }) => {
+    ipcMain.handle('scan-movie-directory', async (event, { scanPath, scanType, category }) => {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
 
-            // category 可能是 undefined，使用 platform 作为备选
-            const actualCategory = category || platform;
-
-            const result = await movieService.scanMovieDirectory(scanPath, scanType, actualCategory, moviesDir);
+            const result = await movieService.scanMovieDirectory(scanPath, scanType, category, moviesDir);
             return result;
         } catch (error) {
             console.error('Error scanning movie directory:', error);
@@ -1040,7 +988,7 @@ function setupIpcHandlers(services) {
             if (coverImage) {
                 if (coverImage.startsWith('data:')) {
                     const base64Data = coverImage.replace(/^data:image\/\w+;base64,/, '');
-                    const ext = coverImage.match(/^data:image\/(\w+);base64,/)?.[1] || 'png';
+                    const ext = coverImage.match(/^data:image\/(\w+);base64,/)?.[1] || 'jpg';
                     const tempImgPath = path.join(APP_ROOT, 'temp_cover_' + Date.now() + '.' + ext);
                     fs.writeFileSync(tempImgPath, Buffer.from(base64Data, 'base64'));
                     coverImagePath = tempImgPath;
@@ -1079,7 +1027,7 @@ function setupIpcHandlers(services) {
     });
 
     // 导入扫描的电影
-    ipcMain.handle('import-scanned-movies', async (event, tempDir) => {
+    ipcMain.handle('import-scanned-movies', async (event, tempDir, excludeIds = []) => {
         try {
             const settings = settingsService.getSettings();
             if (!settings.library || settings.library.moviesDir === undefined) {
@@ -1087,7 +1035,7 @@ function setupIpcHandlers(services) {
             }
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
 
-            const result = await movieService.importScannedMovies(tempDir, moviesDir);
+            const result = await movieService.importScannedMovies(tempDir, moviesDir, excludeIds);
 
             // 通知主窗口刷新
             const mainWindow = getMainWindow();

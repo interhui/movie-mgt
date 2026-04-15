@@ -85,8 +85,8 @@
 
 | 用例ID | 用例名称 | 测试方法 | 前置条件 | 预期结果 |
 |--------|----------|----------|----------|----------|
-| CLI-MOVIE-STATUS-001 | 更新为unplayed | 直接调用 | 电影存在 | 状态已更新 |
-| CLI-MOVIE-STATUS-002 | 更新为playing | 直接调用 | 电影存在 | 状态已更新 |
+| CLI-MOVIE-STATUS-001 | 更新为unwatched | 直接调用 | 电影存在 | 状态已更新 |
+| CLI-MOVIE-STATUS-002 | 更新为watching | 直接调用 | 电影存在 | 状态已更新 |
 | CLI-MOVIE-STATUS-003 | 更新为completed | 直接调用 | 电影存在 | 状态已更新 |
 | CLI-MOVIE-STATUS-004 | 无效状态值 | 直接调用 | 无 | 错误提示有效值 |
 

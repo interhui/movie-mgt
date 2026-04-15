@@ -137,8 +137,8 @@ class DatabaseService {
             const stats = {
                 totalMovies: movies.length,
                 playedMovies: movies.filter(m => m.status === 'completed').length,
-                playingMovies: movies.filter(m => m.status === 'playing').length,
-                unplayedMovies: movies.filter(m => m.status === 'unplayed').length,
+                playingMovies: movies.filter(m => m.status === 'watching').length,
+                unwatchedMovies: movies.filter(m => m.status === 'unwatched').length,
                 totalHours: (movies.reduce((sum, m) => sum + (m.totalPlayTime || 0), 0) / 60).toFixed(1),
                 avgRating: this.calculateAverageRating(movies)
             };

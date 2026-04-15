@@ -39,7 +39,7 @@ beforeAll(() => {
     <tag>action</tag>
     <tag>drama</tag>
     <userRating>5</userRating>
-    <status>unplayed</status>
+    <status>unwatched</status>
     <playCount>0</playCount>
     <totalPlayTime>0</totalPlayTime>
 </movie>`;
@@ -54,7 +54,7 @@ beforeAll(() => {
         created: '2024-01-01T00:00:00.000Z',
         data: {
             movie: [
-                { id: 'movie-test-movie', status: 'unplayed', playCount: 0, totalPlayTime: 0 }
+                { id: 'movie-test-movie', status: 'unwatched', playCount: 0, totalPlayTime: 0 }
             ]
         }
     };

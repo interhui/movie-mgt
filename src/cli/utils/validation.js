@@ -48,7 +48,7 @@ function validateRating(rating) {
  * @returns {boolean} Is valid
  */
 function validateStatus(status) {
-    const validStatuses = ['unplayed', 'playing', 'completed'];
+    const validStatuses = ['unwatched', 'watching', 'completed'];
     return validStatuses.includes(status);
 }
 

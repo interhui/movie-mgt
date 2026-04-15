@@ -340,33 +340,6 @@ async function loadSettings() {
 }
 
 /**
- * 应用主题
- */
-function applyTheme(theme) {
-    // 找到所有 link 标签并找到主题 CSS
-    const links = document.querySelectorAll('link[rel="stylesheet"]');
-    let themeLink = null;
-    for (const link of links) {
-        const href = link.getAttribute('href') || '';
-        if (href.includes('themes/dark') || href.includes('themes/light')) {
-            themeLink = link;
-            break;
-        }
-    }
-    if (themeLink) {
-        // 替换 href 中的主题文件名
-        const currentHref = themeLink.getAttribute('href');
-        let newHref;
-        if (theme === 'light') {
-            newHref = currentHref.replace(/themes\/dark\.css$/, 'themes/light.css');
-        } else {
-            newHref = currentHref.replace(/themes\/light\.css$/, 'themes/dark.css');
-        }
-        themeLink.setAttribute('href', newHref);
-    }
-}
-
-/**
  * 显示Toast提示
  */
 function showToast(message, duration = 3000) {
@@ -552,8 +525,8 @@ function setCurrentCategory(category) {
 /**
  * 获取电影总数
  */
-function getTotalMovieCount(platforms) {
-    return platforms.reduce((sum, p) => sum + p.movieCount, 0);
+function getTotalMovieCount(categories) {
+    return categories.reduce((sum, c) => sum + c.movieCount, 0);
 }
 
 /**
@@ -742,10 +715,10 @@ async function loadMovies() {
  */
 function updateSidebarWithSearchResults(movies) {
     // 按分类分组统计电影数量
-    const platformCounts = {};
+    const categoryCounts = {};
     movies.forEach(movie => {
         const categoryId = movie.category;
-        platformCounts[platformId] = (platformCounts[platformId] || 0) + 1;
+        categoryCounts[categoryId] = (categoryCounts[categoryId] || 0) + 1;
     });
 
     // 构建更新后的分类列表
@@ -770,7 +743,7 @@ function updateSidebarWithSearchResults(movies) {
         }
     });
 
-    elements.platformList.innerHTML = html;
+    elements.categoryList.innerHTML = html;
 
     // 重新绑定点击事件
     document.querySelectorAll('.category-item').forEach(item => {
@@ -778,17 +751,6 @@ function updateSidebarWithSearchResults(movies) {
             setCurrentCategory(item.dataset.category);
         });
     });
-}
-
-/**
- * 根据分类ID获取分类名称
- * @param {string} categoryId - 分类ID
- * @returns {string} 分类名称
- */
-function getCategoryName(categoryId) {
-    if (!categoryId) return '';
-    const category = state.categories.find(c => c.id === categoryId);
-    return category ? category.name : categoryId;
 }
 
 /**
@@ -896,6 +858,64 @@ function renderMovies(movies) {
 
     // 绑定复选框事件
     bindCheckboxEvents(movies);
+}
+
+/**
+ * 更新单个电影卡片的海报
+ */
+function updateMovieCard(updatedMovie) {
+    if (!updatedMovie || !updatedMovie.id) return;
+
+    // 更新 state.movies 中的对应电影数据
+    const movieIndex = state.movies.findIndex(m => m.id === updatedMovie.id);
+    if (movieIndex !== -1) {
+        state.movies[movieIndex] = { ...state.movies[movieIndex], ...updatedMovie };
+    }
+
+    // 查找对应的电影卡片元素
+    const movieCard = document.querySelector(`.movie-card[data-movie-id="${updatedMovie.id}"]`);
+    if (!movieCard) return;
+
+    // 更新网格视图中的海报图片
+    const posterImg = movieCard.querySelector('.movie-poster');
+    const posterPlaceholder = movieCard.querySelector('.movie-poster-placeholder');
+
+    if (updatedMovie.poster) {
+        // 添加时间戳强制刷新缓存
+        const posterUrl = updatedMovie.poster + (updatedMovie.poster.includes('?') ? '&' : '?') + 't=' + Date.now();
+        if (posterImg) {
+            posterImg.src = posterUrl;
+            posterImg.style.display = 'block';
+            posterImg.onerror = function() {
+                this.style.display = 'none';
+                if (posterPlaceholder) posterPlaceholder.style.display = 'flex';
+            };
+        }
+        if (posterPlaceholder) {
+            posterPlaceholder.style.display = 'none';
+        }
+    } else {
+        if (posterImg) posterImg.style.display = 'none';
+        if (posterPlaceholder) posterPlaceholder.style.display = 'flex';
+    }
+
+    // 更新列表视图中的图标
+    const movieIconImg = movieCard.querySelector('.movie-icon img');
+    const movieIconPlaceholder = movieCard.querySelector('.movie-icon-placeholder');
+
+    if (updatedMovie.poster) {
+        const posterUrl = updatedMovie.poster + (updatedMovie.poster.includes('?') ? '&' : '?') + 't=' + Date.now();
+        if (movieIconImg) {
+            movieIconImg.src = posterUrl;
+            movieIconImg.style.display = 'block';
+        }
+        if (movieIconPlaceholder) {
+            movieIconPlaceholder.style.display = 'none';
+        }
+    } else {
+        if (movieIconImg) movieIconImg.style.display = 'none';
+        if (movieIconPlaceholder) movieIconPlaceholder.style.display = 'flex';
+    }
 }
 
 /**
@@ -1008,7 +1028,7 @@ function updateBatchDeleteButtonVisibility() {
 /**
  * 获取分类名称
  */
-function getPlatformName(platformId) {
+function getCategoryName(categoryId) {
     const category = state.categories.find(c => c.id === categoryId);
     return category ? category.shortName : categoryId;
 }
@@ -1128,7 +1148,7 @@ function bindEvents() {
 
         // 更新左侧栏分类选中状态为"全部分类"
         document.querySelectorAll('.category-item').forEach(item => {
-            if (item.dataset.platform === '') {
+            if (item.dataset.category === '') {
                 item.classList.add('active');
             } else {
                 item.classList.remove('active');
@@ -1211,6 +1231,11 @@ function bindEvents() {
     window.electronAPI.onRefreshLibrary(() => {
         refreshLibraryWithProgress();
 
+    });
+
+    // 监听电影更新事件（海报更新等）
+    window.electronAPI.onMovieUpdated((updatedMovie) => {
+        updateMovieCard(updatedMovie);
     });
 
     // 监听详情窗口编辑模式变化（锁定/解锁电影卡片点击）
@@ -1456,7 +1481,7 @@ function bindEvents() {
                 if (movie) {
                     const result = await window.electronAPI.addMovieToBox({
                         boxName: boxName,
-                        platform: movie.platform,
+                        category: movie.category,
                         movieInfo: {
                             id: movie.movieId,
                             status: 'unwatched',
@@ -1535,12 +1560,12 @@ function bindEvents() {
                 // 从所有盒子中移除该电影
                 for (const box of boxes) {
                     const boxDetail = await window.electronAPI.getBoxDetail(box.name);
-                    if (boxDetail && boxDetail.data && boxDetail.data[movie.platform]) {
-                        const movieInBox = boxDetail.data[movie.platform].find(m => m.id === movie.movieId);
+                    if (boxDetail && boxDetail.data && boxDetail.data[movie.category]) {
+                        const movieInBox = boxDetail.data[movie.category].find(m => m.id === movie.movieId);
                         if (movieInBox) {
                             await window.electronAPI.removeMovieFromBox({
                                 boxName: box.name,
-                                platform: movie.platform,
+category: movie.category,
                                 movieId: movie.movieId
                             });
                         }
@@ -1739,21 +1764,21 @@ function bindEvents() {
     // 确认添加电影
     elements.confirmAddMovie.addEventListener('click', async () => {
         const name = elements.movieNameInput.value.trim();
-        const platform = elements.movieCategorySelect.value;
+        const category = elements.movieCategorySelect.value;
 
         if (!name) {
             alert('请输入电影名称');
             return;
         }
 
-        if (!platform) {
+        if (!category) {
             alert('请选择分类');
             return;
         }
 
         // 检查是否有同名电影（同分类）
         const existingMovie = state.movies.find(m =>
-            m.name.toLowerCase() === name.toLowerCase() && m.platform === platform
+            m.name.toLowerCase() === name.toLowerCase() && m.category === category
         );
 
         if (existingMovie) {
@@ -1766,7 +1791,7 @@ function bindEvents() {
         // 获取表单数据
         const movieData = {
             title: name,
-            category: platform,
+            category: category,
             description: elements.movieDescription ? elements.movieDescription.value.trim() : '',
             year: elements.moviePublishDate ? elements.moviePublishDate.value : '',
             director: elements.movieDirector ? elements.movieDirector.value.trim() : '',
@@ -1910,27 +1935,6 @@ function formatFileSize(bytes) {
     const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
-
-/**
- * 格式化视频时长（秒转为 HH:MM:SS 或 MM:SS 格式）
- * @param {string|number} seconds - 秒数
- * @returns {string} 格式化后的时长字符串
- */
-function formatDuration(seconds) {
-    if (!seconds) return '';
-    const totalSeconds = parseInt(seconds, 10);
-    if (isNaN(totalSeconds) || totalSeconds <= 0) return '';
-
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const secs = totalSeconds % 60;
-
-    if (hours > 0) {
-        return `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    } else {
-        return `${minutes}:${String(secs).padStart(2, '0')}`;
-    }
 }
 
 /**
@@ -2315,18 +2319,6 @@ async function loadActors() {
 }
 
 /**
- * 将文件转换为 base64
- */
-function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
-}
-
-/**
  * 保存设置处理器
  */
 async function saveSettingsHandler() {
@@ -2436,8 +2428,8 @@ async function handleSelectScanPath() {
  */
 function updateScanConfirmButton() {
     const path = elements.scanPathInput.dataset.path;
-    const platform = elements.scanCategorySelect.value;
-    elements.confirmScanDir.disabled = !path || !platform;
+    const category = elements.scanCategorySelect.value;
+    elements.confirmScanDir.disabled = !path || !category;
 }
 
 /**
@@ -2446,9 +2438,9 @@ function updateScanConfirmButton() {
 async function startScanDirectory() {
     const scanPath = elements.scanPathInput.dataset.path;
     const scanType = elements.scanPathInput.dataset.type;
-    const platform = elements.scanCategorySelect.value;
+    const category = elements.scanCategorySelect.value;
 
-    if (!scanPath || !platform) {
+    if (!scanPath || !category) {
         alert('请选择扫描路径和目标分类');
         return;
     }
@@ -2460,7 +2452,7 @@ async function startScanDirectory() {
         const result = await window.electronAPI.scanMovieDirectory({
             scanPath: scanPath,
             scanType: scanType,
-            platform: platform
+            category: category
         });
 
         if (result.error) {
@@ -2476,7 +2468,7 @@ async function startScanDirectory() {
         closeScanDirModal();
 
         // 显示扫描结果
-        showScanResults(result.movies, platform);
+        showScanResults(result.movies, category);
 
     } catch (error) {
         console.error('Error scanning directory:', error);
@@ -2489,11 +2481,35 @@ async function startScanDirectory() {
 
 /**
  * 显示扫描结果列表
- * 展示：电影ID、电影名称、演员、导演、发行商、电影时长、海报地址、视频文件地址
+ * 展示：电影ID、电影名称、演员、发行商、电影时长、海报地址、视频文件地址、状态
  */
-function showScanResults(movies, platform) {
-    const platformName = state.categories.find(c => c.id === platform)?.name || platform;
-    elements.scanResultInfo.textContent = `共扫描到 ${movies.length} 个电影（分类：${platformName}）`;
+async function showScanResults(movies, category) {
+    const categoryName = state.categories.find(c => c.id === category)?.name || category;
+    elements.scanResultInfo.textContent = `共扫描到 ${movies.length} 个电影（分类：${categoryName}）`;
+
+    // 获取电影库中已有的电影ID
+    const existingMovieIds = new Set();
+    try {
+        const allMovies = await window.electronAPI.getAllMoviesFromIndex({});
+        allMovies.forEach(m => {
+            if (m.id) existingMovieIds.add(m.id);
+        });
+    } catch (error) {
+        console.error('Error fetching existing movies:', error);
+    }
+
+    // 获取演员列表用于校验
+    const actorNames = new Set();
+    try {
+        const actorData = await window.electronAPI.getActors();
+        if (actorData && actorData.actors) {
+            actorData.actors.forEach(a => {
+                if (a.name) actorNames.add(a.name);
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching actors:', error);
+    }
 
     // 渲染电影列表（table 形式，滚动条仅在 scan-movies-list 内）
     let html = `
@@ -2503,11 +2519,11 @@ function showScanResults(movies, platform) {
                     <th class="scan-movie-id">电影ID</th>
                     <th class="scan-movie-name">电影名称</th>
                     <th class="scan-movie-actors">演员</th>
-                    <th class="scan-movie-director">导演</th>
                     <th class="scan-movie-publisher">发行商</th>
                     <th class="scan-movie-runtime">时长</th>
                     <th class="scan-movie-poster">海报</th>
                     <th class="scan-movie-video">视频</th>
+                    <th class="scan-movie-status">状态</th>
                     <th class="scan-movie-actions">操作</th>
                 </tr>
             </thead>
@@ -2518,25 +2534,43 @@ function showScanResults(movies, platform) {
         const movieData = movie.movieData || {};
         const movieId = movieData.id || movieData.movieId || '-';
         const title = movieData.title || movie.name || '-';
-        const actors = Array.isArray(movieData.actors) ? movieData.actors.join(', ') : '-';
-        const director = movieData.director || '-';
         const studio = movieData.studio || '-';
         const runtime = movieData.runtime || '-';
         const posterPath = movie.posterPath || movieData.poster || '-';
         const videoPath = movie.sourcePath || (movieData.fileset && movieData.fileset[0]?.fullpath) || '-';
 
+        // 检查电影是否已存在
+        const isExisting = existingMovieIds.has(movieId);
+        const statusText = isExisting ? '已存在' : '新电影';
+        const statusClass = isExisting ? 'scan-status-existing' : 'scan-status-new';
+
+        // 处理演员显示，未知演员标红
+        const actorsArray = Array.isArray(movieData.actors) ? movieData.actors : [];
+        const actorsHtml = actorsArray.map(actor => {
+            const isKnownActor = actorNames.has(actor);
+            const actorClass = isKnownActor ? '' : 'actor-unknown';
+            return `<span class="${actorClass}">${actor}</span>`;
+        }).join(', ');
+
+        // 用于显示的文本（未知的演员会标红）
+        const actorsDisplay = actorsArray.length > 0 ? actorsHtml : '-';
+
+        // 如果电影已存在或已删除，显示灰色背景
+        const rowClass = (isExisting || movie.deleted) ? 'scan-movie-row-deleted' : '';
+
         html += `
-                <tr data-index="${index}">
+                <tr data-index="${index}" class="${rowClass}" ${movie.deleted ? 'style="display:none;"' : ''}>
                     <td class="scan-movie-id" title="${movieId}">${truncateText(movieId, 20)}</td>
                     <td class="scan-movie-name" title="${title}">${truncateText(title, 20)}</td>
-                    <td class="scan-movie-actors" title="${actors}">${truncateText(actors, 15)}</td>
-                    <td class="scan-movie-director" title="${director}">${truncateText(director, 10)}</td>
+                    <td class="scan-movie-actors" title="${actorsArray.join(', ')}">${actorsDisplay}</td>
                     <td class="scan-movie-publisher" title="${studio}">${truncateText(studio, 10)}</td>
                     <td class="scan-movie-runtime">${runtime}</td>
                     <td class="scan-movie-poster">${posterPath !== '-' ? '<span class="scan-status-ok">有</span>' : '<span class="scan-status-none">无</span>'}</td>
                     <td class="scan-movie-video" title="${videoPath}">${videoPath !== '-' ? '<span class="scan-status-ok">有</span>' : '<span class="scan-status-none">无</span>'}</td>
+                    <td class="scan-movie-status"><span class="${statusClass}">${statusText}</span></td>
                     <td class="scan-movie-actions">
-                        <button class="btn btn-secondary btn-small" onclick="editScanMovie(${index})">编辑</button>
+                        <button class="btn btn-secondary btn-small" onclick="editScanMovie(${index})">✎</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteScanMovie(${index})">✖︎</button>
                     </td>
                 </tr>
         `;
@@ -2666,6 +2700,23 @@ async function editScanMovie(index) {
     renderScanEditTags();
 
     elements.scanMovieEditModal.style.display = 'flex';
+}
+
+/**
+ * 删除扫描电影
+ */
+function deleteScanMovie(index) {
+    const movie = state.scanMovies[index];
+    if (!movie) return;
+
+    if (confirm(`确定要删除电影 "${movie.movieData?.title || movie.name || '未知'}" 吗？`)) {
+        movie.deleted = true;
+        // 隐藏对应行
+        const row = document.querySelector(`tr[data-index="${index}"]`);
+        if (row) {
+            row.style.display = 'none';
+        }
+    }
 }
 
 /**
@@ -2997,7 +3048,27 @@ async function importAllScannedMovies() {
         elements.scanResultImport.disabled = true;
         elements.scanResultImport.textContent = '导入中...';
 
-        const result = await window.electronAPI.importScannedMovies(state.scanTempDir);
+        // 获取电影库中已有的电影ID，用于排除
+        const existingMovieIds = new Set();
+        try {
+            const allMovies = await window.electronAPI.getAllMoviesFromIndex({});
+            allMovies.forEach(m => {
+                if (m.id) existingMovieIds.add(m.id);
+            });
+        } catch (error) {
+            console.error('Error fetching existing movies:', error);
+        }
+
+        // 收集需要排除的电影ID（已删除的电影 + 电影库中已存在的电影）
+        const excludeIds = [];
+        state.scanMovies.forEach(movie => {
+            const movieId = movie.movieData?.id || movie.movieData?.movieId;
+            if (movie.deleted || (movieId && existingMovieIds.has(movieId))) {
+                if (movieId) excludeIds.push(movieId);
+            }
+        });
+
+        const result = await window.electronAPI.importScannedMovies(state.scanTempDir, excludeIds);
 
         if (result.error) {
             alert('导入失败: ' + result.error);
@@ -3006,6 +3077,9 @@ async function importAllScannedMovies() {
 
         // 显示导入结果
         let message = `导入完成！成功: ${result.success} 个`;
+        if (result.skipped > 0) {
+            message += `，跳过: ${result.skipped} 个`;
+        }
         if (result.failed > 0) {
             message += `，失败: ${result.failed} 个`;
         }

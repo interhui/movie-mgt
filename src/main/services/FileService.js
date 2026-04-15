@@ -12,11 +12,11 @@ class FileService {
     }
 
     /**
-     * 获取指定目录下所有子文件夹名称
+     * 获取指定目录下所有分类文件夹名称
      * @param {string} baseDir - 基础目录路径
      * @returns {Promise<string[]>} 返回文件夹名称数组
      */
-    async getSimulatorFolders(baseDir) {
+    async getCategoryFolders(baseDir) {
         try {
             const fullPath = path.resolve(baseDir);
             const exists = await this.fileExists(fullPath);
@@ -31,7 +31,7 @@ class FileService {
 
             return folders;
         } catch (error) {
-            console.error('Error getting simulator folders:', error);
+            console.error('Error getting category folders:', error);
             throw error;
         }
     }

@@ -112,7 +112,7 @@ describe('CLI Box Commands', () => {
                 name: 'Test Movie',
                 category: 'movie',
                 userRating: 5,
-                status: 'unplayed'
+                status: 'unwatched'
             });
 
             const services = {
@@ -258,7 +258,7 @@ describe('CLI Box Commands', () => {
                 id: 'movie-test1',
                 name: 'Test Movie',
                 category: 'movie',
-                status: 'unplayed',
+                status: 'unwatched',
                 playCount: 0,
                 totalPlayTime: 0
             });
