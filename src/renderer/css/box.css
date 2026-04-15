@@ -192,11 +192,11 @@
 .box-movie-card .movie-poster-container .movie-rating {
     position: absolute;
     bottom: 8px;
-    left: 8px;
+    left: 2px;
     color: #f5c518;
     padding: 2px 8px;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 14px;
     z-index: 5;
 }
 
@@ -580,19 +580,14 @@
     flex-shrink: 0;
 }
 
-.status-dot.unplayed {
+.status-dot.unwatched {
     background-color: #9e9e9e;
     color: #9e9e9e;
 }
 
-.status-dot.playing {
+.status-dot.watching {
     background-color: #2196f3;
     color: #2196f3;
-}
-
-.status-dot.played {
-    background-color: #4caf50;
-    color: #4caf50;
 }
 
 .status-dot.completed {
