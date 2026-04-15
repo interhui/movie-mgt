@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: file:;">
+    <title>演员管理</title>
+    <link rel="stylesheet" href="css/themes/dark.css">
+    <link rel="stylesheet" href="css/management.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 标题栏 -->
+        <header class="management-titlebar">
+            <h1 id="window-title">演员管理</h1>
+            <button id="close-btn" class="titlebar-close-btn">&times;</button>
+        </header>
+
+        <!-- 工具栏 -->
+        <div class="management-toolbar">
+            <div class="toolbar-search">
+                <input type="text" id="search-input" placeholder="搜索演员（姓名、昵称）...">
+            </div>
+            <div class="toolbar-actions">
+                <button id="add-actor-btn" class="btn btn-primary">新建演员</button>
+                <div class="view-toggle">
+                    <button id="view-card-btn" class="btn btn-icon active" title="卡片视图">▦</button>
+                    <button id="view-table-btn" class="btn btn-icon" title="表格视图">☰</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <main class="management-main">
+            <!-- 卡片视图 -->
+            <div class="actor-content" id="card-view">
+                <div class="actor-cards" id="actor-cards">
+                    <!-- 动态生成 -->
+                </div>
+                <div class="empty-state" id="empty-card-list" style="display: none;">
+                    <div class="empty-icon">👤</div>
+                    <p>暂无演员</p>
+                    <p>点击"新建演员"添加</p>
+                </div>
+            </div>
+
+            <!-- 表格视图 -->
+            <div class="actor-content" id="table-view" style="display: none;">
+                <table class="actor-table" id="actor-table">
+                    <thead>
+                        <tr>
+                            <th>照片</th>
+                            <th>姓名</th>
+                            <th>昵称</th>
+                            <th>生日</th>
+                            <th>备注</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="actor-table-body">
+                        <!-- 动态生成 -->
+                    </tbody>
+                </table>
+                <div class="empty-state" id="empty-table-list" style="display: none;">
+                    <div class="empty-icon">👤</div>
+                    <p>暂无演员</p>
+                    <p>点击"新建演员"添加</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 演员模态框 -->
+    <div id="actor-modal" class="modal" style="display: none;">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="modal-title">新建演员</h2>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body actor-modal-body">
+                <!-- 左侧：照片区域 -->
+                <div class="actor-photo-section">
+                    <div class="photo-preview" id="photo-preview">
+                        <div class="photo-placeholder">点击上传照片</div>
+                    </div>
+                    <input type="file" id="photo-input" accept="image/*" style="display: none;">
+                    <button type="button" id="select-photo-btn" class="btn btn-secondary">选择照片</button>
+                    <button type="button" id="remove-photo-btn" class="btn btn-secondary" style="display: none;">移除照片</button>
+                </div>
+                <!-- 右侧：表单区域 -->
+                <div class="actor-form-section">
+                    <form id="actor-form">
+                        <input type="hidden" id="original-name">
+                        <div class="form-group">
+                            <label for="actor-name">姓名 *</label>
+                            <input type="text" id="actor-name" placeholder="输入演员姓名" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="actor-nickname">昵称</label>
+                            <input type="text" id="actor-nickname" placeholder="输入演员昵称">
+                        </div>
+                        <div class="form-group">
+                            <label for="actor-birthday">生日</label>
+                            <input type="date" id="actor-birthday">
+                        </div>
+                        <div class="form-group">
+                            <label for="actor-memo">备注</label>
+                            <textarea id="actor-memo" rows="3" placeholder="输入备注信息"></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-btn" class="btn btn-primary">保存</button>
+                <button id="cancel-btn" class="btn btn-secondary">取消</button>
+                <button id="delete-btn" class="btn btn-danger" style="display: none;">删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查看照片模态框 -->
+    <div id="photo-view-modal" class="modal" style="display: none;">
+        <div class="modal-content modal-photo">
+            <div class="modal-header">
+                <h2 id="photo-view-title">演员照片</h2>
+                <button class="close-btn" id="close-photo-view">&times;</button>
+            </div>
+            <div class="modal-body photo-view-body">
+                <img id="photo-view-img" src="" alt="演员照片">
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils/common-utils.js"></script>
+    <script src="js/actor-mgt.js"></script>
+</body>
+</html>

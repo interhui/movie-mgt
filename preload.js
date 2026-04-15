@@ -67,6 +67,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
     // 演员列表
     getActors: () => ipcRenderer.invoke('get-actors'),
+    createActor: (data) => ipcRenderer.invoke('create-actor', data),
+    updateActor: (data) => ipcRenderer.invoke('update-actor', data),
+    deleteActor: (name) => ipcRenderer.invoke('delete-actor', name),
+    getActorPhotoDir: () => ipcRenderer.invoke('get-actor-photo-dir'),
+    saveActorPhoto: (data) => ipcRenderer.invoke('save-actor-photo', data),
 
     // 电影目录扫描
     scanMovieDirectory: (params) => ipcRenderer.invoke('scan-movie-directory', params),
@@ -85,6 +90,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
     },
     onBoxUpdated: (callback) => {
         ipcRenderer.on('box-updated', callback);
+    },
+    onActorsUpdated: (callback) => {
+        ipcRenderer.on('actors-updated', callback);
     },
     onOpenSettings: (callback) => {
         ipcRenderer.on('open-settings', callback);

@@ -34,6 +34,7 @@ class HardCodeService {
 
             library: {
                 moviesDir: path.join(__dirname, 'movies'),
+                actorPhotoDir: path.join(__dirname, 'actors'),
                 scanOnStartup: true,
                 autoRefresh: false,
                 showHiddenFiles: false,

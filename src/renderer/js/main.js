@@ -64,6 +64,8 @@ const elements = {
     selectDirBtn: document.getElementById('select-dir-btn'),
     movieboxDirInput: document.getElementById('moviebox-dir-input'),
     selectMovieboxDirBtn: document.getElementById('select-moviebox-dir-btn'),
+    actorPhotoDirInput: document.getElementById('actor-photo-dir-input'),
+    selectActorPhotoDirBtn: document.getElementById('select-actor-photo-dir-btn'),
     addBoxBtn: document.getElementById('add-box-btn'),
     boxList: document.getElementById('box-list'),
     createBoxModal: document.getElementById('create-box-modal'),
@@ -333,6 +335,7 @@ async function loadSettings() {
         if (elements.posterSize) elements.posterSize.value = state.settings.layout?.posterSize || 'medium';
         if (elements.moviesDirInput) elements.moviesDirInput.value = state.settings.library?.moviesDir || '';
         if (elements.movieboxDirInput) elements.movieboxDirInput.value = state.settings.moviebox?.movieboxDir || '';
+        if (elements.actorPhotoDirInput) elements.actorPhotoDirInput.value = state.settings.library?.actorPhotoDir || '';
 
         state.viewMode = state.settings.layout.viewMode;
     } catch (error) {
@@ -1223,6 +1226,14 @@ function bindEvents() {
         const result = await window.electronAPI.selectDirectory();
         if (!result.canceled && result.path) {
             elements.movieboxDirInput.value = result.path;
+        }
+    });
+
+    // 选择演员照片目录
+    elements.selectActorPhotoDirBtn.addEventListener('click', async () => {
+        const result = await window.electronAPI.selectDirectory();
+        if (!result.canceled && result.path) {
+            elements.actorPhotoDirInput.value = result.path;
         }
     });
 
@@ -2340,7 +2351,8 @@ async function saveSettingsHandler() {
             },
             library: {
                 ...state.settings.library,
-                moviesDir: elements.moviesDirInput.value
+                moviesDir: elements.moviesDirInput.value,
+                actorPhotoDir: elements.actorPhotoDirInput.value
             },
             moviebox: {
                 ...state.settings.moviebox,
