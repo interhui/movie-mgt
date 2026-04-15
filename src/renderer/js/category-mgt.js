@@ -34,41 +34,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.close();
     });
 
-    // 加载主题设置
-    async function loadTheme() {
-        try {
-            const settings = await window.electronAPI.getSettings();
-            if (settings && settings.appearance) {
-                applyTheme(settings.appearance.theme);
-            }
-        } catch (error) {
-            console.error('Error loading theme:', error);
-        }
-    }
-
-    // 应用主题
-    function applyTheme(theme) {
-        const links = document.querySelectorAll('link[rel="stylesheet"]');
-        let themeLink = null;
-        for (const link of links) {
-            const href = link.getAttribute('href') || '';
-            if (href.includes('themes/dark') || href.includes('themes/light')) {
-                themeLink = link;
-                break;
-            }
-        }
-        if (themeLink) {
-            const currentHref = themeLink.getAttribute('href');
-            let newHref;
-            if (theme === 'light') {
-                newHref = currentHref.replace(/themes\/dark\.css$/, 'themes/light.css');
-            } else {
-                newHref = currentHref.replace(/themes\/light\.css$/, 'themes/dark.css');
-            }
-            themeLink.setAttribute('href', newHref);
-        }
-    }
-
     // 监听主题变化
     window.electronAPI.onThemeChanged((theme) => {
         applyTheme(theme);
@@ -251,14 +216,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Error deleting category:', error);
             alert('删除失败: ' + error.message);
         }
-    }
-
-    // HTML转义
-    function escapeHtml(text) {
-        if (!text) return '';
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
     }
 
     // 事件绑定

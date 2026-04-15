@@ -21,8 +21,8 @@ function formatRating(rating) {
  */
 function formatStatus(status) {
     const statusMap = {
-        'unplayed': '未看',
-        'playing': '观看中',
+        'unwatched': '未看',
+        'watching': '观看中',
         'completed': '已完成'
     };
     return statusMap[status] || status || '-';

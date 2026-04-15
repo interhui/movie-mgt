@@ -78,7 +78,7 @@ class MovieService {
      * @returns {Promise<Array>} 电影列表
      */
     async loadAllMoviesFromFiles(moviesDir, onProgress) {
-        const categories = await this.fileService.getSimulatorFolders(moviesDir);
+        const categories = await this.fileService.getCategoryFolders(moviesDir);
         const allMovies = [];
 
         // 先统计总电影数
@@ -127,7 +127,7 @@ class MovieService {
                 await this.refreshCache(moviesDir);
             }
 
-            const categories = await this.fileService.getSimulatorFolders(moviesDir);
+            const categories = await this.fileService.getCategoryFolders(moviesDir);
             const categoryData = {};
 
             for (const category of categories) {
@@ -592,6 +592,14 @@ class MovieService {
                     valA = a.year || 0;
                     valB = b.year || 0;
                     break;
+                case 'actor':
+                    valA = (a.actors && a.actors.length > 0) ? a.actors[0].toLowerCase() : '';
+                    valB = (b.actors && b.actors.length > 0) ? b.actors[0].toLowerCase() : '';
+                    break;
+                case 'releasedate':
+                    valA = a.year || 0;
+                    valB = b.year || 0;
+                    break;
                 default:
                     valA = a.title.toLowerCase();
                     valB = b.title.toLowerCase();
@@ -704,7 +712,7 @@ class MovieService {
             let poster = null;
             if (coverImagePath) {
                 const ext = this.fileService.getFileExtension(coverImagePath);
-                const coverDestPath = path.join(moviePath, `cover${ext}`);
+                const coverDestPath = path.join(moviePath, `poster${ext}`);
                 await this.fileService.copyFile(coverImagePath, coverDestPath);
                 poster = coverDestPath;
             }
@@ -845,7 +853,7 @@ class MovieService {
                 // 复制海报文件（如果有）
                 let posterDestPath = null;
                 if (folderInfo.posterPath) {
-                    posterDestPath = path.join(movieTempDir, `cover${folderInfo.posterExt}`);
+                    posterDestPath = path.join(movieTempDir, `poster${folderInfo.posterExt}`);
                     await this.fileService.copyFile(folderInfo.posterPath, posterDestPath);
                     completeMovieData.poster = posterDestPath;
                 }
@@ -989,7 +997,7 @@ class MovieService {
             let poster = null;
             if (coverImagePath) {
                 const ext = this.fileService.getFileExtension(coverImagePath);
-                const coverDestPath = path.join(tempPath, `cover${ext}`);
+                const coverDestPath = path.join(tempPath, `poster${ext}`);
                 await this.fileService.copyFile(coverImagePath, coverDestPath);
                 poster = coverDestPath;
             }
@@ -1012,7 +1020,7 @@ class MovieService {
      * @param {string} moviesDir - 电影目录
      * @returns {Promise<object>} 导入结果
      */
-    async importScannedMovies(tempDir, moviesDir) {
+    async importScannedMovies(tempDir, moviesDir, excludeIds = []) {
         try {
             // 验证 moviesDir 参数
             if (!moviesDir) {
@@ -1030,10 +1038,17 @@ class MovieService {
             const results = {
                 success: 0,
                 failed: 0,
+                skipped: 0,
                 errors: []
             };
 
             for (const movieInfo of overview.movies) {
+                // 跳过被排除的电影
+                if (excludeIds.includes(movieInfo.id)) {
+                    results.skipped++;
+                    continue;
+                }
+
                 try {
                     const srcPath = path.join(tempDir, movieInfo.folderName);
                     const destPath = path.join(moviesDir, overview.category, movieInfo.folderName);

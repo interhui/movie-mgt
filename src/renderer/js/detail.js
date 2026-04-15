@@ -115,6 +115,23 @@ async function init() {
         applyTheme(theme);
     });
 
+    // 监听电影更新事件，刷新海报显示
+    window.electronAPI.onMovieUpdated((updatedMovie) => {
+        if (currentMovie && currentMovie.id === updatedMovie.id) {
+            currentMovie = updatedMovie;
+            if (updatedMovie.poster) {
+                // 添加时间戳强制刷新缓存
+                const posterUrl = updatedMovie.poster + (updatedMovie.poster.includes('?') ? '&' : '?') + 't=' + Date.now();
+                elements.moviePoster.src = posterUrl;
+                elements.moviePoster.style.display = 'block';
+                elements.posterPlaceholder.style.display = 'none';
+            } else {
+                elements.moviePoster.style.display = 'none';
+                elements.posterPlaceholder.style.display = 'flex';
+            }
+        }
+    });
+
     await loadTags();
     await loadCategories();
     await loadActors();
@@ -291,47 +308,6 @@ function getTagNameById(tagId) {
 }
 
 /**
- * 加载主题设置
- */
-async function loadTheme() {
-    try {
-        const settings = await window.electronAPI.getSettings();
-        if (settings && settings.appearance) {
-            applyTheme(settings.appearance.theme);
-        }
-    } catch (error) {
-        console.error('Error loading theme:', error);
-    }
-}
-
-/**
- * 应用主题
- */
-function applyTheme(theme) {
-    const links = document.querySelectorAll('link[rel="stylesheet"]');
-    let themeLink = null;
-    for (const link of links) {
-        const href = link.getAttribute('href') || '';
-        if (href.includes('themes/dark') || href.includes('themes/light')) {
-            themeLink = link;
-            break;
-        }
-    }
-    console.log('applyTheme called, theme:', theme, 'themeLink found:', themeLink ? themeLink.href : 'null');
-    if (themeLink) {
-        const currentHref = themeLink.getAttribute('href');
-        let newHref;
-        if (theme === 'light') {
-            newHref = currentHref.replace(/themes\/dark\.css$/, 'themes/light.css');
-        } else {
-            newHref = currentHref.replace(/themes\/light\.css$/, 'themes/dark.css');
-        }
-        console.log('Theme CSS href changed from:', currentHref, 'to:', newHref);
-        themeLink.setAttribute('href', newHref);
-    }
-}
-
-/**
  * Tab 切换事件
  */
 function bindTabEvents() {
@@ -394,7 +370,9 @@ function loadMovieDetail(movie) {
     elements.movieId.textContent = movie.movieId || '';
 
     if (movie.poster) {
-        elements.moviePoster.src = movie.poster;
+        // 添加时间戳强制刷新缓存
+        const posterUrl = movie.poster + (movie.poster.includes('?') ? '&' : '?') + 't=' + Date.now();
+        elements.moviePoster.src = posterUrl;
         elements.moviePoster.style.display = 'block';
         elements.posterPlaceholder.style.display = 'none';
     } else {
@@ -450,7 +428,7 @@ function loadMovieDetail(movie) {
         elements.boxActions.style.display = 'flex';
         elements.boxInfoSection.style.display = 'block';
 
-        const status = movie.boxStatus || 'unplayed';
+        const status = movie.boxStatus || 'unwatched';
         elements.boxStatus.textContent = getStatusText(status);
         elements.boxStatus.className = `value box-status-tag-display ${status}`;
 
@@ -731,31 +709,12 @@ function confirmTagSelection() {
 }
 
 /**
- * 获取分类名称
- */
-function getCategoryName(categoryId) {
-    if (categoriesCache.length > 0) {
-        const category = categoriesCache.find(c => c.id === categoryId);
-        if (category) {
-            return category.name;
-        }
-    }
-    const categoryNames = {
-        'movie': '电影',
-        'tv': '电视剧',
-        'anime': '动漫',
-        'documentary': '纪录片'
-    };
-    return categoryNames[categoryId] || categoryId;
-}
-
-/**
  * 获取状态文本
  */
 function getStatusText(status) {
     const statusMap = {
-        'unplayed': '未看',
-        'playing': '观看中',
+        'unwatched': '未看',
+        'watching': '观看中',
         'completed': '已完成'
     };
     return statusMap[status] || status;
@@ -795,7 +754,7 @@ function formatPlaytime(minutes) {
 function openStatusModal() {
     if (!fromBox) return;
 
-    const status = currentMovie.boxStatus || 'unplayed';
+    const status = currentMovie.boxStatus || 'unwatched';
     const radioButtons = document.querySelectorAll('input[name="edit-status"]');
     radioButtons.forEach(radio => {
         radio.checked = radio.value === status;
@@ -896,6 +855,8 @@ function enterEditMode() {
     elements.boxActions.style.display = 'none';
     elements.detailFooter.style.display = 'flex';
     elements.uploadPosterBtn.style.display = 'block';
+    elements.moviePoster.style.cursor = 'pointer';
+    elements.moviePoster.title = '点击上传新海报';
 
     if (currentTab === 'movie-files') {
         elements.addFileBtn.style.display = 'block';
@@ -945,6 +906,10 @@ function exitEditMode() {
     elements.detailFooter.style.display = 'none';
     elements.addFileBtn.style.display = 'none';
     elements.uploadPosterBtn.style.display = 'none';
+    elements.moviePoster.style.cursor = 'default';
+    elements.moviePoster.title = '';
+    elements.moviePoster.onclick = null;
+    elements.posterPlaceholder.onclick = null;
 
     if (fromBox) {
         elements.boxActions.style.display = 'flex';
@@ -968,6 +933,14 @@ function bindEditModeEvents() {
         elements.posterUploadInput.click();
     };
 
+    elements.moviePoster.onclick = () => {
+        elements.posterUploadInput.click();
+    };
+
+    elements.posterPlaceholder.onclick = () => {
+        elements.posterUploadInput.click();
+    };
+
     elements.posterUploadInput.onchange = async (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -975,6 +948,7 @@ function bindEditModeEvents() {
                 const base64 = await fileToBase64(file);
                 editData.coverImage = base64;
                 elements.moviePoster.src = base64;
+                elements.moviePoster.style.display = 'block';
                 elements.posterPlaceholder.style.display = 'none';
             } catch (error) {
                 console.error('Error converting image to base64:', error);
@@ -982,18 +956,6 @@ function bindEditModeEvents() {
             }
         }
     };
-}
-
-/**
- * 将文件转换为 base64
- */
-function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
 }
 
 /**
@@ -1237,27 +1199,6 @@ function formatFileSize(bytes) {
 }
 
 /**
- * 格式化视频时长（秒转为 HH:MM:SS 或 MM:SS 格式）
- * @param {string|number} seconds - 秒数
- * @returns {string} 格式化后的时长字符串
- */
-function formatDuration(seconds) {
-    if (!seconds) return '';
-    const totalSeconds = parseInt(seconds, 10);
-    if (isNaN(totalSeconds) || totalSeconds <= 0) return '';
-
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const secs = totalSeconds % 60;
-
-    if (hours > 0) {
-        return `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    } else {
-        return `${minutes}:${String(secs).padStart(2, '0')}`;
-    }
-}
-
-/**
  * 绑定事件
  */
 function bindEvents() {
@@ -1357,7 +1298,7 @@ function bindEvents() {
                 category: currentMovie.category,
                 movieInfo: {
                     id: currentMovie.movieId,
-                    status: 'unplayed',
+                    status: 'unwatched',
                     rating: 0
                 }
             });

@@ -43,20 +43,20 @@ describe('DatabaseService', () => {
 
     describe('saveMovieState', () => {
         test('SVC-DB-003: 保存状态成功', () => {
-            service.data.movies = [{ id: 'movie-1', status: 'unplayed' }];
-            service.saveMovieState('movie-1', { status: 'playing', playTime: 30 });
-            expect(service.data.movies[0].status).toBe('playing');
+            service.data.movies = [{ id: 'movie-1', status: 'unwatched' }];
+            service.saveMovieState('movie-1', { status: 'watching', playTime: 30 });
+            expect(service.data.movies[0].status).toBe('watching');
         });
 
         test('SVC-DB-004: 累加播放时间', () => {
             service.data.movies = [{ id: 'movie-1', totalPlayTime: 10 }];
-            service.saveMovieState('movie-1', { status: 'playing', playTime: 30 });
+            service.saveMovieState('movie-1', { status: 'watching', playTime: 30 });
             expect(service.data.movies[0].totalPlayTime).toBe(40);
         });
 
         test('SVC-DB-005: 播放次数累加', () => {
             service.data.movies = [{ id: 'movie-1', playCount: 1 }];
-            service.saveMovieState('movie-1', { status: 'playing', playTime: 30 });
+            service.saveMovieState('movie-1', { status: 'watching', playTime: 30 });
             expect(service.data.movies[0].playCount).toBe(2);
         });
     });
@@ -65,14 +65,14 @@ describe('DatabaseService', () => {
         test('SVC-DB-006: 返回完整状态', () => {
             service.data.movies = [{
                 id: 'movie-1',
-                status: 'playing',
+                status: 'watching',
                 playCount: 5,
                 totalPlayTime: 120,
                 lastPlayed: '2024-01-01',
                 firstPlayed: '2024-01-01'
             }];
             const state = service.getMovieState('movie-1');
-            expect(state.status).toBe('playing');
+            expect(state.status).toBe('watching');
             expect(state.playCount).toBe(5);
             expect(state.totalPlayTime).toBe(120);
         });
@@ -87,14 +87,14 @@ describe('DatabaseService', () => {
         test('SVC-DB-008: 返回全局统计', () => {
             service.data.movies = [
                 { id: '1', status: 'completed', userRating: 5 },
-                { id: '2', status: 'playing', userRating: 3 },
-                { id: '3', status: 'unplayed', userRating: 0 }
+                { id: '2', status: 'watching', userRating: 3 },
+                { id: '3', status: 'unwatched', userRating: 0 }
             ];
             const stats = service.getMovieStats();
             expect(stats.totalMovies).toBe(3);
             expect(stats.playedMovies).toBe(1);
             expect(stats.playingMovies).toBe(1);
-            expect(stats.unplayedMovies).toBe(1);
+            expect(stats.unwatchedMovies).toBe(1);
         });
 
         test('SVC-DB-009: 支持分类筛选', () => {
@@ -224,8 +224,8 @@ describe('DatabaseService', () => {
         beforeEach(() => {
             service.data.movies = [
                 { id: '1', name: 'Action Movie', category: 'movie', status: 'completed', userRating: 5, tags: ['action'] },
-                { id: '2', name: 'Drama Movie', category: 'movie', status: 'playing', userRating: 3, tags: ['drama'] },
-                { id: '3', name: 'TV Show', category: 'tv', status: 'unplayed', userRating: 4, tags: ['drama'] }
+                { id: '2', name: 'Drama Movie', category: 'movie', status: 'watching', userRating: 3, tags: ['drama'] },
+                { id: '3', name: 'TV Show', category: 'tv', status: 'unwatched', userRating: 4, tags: ['drama'] }
             ];
             service.data.movie_tags = [
                 { movie_id: '1', tag_id: 'action' },

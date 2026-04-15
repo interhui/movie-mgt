@@ -85,7 +85,7 @@ class IndexService {
      */
     async rebuildAllIndexes(moviesDir) {
         try {
-            const categories = await this.fileService.getSimulatorFolders(moviesDir);
+            const categories = await this.fileService.getCategoryFolders(moviesDir);
             const results = [];
 
             for (const category of categories) {
@@ -206,7 +206,7 @@ class IndexService {
      */
     async checkIndexesExist(moviesDir) {
         try {
-            const categories = await this.fileService.getSimulatorFolders(moviesDir);
+            const categories = await this.fileService.getCategoryFolders(moviesDir);
             const missingCategories = [];
 
             for (const category of categories) {
@@ -234,7 +234,7 @@ class IndexService {
      */
     async getAllCategoriesIndexMovies(moviesDir) {
         try {
-            const categories = await this.fileService.getSimulatorFolders(moviesDir);
+            const categories = await this.fileService.getCategoryFolders(moviesDir);
             const result = {};
 
             for (const category of categories) {
