@@ -28,6 +28,8 @@ const elements = {
     posterUploadInput: document.getElementById('poster-upload-input'),
     movieId: document.getElementById('movie-id'),
     movieCategory: document.getElementById('movie-category'),
+    movieDuration: document.getElementById('movie-duration'),
+    movieDurationContainer: document.getElementById('movie-duration-container'),
     moviePublishDate: document.getElementById('movie-publish-date'),
     moviePublishDateContainer: document.getElementById('movie-publish-date-container'),
     movieDirector: document.getElementById('movie-director'),
@@ -368,6 +370,14 @@ function loadMovieDetail(movie) {
     document.title = `${movie.name} - 电影详情`;
 
     elements.movieId.textContent = movie.movieId || '';
+
+    // 显示电影时长
+    const duration = movie.videoDuration;
+    if (duration) {
+        elements.movieDuration.textContent = formatDuration(duration);
+    } else {
+        elements.movieDuration.textContent = '未知';
+    }
 
     if (movie.poster) {
         // 添加时间戳强制刷新缓存
@@ -829,6 +839,7 @@ function enterEditMode() {
     editData = {
         name: currentMovie.name,
         publishDate: currentMovie.publishDate || '',
+        duration: currentMovie.videoDuration || '',
         director: currentMovie.director || '',
         actors: currentMovie.actors || '',
         studio: currentMovie.studio || '',
@@ -838,6 +849,7 @@ function enterEditMode() {
     };
 
     elements.movieTitleContainer.innerHTML = `<input type="text" id="edit-name" class="edit-input" value="${editData.name}">`;
+    elements.movieDurationContainer.innerHTML = `<input type="text" id="edit-duration" class="edit-input" value="${editData.duration}" placeholder="时长（秒）">`;
     elements.moviePublishDateContainer.innerHTML = `<input type="number" id="edit-publish-date" class="edit-input" value="${editData.publishDate}" placeholder="年份" min="1900" max="2100">`;
     elements.movieDirectorContainer.innerHTML = `<input type="text" id="edit-director" class="edit-input" value="${editData.director}" placeholder="导演">`;
 
@@ -879,6 +891,11 @@ function exitEditMode() {
 
     elements.movieTitleContainer.innerHTML = `<span id="movie-title">${currentMovie.name}</span>`;
     elements.movieTitle = document.getElementById('movie-title');
+
+    // 恢复时长显示
+    const duration = currentMovie.videoDuration;
+    elements.movieDurationContainer.innerHTML = `<span id="movie-duration" class="value">${duration ? formatDuration(duration) : '未知'}</span>`;
+    elements.movieDuration = document.getElementById('movie-duration');
 
     elements.moviePublishDateContainer.innerHTML = `<span id="movie-publish-date">${currentMovie.publishDate || '未知'}</span>`;
     elements.moviePublishDate = document.getElementById('movie-publish-date');
@@ -964,6 +981,7 @@ function bindEditModeEvents() {
 async function saveEdit() {
     const nameInput = document.getElementById('edit-name');
     const publishDateInput = document.getElementById('edit-publish-date');
+    const durationInput = document.getElementById('edit-duration');
     const directorInput = document.getElementById('edit-director');
     const studioInput = document.getElementById('edit-studio');
     const descriptionInput = document.getElementById('edit-description');
@@ -977,7 +995,9 @@ async function saveEdit() {
     const videoCodec = mainFile ? (mainFile.videoCodec || '') : (currentMovie.videoCodec || '');
     const videoWidth = mainFile ? (mainFile.videoWidth || '') : (currentMovie.videoWidth || '');
     const videoHeight = mainFile ? (mainFile.videoHeight || '') : (currentMovie.videoHeight || '');
-    const videoDuration = mainFile ? (mainFile.videoDuration || '') : (currentMovie.videoDuration || '');
+    // 优先使用手动输入的时长，其次使用主文件的时长，最后使用现有数据
+    const manualDuration = durationInput ? durationInput.value.trim() : '';
+    const videoDuration = manualDuration || (mainFile ? (mainFile.videoDuration || '') : '') || (currentMovie.videoDuration || '');
     const originalFilename = mainFile ? (mainFile.fullpath || '') : (currentMovie.original_filename || '');
 
     // 确保 folderName 存在，如果缺失则从 id 中提取 (格式: category-folderName)

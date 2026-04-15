@@ -160,23 +160,7 @@ class FileService {
             }
         }
 
-        // 解析 userRating（数字）
-        const ratingMatch = xmlContent.match(/<userRating>(\d+)<\/userRating>/i);
-        if (ratingMatch) {
-            movie.userRating = parseInt(ratingMatch[1], 10);
-        }
-
-        // 解析 userComment
-        const commentMatch = xmlContent.match(/<userComment>([^<]*)<\/userComment>/i);
-        if (commentMatch) {
-            movie.userComment = commentMatch[1];
-        }
-
-        // 解析 tags（兼容性）
-        const tagsMatch = xmlContent.match(/<tags>([^<]*)<\/tags>/i);
-        if (tagsMatch && tagsMatch[1]) {
-            movie.tags = tagsMatch[1].split(',').map(t => t.trim()).filter(t => t);
-        }
+        
 
         // 解析 fileset（关联文件列表）
         const filesetMatch = xmlContent.match(/<fileset>([\s\S]*?)<\/fileset>/i);
@@ -270,8 +254,8 @@ class FileService {
         }
 
         // 写入标签
-        if (movieData.tag && Array.isArray(movieData.tag)) {
-            for (const tag of movieData.tag) {
+        if (movieData.tags && Array.isArray(movieData.tags)) {
+            for (const tag of movieData.tags) {
                 xml += `    <tag>${this.escapeXml(tag)}</tag>\n`;
             }
         }
@@ -349,20 +333,7 @@ class FileService {
             xml += '    </fileset>\n';
         }
 
-        // 写入用户评分
-        if (movieData.userRating !== undefined) {
-            xml += `    <userRating>${movieData.userRating}</userRating>\n`;
-        }
-
-        // 写入用户评论
-        if (movieData.userComment) {
-            xml += `    <userComment>${this.escapeXml(movieData.userComment)}</userComment>\n`;
-        }
-
-        // 写入 tags（兼容性）
-        if (movieData.tags && Array.isArray(movieData.tags)) {
-            xml += `    <tags>${movieData.tags.join(',')}</tags>\n`;
-        }
+        
 
         xml += '</movie>';
         return xml;

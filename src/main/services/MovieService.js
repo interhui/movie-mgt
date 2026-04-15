@@ -675,10 +675,10 @@ class MovieService {
      */
     async addMovie(movieData, coverImagePath, moviesDir) {
         try {
-            const { title, description, category, year, director, actors, studio, tags, fileset } = movieData;
+            const { title, description, category, year, director, actors, studio, tags, fileset, customId } = movieData;
 
             // 生成电影ID和文件夹名称
-            const movieId = this.generateMovieId(category, title);
+            const movieId = customId || this.generateMovieId(category, title);
             const folderName = this.generateFolderName(title);
 
             // 确保分类目录存在

@@ -103,6 +103,7 @@ const elements = {
     addMovieModal: document.getElementById('add-movie-modal'),
     closeAddMovie: document.getElementById('close-add-movie'),
     movieNameInput: document.getElementById('movie-name'),
+    movieIdInput: document.getElementById('movie-id-input'),
     movieCategorySelect: document.getElementById('movie-category'),
     moviePublishDate: document.getElementById('movie-publish-date'),
     movieDirector: document.getElementById('movie-director'),
@@ -1765,6 +1766,7 @@ category: movie.category,
     elements.confirmAddMovie.addEventListener('click', async () => {
         const name = elements.movieNameInput.value.trim();
         const category = elements.movieCategorySelect.value;
+        const customId = elements.movieIdInput ? elements.movieIdInput.value.trim() : '';
 
         if (!name) {
             alert('请输入电影名称');
@@ -1798,7 +1800,8 @@ category: movie.category,
             studio: elements.movieStudio ? elements.movieStudio.value.trim() : '',
             actors: [...state.selectedActors],
             tags: getSelectedTags(),
-            fileset: [...state.movieFiles]  // 包含关联文件
+            fileset: [...state.movieFiles],
+            customId: customId
         };
 
         // 处理封面图片
@@ -1892,6 +1895,7 @@ category: movie.category,
  */
 function resetAddMovieForm() {
     if (elements.movieNameInput) elements.movieNameInput.value = '';
+    if (elements.movieIdInput) elements.movieIdInput.value = '';
     if (elements.movieCategorySelect) elements.movieCategorySelect.value = '';
     if (elements.moviePublishDate) elements.moviePublishDate.value = '';
     if (elements.movieDirector) elements.movieDirector.value = '';

@@ -737,12 +737,14 @@ function renderMovies(movies) {
                 <div class="box-movie-card movie-card" data-movie-id="${movie.movieId}">
                     <button class="remove-btn" data-movie-id="${movie.movieId}" title="从盒子中移除">✕</button>
                     <span class="box-status-tag ${movie.boxStatus || 'unwatched'}" data-movie-id="${movie.movieId}" data-category="${movie.category}">${getStatusText(movie.boxStatus)}</span>
-                    ${movie.poster ?
-                        `<img class="movie-poster" src="${movie.poster}" alt="${movie.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                         <div class="movie-poster-placeholder" style="display:none;">🎬</div>` :
-                        `<div class="movie-poster-placeholder">🎬</div>`
-                    }
-                    ${movie.boxRating ? `<div class="movie-rating">${'⭐'.repeat(movie.boxRating)}</div>` : ''}
+                    <div class="movie-poster-container" style="width: 100%; height: calc(100% - 50px); position: relative;">
+                        ${movie.poster ?
+                            `<img class="movie-poster" src="${movie.poster}" alt="${movie.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                             <div class="movie-poster-placeholder" style="display:none;">🎬</div>` :
+                            `<div class="movie-poster-placeholder" style="display:flex;">🎬</div>`
+                        }
+                        ${movie.boxRating ? `<div class="movie-rating">${'⭐'.repeat(movie.boxRating)}</div>` : ''}
+                    </div>
                     <div class="movie-info">
                         <div class="movie-name">${movie.name}</div>
                         <div class="movie-extra">${movie.actors || '-'}</div>
