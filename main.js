@@ -20,6 +20,7 @@ const SettingsService = require('./src/main/services/SettingsService');
 const TagService = require('./src/main/services/TagService');
 const CategoryService = require('./src/main/services/CategoryService');
 const IndexService = require('./src/main/services/IndexService');
+const ActorService = require('./src/main/services/ActorService');
 const { setupIpcHandlers } = require('./src/main/ipc-handlers');
 
 // 全局变量
@@ -37,6 +38,7 @@ let boxService = null;
 let tagService = null;
 let categoryService = null;
 let indexService = null;
+let actorService = null;
 
 /**
  * 初始化服务
@@ -53,6 +55,7 @@ function initializeServices() {
     boxService = new BoxService();
     tagService = new TagService(path.join(__dirname, 'config', 'tags.json'));
     categoryService = new CategoryService(path.join(__dirname, 'config', 'categories.json'));
+    actorService = new ActorService(path.join(__dirname, 'config', 'actor.json'));
 
     // 将 categoryService 传递给 movieService（如果支持）
     if (typeof movieService.setCategoryService === 'function') {
@@ -145,6 +148,10 @@ function createApplicationMenu() {
                     }
                 },
                 { type: 'separator' },
+                {
+                    label: '演员管理',
+                    click: () => createActorManagementWindow()
+                },
                 {
                     label: '标签管理',
                     click: () => createTagManagementWindow()
@@ -375,6 +382,39 @@ function createCategoryManagementWindow() {
     categoryManagementWindow.on('closed', () => { categoryManagementWindow = null; });
 }
 
+// 演员管理窗口
+let actorManagementWindow = null;
+
+function createActorManagementWindow() {
+    if (actorManagementWindow) {
+        actorManagementWindow.focus();
+        return;
+    }
+    actorManagementWindow = new BrowserWindow({
+        width: 1100,
+        height: 700,
+        minWidth: 800,
+        minHeight: 600,
+        title: '演员管理',
+        frame: false,
+        thickFrame: false,
+        autoHideMenuBar: true,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
+            contextIsolation: true,
+            nodeIntegration: false,
+            sandbox: false
+        },
+        show: false
+    });
+    actorManagementWindow.loadFile(path.join(__dirname, 'src', 'renderer', 'actor-mgt.html'));
+    actorManagementWindow.once('ready-to-show', () => {
+        actorManagementWindow.show();
+        actorManagementWindow.maximize();
+    });
+    actorManagementWindow.on('closed', () => { actorManagementWindow = null; });
+}
+
 // 全局异常处理
 process.on('uncaughtException', (error) => {
     log.error('Uncaught Exception:', error);
@@ -406,6 +446,7 @@ app.whenReady().then(async () => {
         boxService,
         tagService,
         categoryService,
+        actorService,
         getMainWindow: () => mainWindow,
         createMovieDetailWindow,
         createBoxWindow,

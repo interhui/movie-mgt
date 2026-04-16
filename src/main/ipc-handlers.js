@@ -158,6 +158,7 @@ function setupIpcHandlers(services) {
         boxService,
         tagService,
         categoryService,
+        actorService,
         getMainWindow,
         createMovieDetailWindow,
         createBoxWindow,
@@ -374,16 +375,87 @@ function setupIpcHandlers(services) {
     // 获取演员列表
     ipcMain.handle('get-actors', async () => {
         try {
-            const actorFilePath = path.join(APP_ROOT, 'config', 'actor.json');
-            if (fs.existsSync(actorFilePath)) {
-                const content = fs.readFileSync(actorFilePath, 'utf-8');
-                const data = JSON.parse(content);
-                return { actors: data.actor || [] };
-            }
-            return { actors: [] };
+            const actors = await actorService.loadActors();
+            return { actors };
         } catch (error) {
-            console.error('Error reading actor.json:', error);
+            console.error('Error getting actors:', error);
             return { error: error.message, actors: [] };
+        }
+    });
+
+    // 广播演员更新
+    function broadcastActorsUpdated() {
+        BrowserWindow.getAllWindows().forEach(win => {
+            win.webContents.send('actors-updated');
+        });
+    }
+
+    // 创建演员
+    ipcMain.handle('create-actor', async (event, actorData) => {
+        try {
+            const { name } = actorData;
+            if (!name) {
+                return { error: '演员姓名不能为空' };
+            }
+            await actorService.addActor(actorData);
+            broadcastActorsUpdated();
+            return { success: true };
+        } catch (error) {
+            console.error('Error creating actor:', error);
+            return { error: error.message };
+        }
+    });
+
+    // 更新演员
+    ipcMain.handle('update-actor', async (event, { oldName, newActor }) => {
+        try {
+            await actorService.updateActor(oldName, newActor);
+            broadcastActorsUpdated();
+            return { success: true };
+        } catch (error) {
+            console.error('Error updating actor:', error);
+            return { error: error.message };
+        }
+    });
+
+    // 删除演员
+    ipcMain.handle('delete-actor', async (event, name) => {
+        try {
+            await actorService.deleteActor(name);
+            broadcastActorsUpdated();
+            return { success: true };
+        } catch (error) {
+            console.error('Error deleting actor:', error);
+            return { error: error.message };
+        }
+    });
+
+    // 获取演员照片目录
+    ipcMain.handle('get-actor-photo-dir', async () => {
+        try {
+            const dirPath = settingsService.getActorPhotoDir();
+            return { dirPath };
+        } catch (error) {
+            console.error('Error getting actor photo dir:', error);
+            return { error: error.message, dirPath: '' };
+        }
+    });
+
+    // 保存演员照片
+    ipcMain.handle('save-actor-photo', async (event, { base64Data, fileName }) => {
+        try {
+            const photoDir = settingsService.getActorPhotoDir();
+            if (!photoDir) {
+                return { error: '请先在设置中配置演员照片目录' };
+            }
+            const filePath = path.join(photoDir, fileName);
+            await fileService.ensureDir(photoDir);
+            const buffer = Buffer.from(base64Data, 'base64');
+            await fileService.writeFile(filePath, buffer);
+            return { success: true, filePath };
+        } catch (error) {
+            console.error('Error saving actor photo:', error);
+            return { error: error.message };
         }
     });
 

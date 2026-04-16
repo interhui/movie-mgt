@@ -134,6 +134,26 @@ class SettingsService {
     }
 
     /**
+     * 获取演员照片目录配置
+     * @returns {string} 演员照片目录路径
+     */
+    getActorPhotoDir() {
+        return this.settings.library.actorPhotoDir || '';
+    }
+
+    /**
+     * 设置演员照片目录
+     * @param {string} dirPath - 演员照片目录路径
+     */
+    setActorPhotoDir(dirPath) {
+        if (!this.settings.library) {
+            this.settings.library = {};
+        }
+        this.settings.library.actorPhotoDir = dirPath;
+        this.saveSettings(this.settings);
+    }
+
+    /**
      * 获取电影盒子目录配置
      * @returns {string} 电影盒子目录路径
      */

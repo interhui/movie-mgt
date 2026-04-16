@@ -480,7 +480,7 @@ body {
 }
 
 .form-group label {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text-secondary);
 }
 
@@ -490,7 +490,7 @@ body {
     color: var(--text-color);
     border: 1px solid var(--border-color);
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .form-input:focus {

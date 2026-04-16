@@ -103,7 +103,7 @@ body {
 }
 
 .sidebar-header h2 {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--text-secondary);
     text-transform: uppercase;
@@ -122,7 +122,7 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 4px;
     color: var(--text-color);
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .search-box input:focus {
@@ -195,7 +195,7 @@ body {
 }
 
 .detail-header h2 {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     margin: 0;
 }
@@ -230,7 +230,7 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 4px;
     color: var(--text-color);
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .form-group input:focus,
@@ -280,7 +280,7 @@ body {
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     cursor: pointer;
     transition: background 0.15s;
