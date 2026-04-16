@@ -94,6 +94,12 @@ contextBridge.exposeInMainWorld('electronAPI', {
     onActorsUpdated: (callback) => {
         ipcRenderer.on('actors-updated', callback);
     },
+    onTagsUpdated: (callback) => {
+        ipcRenderer.on('tags-updated', callback);
+    },
+    onCategoriesUpdated: (callback) => {
+        ipcRenderer.on('categories-updated', callback);
+    },
     onOpenSettings: (callback) => {
         ipcRenderer.on('open-settings', callback);
     },

@@ -20,7 +20,10 @@
         <!-- 工具栏 -->
         <div class="management-toolbar">
             <div class="toolbar-search">
-                <input type="text" id="search-input" placeholder="搜索演员（姓名、昵称）...">
+                <div class="search-input-with-btn">
+                    <input type="text" id="search-input" placeholder="搜索演员（姓名、昵称）...">
+                    <button id="search-btn" class="icon-btn">🔍</button>
+                </div>
             </div>
             <div class="toolbar-actions">
                 <button id="add-actor-btn" class="btn btn-primary">新建演员</button>
@@ -73,7 +76,7 @@
 
     <!-- 演员模态框 -->
     <div id="actor-modal" class="modal" style="display: none;">
-        <div class="modal-content modal-large">
+        <div class="modal-content modal-middle">
             <div class="modal-header">
                 <h2 id="modal-title">新建演员</h2>
                 <button class="close-btn" id="close-modal">&times;</button>
@@ -85,8 +88,10 @@
                         <div class="photo-placeholder">点击上传照片</div>
                     </div>
                     <input type="file" id="photo-input" accept="image/*" style="display: none;">
-                    <button type="button" id="select-photo-btn" class="btn btn-secondary">选择照片</button>
-                    <button type="button" id="remove-photo-btn" class="btn btn-secondary" style="display: none;">移除照片</button>
+                    <div class="photo-buttons">
+                        <button type="button" id="select-photo-btn" class="btn btn-secondary">选择照片</button>
+                        <button type="button" id="remove-photo-btn" class="btn btn-secondary" style="display: none;">移除照片</button>
+                    </div>
                 </div>
                 <!-- 右侧：表单区域 -->
                 <div class="actor-form-section">
