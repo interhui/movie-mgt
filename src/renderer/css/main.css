@@ -2221,3 +2221,202 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
+
+/* 演员过滤模态窗样式 */
+.actor-filter-modal-content {
+    max-width: 1000px;
+    width: 1000px;
+    height: 800px;
+    display: flex;
+    flex-direction: column;
+}
+
+.actor-filter-modal-content .modal-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+}
+
+/* 演员过滤工具条 */
+.actor-filter-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    flex-shrink: 0;
+}
+
+.actor-filter-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.actor-filter-right {
+    display: flex;
+    align-items: center;
+}
+
+.actor-filter-search {
+    width: 280px;
+}
+
+/* 演员过滤搜索框 */
+.actor-filter-search .search-input {
+    width: 100%;
+}
+
+/* 演员卡片列表 */
+.actor-filter-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+    align-content: start;
+}
+
+/* 演员过滤卡片 */
+.actor-filter-card {
+    background: var(--bg-card);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    border: 2px solid transparent;
+}
+
+.actor-filter-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.actor-filter-card.selected {
+    border-color: var(--primary-color);
+}
+
+/* 演员卡片复选框 */
+.actor-filter-card .card-checkbox {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.actor-filter-card .card-checkbox.checked {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.actor-filter-card .card-checkbox.checked::after {
+    content: '✓';
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* 演员收藏按钮 */
+.actor-filter-card .card-favorite {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 16px;
+    z-index: 2;
+    cursor: pointer;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.actor-filter-card .card-favorite.favorited {
+    color: #e74c3c;
+}
+
+/* 演员卡片照片 */
+.actor-filter-card .card-photo {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--bg-secondary);
+}
+
+.actor-filter-card .card-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.actor-filter-card .card-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+}
+
+/* 演员卡片评分 */
+.actor-filter-card .card-rating {
+    position: absolute;
+    bottom: 50px;
+    left: 8px;
+    right: 8px;
+    font-size: 12px;
+    color: #f5c518;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* 演员卡片信息 */
+.actor-filter-card .card-info {
+    padding: 8px;
+    text-align: center;
+}
+
+.actor-filter-card .card-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.actor-filter-card .card-birthday {
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+/* 演员过滤空状态 */
+.actor-filter-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-secondary);
+}
+
+/* 演员卡片选中遮罩 */
+.actor-filter-card.selected::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(74, 158, 255, 0.1);
+    pointer-events: none;
+    z-index: 1;
+}
+
