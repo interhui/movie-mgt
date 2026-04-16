@@ -1,24 +1,36 @@
 {
-   "actor": [
-        {
-           "name": "李连杰",
-           "birthday": "2023-02-32",
-           "memo": "演员备注"
-        },
-        {
-           "name": "刘亦菲",
-           "birthday": "2022-02-32",
-           "memo": "演员备注"
-        },
-        {
-           "name": "周星驰",
-           "birthday": "2022-02-32",
-           "memo": "演员备注"
-        },
-        {
-           "name": "郭涛",
-           "birthday": "2022-02-32",
-           "memo": "演员备注"
-        }
-    ]
+  "actor": [
+    {
+      "name": "李连杰",
+      "nickname": "",
+      "birthday": "",
+      "memo": "演员备注",
+      "rating": 4,
+      "favorites": false
+    },
+    {
+      "name": "刘亦菲",
+      "nickname": "",
+      "birthday": "",
+      "memo": "演员备注",
+      "rating": 5,
+      "favorites": false
+    },
+    {
+      "name": "周星驰",
+      "nickname": "",
+      "birthday": "",
+      "memo": "演员备注",
+      "rating": 5,
+      "favorites": true
+    },
+    {
+      "name": "郭涛",
+      "nickname": "",
+      "birthday": "",
+      "memo": "演员备注",
+      "rating": 4,
+      "favorites": true
+    }
+  ]
 }

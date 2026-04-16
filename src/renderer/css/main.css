@@ -2177,9 +2177,7 @@ body {
 .favorite-selector-modal {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    background: var(--card-bg);
+    gap: 15px;
     border-radius: 8px;
     cursor: pointer;
     transition: background 0.2s;
@@ -2190,7 +2188,7 @@ body {
 }
 
 .favorite-heart-modal {
-    font-size: 32px;
+    font-size: 24px;
     transition: color 0.2s, transform 0.2s;
     user-select: none;
 }
@@ -2210,5 +2208,16 @@ body {
 
 /* 模态框中的评分星星样式 */
 .modal-rating-star {
-    font-size: 32px;
+    font-size: 24px;
+    color: #f5c518;
+}
+
+.modal-section-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }

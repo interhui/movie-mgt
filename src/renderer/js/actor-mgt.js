@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const favoriteHeart = document.getElementById('favorite-heart');
 
     const actorRatingModal = document.getElementById('actor-rating-modal');
-    const ratingModalTitle = document.getElementById('rating-modal-title');
     const ratingActorName = document.getElementById('rating-actor-name');
     const favoriteHeartModal = document.getElementById('favorite-heart-modal');
     const favoriteText = document.getElementById('favorite-text');
@@ -466,7 +465,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         currentRatingModalActor = actor;
         ratingActorName.textContent = actor.name;
-        ratingModalTitle.textContent = '演员评分';
 
         // 设置当前状态
         currentRating = actor.rating || 0;

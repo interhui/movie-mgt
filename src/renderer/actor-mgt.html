@@ -146,19 +146,18 @@
     <div id="actor-rating-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="rating-modal-title">演员评分</h2>
+                <h2 id="rating-actor-name">演员</h2>
                 <button class="close-btn" id="close-rating-modal">&times;</button>
             </div>
             <div class="modal-body">
-                <p id="rating-actor-name" class="status-movie-name"></p>
                 <div class="modal-section">
-                    <label class="modal-section-label">收藏状态</label>
+                    <label class="modal-section-label">收藏</label>
                     <div class="favorite-selector-modal">
                         <span class="favorite-heart-modal" id="favorite-heart-modal">♡</span>
                         <span class="favorite-text" id="favorite-text">未收藏</span>
                     </div>
                 </div>
-                <div class="modal-section">
+                <div class="modal-section" style="margin-top: 15px;">
                     <label class="modal-section-label">评分</label>
                     <div class="rating-selector" id="rating-modal-selector">
                         <span class="rating-star modal-rating-star" data-rating="1">☆</span>
@@ -170,8 +169,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="cancel-rating-btn" class="btn btn-secondary">取消</button>
                 <button id="confirm-rating-btn" class="btn btn-primary">确定</button>
+                <button id="cancel-rating-btn" class="btn btn-secondary">取消</button>
             </div>
         </div>
     </div>
