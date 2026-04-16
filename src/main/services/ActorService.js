@@ -93,7 +93,9 @@ class ActorService {
             nickname: actor.nickname || '',
             birthday: actor.birthday || '',
             memo: actor.memo || '',
-            photo: actor.photo || ''
+            photo: actor.photo || '',
+            rating: actor.rating || 0,
+            favorites: actor.favorites || false
         });
 
         await this.saveActors(actors);
@@ -129,7 +131,9 @@ class ActorService {
             nickname: newActor.nickname !== undefined ? newActor.nickname : actors[index].nickname,
             birthday: newActor.birthday !== undefined ? newActor.birthday : actors[index].birthday,
             memo: newActor.memo !== undefined ? newActor.memo : actors[index].memo,
-            photo: newActor.photo !== undefined ? newActor.photo : actors[index].photo
+            photo: newActor.photo !== undefined ? newActor.photo : actors[index].photo,
+            rating: newActor.rating !== undefined ? newActor.rating : (actors[index].rating || 0),
+            favorites: newActor.favorites !== undefined ? newActor.favorites : (actors[index].favorites || false)
         };
 
         await this.saveActors(actors);

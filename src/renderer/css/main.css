@@ -887,7 +887,7 @@ body {
 /* 中等模态框 */
 .modal-middle {
     width: 800px;
-    height: 550px;
+    height: 590px;
     max-height: 90vh;
 }
 
@@ -1794,6 +1794,7 @@ body {
     cursor: pointer;
     transition: transform 0.15s, box-shadow 0.15s;
     border: 2px solid transparent;
+    position: relative;
 }
 
 .actor-card:hover {
@@ -1807,6 +1808,7 @@ body {
     aspect-ratio: 1;
     overflow: hidden;
     background: var(--bg-secondary);
+    position: relative;
 }
 
 .actor-card-photo img {
@@ -1850,6 +1852,45 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+/* 演员收藏标签 */
+.actor-favorite-tag {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 26px;
+    cursor: pointer;
+    z-index: 5;
+    transition: transform 0.2s, color 0.2s;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.actor-favorite-tag:hover {
+    transform: scale(1.1);
+}
+
+.actor-favorite-tag.favorited {
+    color: #e74c3c;
+    font-size: 20px;
+}
+
+/* 演员评分显示 */
+.actor-rating-display {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    color: #f5c518;
+    font-size: 14px;
+    z-index: 5;
+    padding: 2px 2px;
+    border-radius: 4px;
 }
 
 /* 演员表格视图 */
@@ -2056,4 +2097,118 @@ body {
         width: 120px;
         height: 120px;
     }
+}
+
+/* 演员评分选择器 */
+.rating-favorite-row {
+    display: flex;
+    flex-direction: row;
+    gap: 60px;
+}
+
+.rating-section,
+.favorite-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.favorite-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.favorite-heart {
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    user-select: none;
+}
+
+.favorite-heart:hover {
+    transform: scale(1.1);
+}
+
+.favorite-heart.favorited {
+    color: #e74c3c;
+}
+
+/* actor-modal 中紧凑样式 */
+.compact-star {
+    font-size: 20px;
+    color: #f5c518;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    user-select: none;
+}
+
+.compact-star:hover {
+    transform: scale(1.1);
+}
+
+.compact-star.active {
+    color: #f5c518;
+}
+
+.compact-heart {
+    font-size: 24px;
+    color: #e74c3c;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    user-select: none;
+}
+
+.compact-heart:hover {
+    transform: scale(1.1);
+}
+
+.compact-heart.favorited {
+    color: #e74c3c;
+    font-size: 20px
+}
+
+.rating-selector.compact {
+    display: flex;
+    gap: 4px;
+}
+
+/* 演员评分模态框收藏选择器 */
+.favorite-selector-modal {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--card-bg);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.favorite-selector-modal:hover {
+    background: var(--hover-bg);
+}
+
+.favorite-heart-modal {
+    font-size: 32px;
+    transition: color 0.2s, transform 0.2s;
+    user-select: none;
+}
+
+.favorite-heart-modal:hover {
+    transform: scale(1.1);
+}
+
+.favorite-heart-modal.favorited {
+    color: #e74c3c;
+}
+
+.favorite-text {
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+/* 模态框中的评分星星样式 */
+.modal-rating-star {
+    font-size: 32px;
 }
