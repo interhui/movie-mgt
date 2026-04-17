@@ -433,8 +433,8 @@ function renderActorFilterList() {
 
         return `
             <div class="actor-filter-card ${isSelected ? 'selected' : ''}" data-name="${escapeHtml(actor.name)}">
-                <div class="card-checkbox ${isSelected ? 'checked' : ''}" onclick="toggleActorSelection('${escapeHtml(actor.name)}')"></div>
-                <span class="card-favorite ${favoriteClass}" onclick="event.stopPropagation(); toggleActorFavorite('${escapeHtml(actor.name)}')">${actor.favorites ? '❤' : '♡'}</span>
+                <div class="card-checkbox ${isSelected ? 'checked' : ''}" data-actor-name="${escapeHtml(actor.name)}"></div>
+                <span class="card-favorite ${favoriteClass}" data-actor-favorite="${escapeHtml(actor.name)}">${actor.favorites ? '❤' : '♡'}</span>
                 <div class="card-photo">${photoHtml}</div>
                 ${ratingStars ? `<div class="card-rating">${ratingStars}</div>` : ''}
                 <div class="card-info">
@@ -450,6 +450,24 @@ function renderActorFilterList() {
         card.addEventListener('click', () => {
             const actorName = card.dataset.name;
             toggleActorSelection(actorName);
+        });
+    });
+
+    // 绑定复选框点击事件（阻止冒泡）
+    elements.actorFilterList.querySelectorAll('.card-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const actorName = checkbox.dataset.actorName;
+            toggleActorSelection(actorName);
+        });
+    });
+
+    // 绑定收藏按钮点击事件（阻止冒泡）
+    elements.actorFilterList.querySelectorAll('.card-favorite').forEach(favoriteBtn => {
+        favoriteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const actorName = favoriteBtn.dataset.actorFavorite;
+            toggleActorFavorite(actorName);
         });
     });
 }
@@ -683,7 +701,7 @@ function updateCategoryFilter(categories) {
  */
 function renderSidebar(categories) {
     let html = `
-        <li class="category-item active" data-category="">
+        <li class="category-item${state.currentCategory === '' ? ' active' : ''}" data-category="">
             <span class="category-name">全部分类</span>
             <span class="movie-count">${getTotalMovieCount(categories)}</span>
         </li>
@@ -691,7 +709,7 @@ function renderSidebar(categories) {
 
     categories.forEach(category => {
         html += `
-            <li class="category-item" data-category="${category.id}">
+            <li class="category-item${state.currentCategory === category.id ? ' active' : ''}" data-category="${category.id}">
                 <span class="category-name">${category.name}</span>
                 <span class="movie-count">${category.movieCount}</span>
             </li>
@@ -925,7 +943,7 @@ async function loadMovies() {
             state.sidebarSearchActive = true;
         } else if (state.sidebarSearchActive) {
             // 清除筛选后恢复原始侧边栏
-            updateSidebar(state.categories);
+            renderSidebar(state.categories);
             state.sidebarSearchActive = false;
         }
     } catch (error) {
@@ -1321,7 +1339,11 @@ function bindEvents() {
         if (value === '') {
             // 选择"全部演员"，清除筛选
             state.currentActorFilter = [];
-            updateActorFilterDisplay();
+            // 恢复下拉框完整选项
+            elements.actorFilter.innerHTML = `
+                <option value="" selected>全部演员</option>
+                <option value="select">选择演员</option>
+            `;
             loadMovies();
         } else if (value === 'select') {
             // 选择"选择演员"，打开模态窗
