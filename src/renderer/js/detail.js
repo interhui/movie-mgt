@@ -351,12 +351,20 @@ function updateActorSelectorPagination(totalPages) {
 
     elements.actorSelectorPageInfo.textContent = `第 ${actorSelectorCurrentPage} / ${totalPages} 页`;
 
-    // 更新翻页按钮状态
+    // 更新翻页按钮状态（使用class控制）
     if (elements.actorSelectorPrevBtn) {
-        elements.actorSelectorPrevBtn.disabled = actorSelectorCurrentPage <= 1;
+        if (actorSelectorCurrentPage <= 1) {
+            elements.actorSelectorPrevBtn.classList.add('disabled');
+        } else {
+            elements.actorSelectorPrevBtn.classList.remove('disabled');
+        }
     }
     if (elements.actorSelectorNextBtn) {
-        elements.actorSelectorNextBtn.disabled = actorSelectorCurrentPage >= totalPages;
+        if (actorSelectorCurrentPage >= totalPages) {
+            elements.actorSelectorNextBtn.classList.add('disabled');
+        } else {
+            elements.actorSelectorNextBtn.classList.remove('disabled');
+        }
     }
 }
 

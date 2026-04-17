@@ -1159,6 +1159,33 @@ body {
     margin-right: 8px;
 }
 
+/* 演员选择分页链接样式（文本超链接） */
+.actor-selector-page-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.actor-selector-page-link:hover:not(.disabled) {
+    background-color: var(--hover-bg);
+    text-decoration: underline;
+}
+
+.actor-selector-page-link.disabled {
+    color: var(--text-secondary);
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.actor-selector-page-link.disabled:hover {
+    text-decoration: none;
+    background-color: transparent;
+}
+
 .actor-selector-modal-content .modal-footer {
     flex-shrink: 0;
 }
