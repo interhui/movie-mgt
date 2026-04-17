@@ -189,7 +189,7 @@ class MovieService {
      */
     async getMoviesByCategory(category, moviesDir, options = {}) {
         try {
-            const { sortBy, sortOrder, tagId, rating } = options;
+            const { sortBy, sortOrder, tagId, rating, actors } = options;
 
             // 如果缓存未初始化，先初始化缓存
             if (!this.cacheService.isCacheInitialized()) {
@@ -197,8 +197,8 @@ class MovieService {
             }
 
             // 如果有筛选条件，使用 searchMovies
-            if (tagId || rating !== undefined && rating !== null && rating !== '') {
-                const filters = { category, sortBy, sortOrder, tagId, rating };
+            if (tagId || rating !== undefined && rating !== null && rating !== '' || (actors && actors.length > 0)) {
+                const filters = { category, sortBy, sortOrder, tagId, rating, actors };
                 return this.cacheService.searchMovies(null, filters);
             }
 
@@ -225,11 +225,11 @@ class MovieService {
                 await this.refreshCache(moviesDir);
             }
 
-            const { sortBy, sortOrder, tagId, rating } = options;
+            const { sortBy, sortOrder, tagId, rating, actors } = options;
 
             // 如果有筛选条件，使用 searchMovies
-            if (tagId || rating !== undefined && rating !== null && rating !== '') {
-                const filters = { sortBy, sortOrder, tagId, rating };
+            if (tagId || rating !== undefined && rating !== null && rating !== '' || (actors && actors.length > 0)) {
+                const filters = { sortBy, sortOrder, tagId, rating, actors };
                 return this.cacheService.searchMovies(null, filters);
             }
 

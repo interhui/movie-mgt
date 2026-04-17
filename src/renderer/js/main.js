@@ -29,7 +29,9 @@ const state = {
     currentEditMovie: null,  // 当前编辑的扫描电影
     // 演员相关
     actors: [],  // 演员列表缓存
-    selectedActors: []  // 当前选中的演员（用于添加电影）
+    selectedActors: [],  // 当前选中的演员（用于添加电影）
+    currentActorFilter: [],  // 当前用于电影筛选的演员名称列表
+    actorFilterModalVisible: false  // 演员过滤模态窗是否显示
 };
 
 // DOM 元素
@@ -127,6 +129,19 @@ const elements = {
     actorSelectorList: document.getElementById('actor-selector-list'),
     confirmActorSelection: document.getElementById('confirm-actor-selection'),
     cancelActorSelection: document.getElementById('cancel-actor-selection'),
+
+    // 演员过滤相关
+    actorFilter: document.getElementById('actor-filter'),
+    actorFilterModal: document.getElementById('actor-filter-modal'),
+    closeActorFilter: document.getElementById('close-actor-filter'),
+    actorFilterList: document.getElementById('actor-filter-list'),
+    actorRatingFilter: document.getElementById('actor-rating-filter'),
+    actorFavoriteFilter: document.getElementById('actor-favorite-filter'),
+    actorFilterSearchInput: document.getElementById('actor-filter-search-input'),
+    actorFilterSearchBtn: document.getElementById('actor-filter-search-btn'),
+    actorFilterClearBtn: document.getElementById('actor-filter-clear-btn'),
+    confirmActorFilter: document.getElementById('confirm-actor-filter'),
+    cancelActorFilter: document.getElementById('cancel-actor-filter'),
 
     // 电影文件管理相关
     addFileBtn: document.getElementById('add-file-btn'),
@@ -317,6 +332,226 @@ function updateTagFilter() {
 }
 
 /**
+ * 打开演员过滤模态窗
+ */
+async function openActorFilterModal() {
+    state.actorFilterModalVisible = true;
+    state.actorFilterSearchKeyword = '';
+    elements.actorFilterSearchInput.value = '';
+    elements.actorRatingFilter.value = '';
+    elements.actorFavoriteFilter.checked = false;
+    // 重新加载演员数据
+    await loadActors();
+    // 使用之前选中的演员作为当前选中状态
+    state.tempSelectedActors = [...state.currentActorFilter];
+    renderActorFilterList();
+    elements.actorFilterModal.style.display = 'flex';
+}
+
+/**
+ * 关闭演员过滤模态窗
+ */
+function closeActorFilterModal() {
+    state.actorFilterModalVisible = false;
+    elements.actorFilterModal.style.display = 'none';
+}
+
+/**
+ * 确认演员过滤选择
+ */
+function confirmActorFilter() {
+    state.currentActorFilter = [...state.tempSelectedActors];
+    updateActorFilterDisplay();
+    closeActorFilterModal();
+    loadMovies();
+}
+
+/**
+ * 切换演员选中状态
+ */
+function toggleActorSelection(actorName) {
+    const index = state.tempSelectedActors.indexOf(actorName);
+    if (index === -1) {
+        state.tempSelectedActors.push(actorName);
+    } else {
+        state.tempSelectedActors.splice(index, 1);
+    }
+    // 更新卡片选中状态
+    const card = document.querySelector(`.actor-filter-card[data-name="${CSS.escape(actorName)}"]`);
+    if (card) {
+        card.classList.toggle('selected', state.tempSelectedActors.includes(actorName));
+        const checkbox = card.querySelector('.card-checkbox');
+        checkbox.classList.toggle('checked', state.tempSelectedActors.includes(actorName));
+    }
+}
+
+/**
+ * 渲染演员过滤列表
+ */
+function renderActorFilterList() {
+    const ratingFilter = elements.actorRatingFilter.value ? parseInt(elements.actorRatingFilter.value, 10) : null;
+    const favoriteFilter = elements.actorFavoriteFilter.checked;
+    const searchKeyword = state.actorFilterSearchKeyword || '';
+
+    // 过滤演员
+    let filteredActors = state.actors.filter(actor => {
+        // 评分过滤
+        if (ratingFilter !== null && actor.rating !== ratingFilter) {
+            return false;
+        }
+        // 收藏过滤
+        if (favoriteFilter && !actor.favorites) {
+            return false;
+        }
+        // 搜索过滤
+        if (searchKeyword) {
+            const keyword = searchKeyword.toLowerCase();
+            const nameMatch = actor.name && actor.name.toLowerCase().includes(keyword);
+            const nicknameMatch = actor.nickname && actor.nickname.toLowerCase().includes(keyword);
+            const birthdayMatch = actor.birthday && actor.birthday.includes(keyword);
+            if (!nameMatch && !nicknameMatch && !birthdayMatch) {
+                return false;
+            }
+        }
+        return true;
+    });
+
+    // 按姓名排序
+    filteredActors.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+    // 渲染卡片
+    if (filteredActors.length === 0) {
+        elements.actorFilterList.innerHTML = '<div class="actor-filter-empty">暂无演员</div>';
+        return;
+    }
+
+    elements.actorFilterList.innerHTML = filteredActors.map(actor => {
+        const isSelected = state.tempSelectedActors.includes(actor.name);
+        const ratingStars = actor.rating ? '⭐'.repeat(actor.rating) : '';
+        const photoHtml = actor.photo
+            ? `<img src="file://${actor.photo}" alt="${escapeHtml(actor.name)}">`
+            : `<div class="card-placeholder">${escapeHtml(actor.name ? actor.name.charAt(0) : '?')}</div>`;
+        const favoriteClass = actor.favorites ? 'favorited' : '';
+
+        return `
+            <div class="actor-filter-card ${isSelected ? 'selected' : ''}" data-name="${escapeHtml(actor.name)}">
+                <div class="card-checkbox ${isSelected ? 'checked' : ''}" data-actor-name="${escapeHtml(actor.name)}"></div>
+                <span class="card-favorite ${favoriteClass}" data-actor-favorite="${escapeHtml(actor.name)}">${actor.favorites ? '❤' : '♡'}</span>
+                <div class="card-photo">${photoHtml}</div>
+                ${ratingStars ? `<div class="card-rating">${ratingStars}</div>` : ''}
+                <div class="card-info">
+                    <div class="card-name">${escapeHtml(actor.name)}</div>
+                    <div class="card-birthday">${formatBirthday(actor.birthday)}</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    // 绑定卡片点击事件
+    elements.actorFilterList.querySelectorAll('.actor-filter-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const actorName = card.dataset.name;
+            toggleActorSelection(actorName);
+        });
+    });
+
+    // 绑定复选框点击事件（阻止冒泡）
+    elements.actorFilterList.querySelectorAll('.card-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const actorName = checkbox.dataset.actorName;
+            toggleActorSelection(actorName);
+        });
+    });
+
+    // 绑定收藏按钮点击事件（阻止冒泡）
+    elements.actorFilterList.querySelectorAll('.card-favorite').forEach(favoriteBtn => {
+        favoriteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const actorName = favoriteBtn.dataset.actorFavorite;
+            toggleActorFavorite(actorName);
+        });
+    });
+}
+
+/**
+ * 切换演员收藏状态（在模态窗中快速收藏）
+ */
+async function toggleActorFavorite(actorName) {
+    const actor = state.actors.find(a => a.name === actorName);
+    if (!actor) return;
+
+    try {
+        const result = await window.electronAPI.updateActor({
+            oldName: actor.name,
+            newActor: {
+                name: actor.name,
+                rating: actor.rating,
+                favorites: !actor.favorites
+            }
+        });
+
+        if (result.error) {
+            console.error('Error updating actor favorite:', result.error);
+            return;
+        }
+
+        // 更新本地状态
+        actor.favorites = !actor.favorites;
+
+        // 更新卡片显示
+        const card = document.querySelector(`.actor-filter-card[data-name="${CSS.escape(actorName)}"]`);
+        if (card) {
+            const favoriteBtn = card.querySelector('.card-favorite');
+            favoriteBtn.classList.toggle('favorited', actor.favorites);
+            favoriteBtn.textContent = actor.favorites ? '❤' : '♡';
+        }
+    } catch (error) {
+        console.error('Error toggling actor favorite:', error);
+    }
+}
+
+/**
+ * 更新演员过滤下拉框显示
+ */
+function updateActorFilterDisplay() {
+    const count = state.currentActorFilter.length;
+    if (count === 0) {
+        elements.actorFilter.value = '';
+    } else {
+        // 设置显示为"选择演员(N)"
+        elements.actorFilter.innerHTML = `
+            <option value="">全部演员</option>
+            <option value="select" selected>选择演员(${count})</option>
+        `;
+    }
+}
+
+/**
+ * 更新演员过滤搜索清除按钮可见性
+ */
+function updateActorFilterClearButton() {
+    if (state.actorFilterSearchKeyword) {
+        elements.actorFilterClearBtn.style.display = 'block';
+    } else {
+        elements.actorFilterClearBtn.style.display = 'none';
+    }
+}
+
+/**
+ * 格式化生日显示
+ */
+function formatBirthday(birthday) {
+    if (!birthday) return '';
+    const date = new Date(birthday);
+    return date.toLocaleDateString('zh-CN', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    });
+}
+
+/**
  * 加载设置
  */
 async function loadSettings() {
@@ -468,7 +703,7 @@ function updateCategoryFilter(categories) {
  */
 function renderSidebar(categories) {
     let html = `
-        <li class="category-item active" data-category="">
+        <li class="category-item${state.currentCategory === '' ? ' active' : ''}" data-category="">
             <span class="category-name">全部分类</span>
             <span class="movie-count">${getTotalMovieCount(categories)}</span>
         </li>
@@ -476,7 +711,7 @@ function renderSidebar(categories) {
 
     categories.forEach(category => {
         html += `
-            <li class="category-item" data-category="${category.id}">
+            <li class="category-item${state.currentCategory === category.id ? ' active' : ''}" data-category="${category.id}">
                 <span class="category-name">${category.name}</span>
                 <span class="movie-count">${category.movieCount}</span>
             </li>
@@ -656,7 +891,8 @@ async function loadMovies() {
         const filterOptions = {
             sortBy: state.currentSort.split('-')[0],
             sortOrder: state.currentSort.split('-')[1],
-            tagId: state.currentTag || undefined
+            tagId: state.currentTag || undefined,
+            actors: state.currentActorFilter.length > 0 ? state.currentActorFilter : undefined
         };
 
         if (state.searchKeyword) {
@@ -667,7 +903,8 @@ async function loadMovies() {
                     category: state.currentCategory,
                     sort: state.currentSort,
                     tagId: filterOptions.tagId,
-                    rating: filterOptions.rating
+                    rating: filterOptions.rating,
+                    actors: filterOptions.actors
                 }
             });
         } else if (state.currentCategory) {
@@ -677,7 +914,8 @@ async function loadMovies() {
                 sortBy: filterOptions.sortBy,
                 sortOrder: filterOptions.sortOrder,
                 tagId: filterOptions.tagId,
-                rating: filterOptions.rating
+                rating: filterOptions.rating,
+                actors: filterOptions.actors
             });
         } else {
             // 加载所有电影
@@ -685,7 +923,8 @@ async function loadMovies() {
                 sortBy: filterOptions.sortBy,
                 sortOrder: filterOptions.sortOrder,
                 tagId: filterOptions.tagId,
-                rating: filterOptions.rating
+                rating: filterOptions.rating,
+                actors: filterOptions.actors
             });
         }
 
@@ -698,7 +937,7 @@ async function loadMovies() {
         renderMovies(movies);
 
         // 检查是否有任何筛选条件激活
-        const filtersActive = state.searchKeyword || state.currentTag;
+        const filtersActive = state.searchKeyword || state.currentTag || state.currentActorFilter.length > 0;
 
         // 更新侧边栏分类计数
         if (filtersActive) {
@@ -706,7 +945,7 @@ async function loadMovies() {
             state.sidebarSearchActive = true;
         } else if (state.sidebarSearchActive) {
             // 清除筛选后恢复原始侧边栏
-            updateSidebar(state.categories);
+            renderSidebar(state.categories);
             state.sidebarSearchActive = false;
         }
     } catch (error) {
@@ -1094,6 +1333,74 @@ function bindEvents() {
     elements.tagFilter.addEventListener('change', (e) => {
         state.currentTag = e.target.value;
         loadMovies();
+    });
+
+    // 演员筛选
+    elements.actorFilter.addEventListener('change', (e) => {
+        const value = e.target.value;
+        if (value === '') {
+            // 选择"全部演员"，清除筛选
+            state.currentActorFilter = [];
+            // 恢复下拉框完整选项
+            elements.actorFilter.innerHTML = `
+                <option value="" selected>全部演员</option>
+                <option value="select">选择演员</option>
+            `;
+            loadMovies();
+        } else if (value === 'select') {
+            // 选择"选择演员"，打开模态窗
+            openActorFilterModal();
+        }
+    });
+
+    // 演员过滤模态窗关闭
+    elements.closeActorFilter.addEventListener('click', closeActorFilterModal);
+    elements.cancelActorFilter.addEventListener('click', closeActorFilterModal);
+    elements.actorFilterModal.addEventListener('click', (e) => {
+        if (e.target === elements.actorFilterModal) {
+            closeActorFilterModal();
+        }
+    });
+
+    // 演员过滤模态窗确认
+    elements.confirmActorFilter.addEventListener('click', confirmActorFilter);
+
+    // 演员过滤评分筛选
+    elements.actorRatingFilter.addEventListener('change', renderActorFilterList);
+
+    // 演员过滤收藏筛选
+    elements.actorFavoriteFilter.addEventListener('change', renderActorFilterList);
+
+    // 演员过滤搜索
+    elements.actorFilterSearchBtn.addEventListener('click', () => {
+        const keyword = elements.actorFilterSearchInput.value.trim();
+        state.actorFilterSearchKeyword = keyword;
+        updateActorFilterClearButton();
+        renderActorFilterList();
+    });
+
+    elements.actorFilterSearchInput.addEventListener('input', () => {
+        const keyword = elements.actorFilterSearchInput.value.trim();
+        state.actorFilterSearchKeyword = keyword;
+        updateActorFilterClearButton();
+        renderActorFilterList();
+    });
+
+    elements.actorFilterSearchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            const keyword = e.target.value.trim();
+            state.actorFilterSearchKeyword = keyword;
+            updateActorFilterClearButton();
+            renderActorFilterList();
+        }
+    });
+
+    // 清除演员过滤搜索
+    elements.actorFilterClearBtn.addEventListener('click', () => {
+        elements.actorFilterSearchInput.value = '';
+        state.actorFilterSearchKeyword = '';
+        updateActorFilterClearButton();
+        renderActorFilterList();
     });
 
     // 搜索

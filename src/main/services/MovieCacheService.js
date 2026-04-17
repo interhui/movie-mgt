@@ -297,6 +297,15 @@ class MovieCacheService {
             }
         }
 
+        // 演员筛选（多选）- OR逻辑：电影包含任一指定的演员即返回
+        if (filters.actors && Array.isArray(filters.actors) && filters.actors.length > 0) {
+            results = results.filter(movie =>
+                movie.actors && movie.actors.some(actorName =>
+                    filters.actors.includes(actorName)
+                )
+            );
+        }
+
         // 排序
         results = this.sortMovies(results, filters.sortBy, filters.sortOrder);
 

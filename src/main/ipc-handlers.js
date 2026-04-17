@@ -187,9 +187,9 @@ function setupIpcHandlers(services) {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-            const { category, status, sortBy, sortOrder, tagId, rating } = filters || {};
+            const { category, status, sortBy, sortOrder, tagId, rating, actors } = filters || {};
             const categoryFilter = category;
-            const movies = await movieService.getMoviesByCategory(categoryFilter, moviesDir, { status, sortBy, sortOrder, tagId, rating });
+            const movies = await movieService.getMoviesByCategory(categoryFilter, moviesDir, { status, sortBy, sortOrder, tagId, rating, actors });
             return movies;
         } catch (error) {
             console.error('Error getting movies by category:', error);
@@ -216,8 +216,8 @@ function setupIpcHandlers(services) {
         try {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
-            const { sortBy, sortOrder, tagId, rating } = filters || {};
-            const movies = await movieService.getAllMovies(moviesDir, { sortBy, sortOrder, tagId, rating });
+            const { sortBy, sortOrder, tagId, rating, actors } = filters || {};
+            const movies = await movieService.getAllMovies(moviesDir, { sortBy, sortOrder, tagId, rating, actors });
             return movies;
         } catch (error) {
             console.error('Error getting all movies:', error);

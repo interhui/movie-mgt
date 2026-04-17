@@ -33,6 +33,12 @@
                         <option value="">全部标签</option>
                     </select>
                 </div>
+                <div class="filter-group">
+                    <select id="actor-filter" class="filter-select">
+                        <option value="">全部演员</option>
+                        <option value="select">选择演员</option>
+                    </select>
+                </div>
             </div>
             <div class="toolbar-right">
                 <button id="batch-add-btn" class="btn btn-secondary" style="display: none;">添加到盒子</button>
@@ -650,6 +656,54 @@
                 <div id="refresh-progress-bar-container" style="background: #e0e0e0; border-radius: 4px; height: 8px; overflow: hidden;">
                     <div id="refresh-progress-bar" style="background: #4CAF50; height: 100%; width: 0%; transition: width 0.2s;"></div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 演员过滤模态窗 -->
+    <div id="actor-filter-modal" class="modal" style="display: none;">
+        <div class="modal-content actor-filter-modal-content">
+            <div class="modal-header">
+                <h2>演员筛选选择</h2>
+                <button class="close-btn" id="close-actor-filter">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- 工具条 -->
+                <div class="actor-filter-toolbar">
+                    <div class="actor-filter-left">
+                        <div class="filter-group">
+                            <select id="actor-rating-filter" class="filter-select">
+                                <option value="">全部评分</option>
+                                <option value="5">⭐⭐⭐⭐⭐</option>
+                                <option value="4">⭐⭐⭐⭐</option>
+                                <option value="3">⭐⭐⭐</option>
+                                <option value="2">⭐⭐</option>
+                                <option value="1">⭐</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>
+                                <input type="checkbox" id="actor-favorite-filter">
+                                仅显示收藏
+                            </label>
+                        </div>
+                    </div>
+                    <div class="actor-filter-right">
+                        <div class="search-box actor-filter-search">
+                            <input type="text" id="actor-filter-search-input" placeholder="搜索演员（姓名、昵称）...">
+                            <button id="actor-filter-search-btn" class="icon-btn">🔍</button>
+                            <button id="actor-filter-clear-btn" class="icon-btn clear-search-btn" style="display: none;">✕</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 演员卡片列表 -->
+                <div class="actor-filter-list" id="actor-filter-list">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-actor-filter" class="btn btn-primary">确定</button>
+                <button id="cancel-actor-filter" class="btn btn-secondary">取消</button>
             </div>
         </div>
     </div>

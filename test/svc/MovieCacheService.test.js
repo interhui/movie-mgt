@@ -17,6 +17,7 @@ describe('MovieCacheService', () => {
                 category: 'movie',
                 userRating: 5,
                 tags: ['action'],
+                actors: ['李连杰', '成龙'],
                 year: 2024
             },
             {
@@ -26,6 +27,7 @@ describe('MovieCacheService', () => {
                 category: 'movie',
                 userRating: 3,
                 tags: ['drama'],
+                actors: ['周星驰', '刘亦菲'],
                 year: 2023
             },
             {
@@ -35,6 +37,7 @@ describe('MovieCacheService', () => {
                 category: 'tv',
                 userRating: 4,
                 tags: ['drama'],
+                actors: ['李连杰', '周星驰'],
                 year: 2024
             }
         ];
@@ -182,6 +185,49 @@ describe('MovieCacheService', () => {
         test('SVC-CACHE-022: 无匹配返回空', () => {
             const results = service.searchMovies(null, { rating: 1 });
             expect(results).toEqual([]);
+        });
+
+        test('SVC-CACHE-023: 演员筛选-单演员', () => {
+            const results = service.searchMovies(null, { actors: ['李连杰'] });
+            expect(results.length).toBe(2);
+            expect(results[0].actors).toContain('李连杰');
+            expect(results[1].actors).toContain('李连杰');
+        });
+
+        test('SVC-CACHE-024: 演员筛选-多演员', () => {
+            // OR逻辑：返回包含任一演员的电影
+            // movie-1包含李连杰，movie-2包含刘亦菲，movie-3包含李连杰
+            const results = service.searchMovies(null, { actors: ['李连杰', '刘亦菲'] });
+            expect(results.length).toBe(3);
+        });
+
+        test('SVC-CACHE-025: 演员筛选-空数组返回全部', () => {
+            const results = service.searchMovies(null, { actors: [] });
+            expect(results.length).toBe(3);
+        });
+
+        test('SVC-CACHE-026: 演员筛选-无匹配演员返回空', () => {
+            const results = service.searchMovies(null, { actors: ['不存在的演员'] });
+            expect(results).toEqual([]);
+        });
+
+        test('SVC-CACHE-027: 组合筛选-演员+分类', () => {
+            const results = service.searchMovies(null, { actors: ['李连杰'], category: 'movie' });
+            expect(results.length).toBe(1);
+            expect(results[0].title).toBe('Action Movie');
+        });
+
+        test('SVC-CACHE-028: 组合筛选-演员+标签', () => {
+            // movie-2和movie-3都包含周星驰且标签是drama
+            const results = service.searchMovies(null, { actors: ['周星驰'], tagId: 'drama' });
+            expect(results.length).toBe(2);
+            expect(results.map(r => r.title).sort()).toEqual(['Drama Movie', 'TV Show']);
+        });
+
+        test('SVC-CACHE-029: 组合筛选-演员+评分', () => {
+            const results = service.searchMovies(null, { actors: ['李连杰'], rating: 5 });
+            expect(results.length).toBe(1);
+            expect(results[0].userRating).toBe(5);
         });
     });
 
