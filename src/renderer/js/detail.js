@@ -16,6 +16,10 @@ let movieDataLoaded = false;
 let currentTab = 'movie-info';
 let selectedFileIndex = -1;
 let editFileset = [];
+// 演员选择弹窗状态
+let actorSelectorSearchKeyword = '';
+let actorSelectorCurrentPage = 1;
+const ACTOR_SELECTOR_PAGE_SIZE = 10;
 
 // DOM 元素
 const elements = {
@@ -51,6 +55,12 @@ const elements = {
     actorSelectorModal: document.getElementById('actor-selector-modal'),
     closeActorSelector: document.getElementById('close-actor-selector'),
     actorSelectorList: document.getElementById('actor-selector-list'),
+    actorSelectorSearchInput: document.getElementById('actor-selector-search-input'),
+    actorSelectorSearchBtn: document.getElementById('actor-selector-search-btn'),
+    actorSelectorClearBtn: document.getElementById('actor-selector-clear-btn'),
+    actorSelectorPrevBtn: document.getElementById('actor-selector-prev-btn'),
+    actorSelectorNextBtn: document.getElementById('actor-selector-next-btn'),
+    actorSelectorPageInfo: document.getElementById('actor-selector-page-info'),
     confirmActorSelection: document.getElementById('confirm-actor-selection'),
     cancelActorSelection: document.getElementById('cancel-actor-selection'),
     deleteBtn: document.getElementById('delete-btn'),
@@ -244,21 +254,110 @@ function openActorSelectorModal() {
         return;
     }
 
-    // 渲染演员选择列表
-    let html = '';
-    actorsCache.forEach(actor => {
-        const isSelected = selectedActors.includes(actor.name);
-        html += `
-            <label class="tag-checkbox ${isSelected ? 'selected' : ''}">
-                <input type="checkbox" value="${actor.name}" ${isSelected ? 'checked' : ''} onclick="toggleActorInSelection('${actor.name}')">
-                <span>${actor.name}</span>
-                ${actor.memo ? `<span style="color: var(--text-secondary); font-size: 12px;"> - ${actor.memo}</span>` : ''}
-            </label>
-        `;
-    });
-    elements.actorSelectorList.innerHTML = html;
+    // 重置搜索和分页状态
+    actorSelectorSearchKeyword = '';
+    actorSelectorCurrentPage = 1;
+
+    // 清空搜索框
+    if (elements.actorSelectorSearchInput) {
+        elements.actorSelectorSearchInput.value = '';
+    }
+
+    // 渲染演员列表
+    renderActorSelectorList();
 
     elements.actorSelectorModal.style.display = 'flex';
+}
+
+/**
+ * 渲染演员选择列表
+ */
+function renderActorSelectorList() {
+    if (!elements.actorSelectorList) {
+        console.error('Actor selector list element not found');
+        return;
+    }
+
+    // 根据搜索关键字过滤演员
+    let filteredActors = actorsCache;
+    if (actorSelectorSearchKeyword) {
+        const keyword = actorSelectorSearchKeyword.toLowerCase();
+        filteredActors = actorsCache.filter(actor => {
+            const nameMatch = actor.name && actor.name.toLowerCase().includes(keyword);
+            const nicknameMatch = actor.nickname && actor.nickname.toLowerCase().includes(keyword);
+            return nameMatch || nicknameMatch;
+        });
+    }
+
+    // 计算分页
+    const totalActors = filteredActors.length;
+    const totalPages = Math.ceil(totalActors / ACTOR_SELECTOR_PAGE_SIZE) || 1;
+    if (actorSelectorCurrentPage > totalPages) {
+        actorSelectorCurrentPage = totalPages;
+    }
+
+    // 截取当前页的数据
+    const startIndex = (actorSelectorCurrentPage - 1) * ACTOR_SELECTOR_PAGE_SIZE;
+    const endIndex = startIndex + ACTOR_SELECTOR_PAGE_SIZE;
+    const pageActors = filteredActors.slice(startIndex, endIndex);
+
+    // 生成表格HTML
+    let html = `
+        <table>
+            <thead>
+                <tr>
+                    <th class="actor-selector-col-name">姓名</th>
+                    <th class="actor-selector-col-nickname">昵称</th>
+                    <th class="actor-selector-col-birthday">生日</th>
+                    <th class="actor-selector-col-memo">备注</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    if (pageActors.length === 0) {
+        html += `
+            <tr>
+                <td colspan="4" style="text-align: center; color: var(--text-secondary);">暂无演员数据</td>
+            </tr>
+        `;
+    } else {
+        pageActors.forEach(actor => {
+            const isSelected = selectedActors.includes(actor.name);
+            html += `
+                <tr class="${isSelected ? 'selected' : ''}" data-actor-name="${actor.name}" onclick="toggleActorInSelection('${actor.name}')">
+                    <td class="actor-selector-col-name">${escapeHtml(actor.name)}</td>
+                    <td class="actor-selector-col-nickname">${escapeHtml(actor.nickname || '-')}</td>
+                    <td class="actor-selector-col-birthday">${escapeHtml(actor.birthday || '-')}</td>
+                    <td class="actor-selector-col-memo">${escapeHtml(actor.memo || '-')}</td>
+                </tr>
+            `;
+        });
+    }
+
+    html += '</tbody></table>';
+
+    elements.actorSelectorList.innerHTML = html;
+
+    // 更新分页信息
+    updateActorSelectorPagination(totalPages);
+}
+
+/**
+ * 更新演员选择分页组件
+ */
+function updateActorSelectorPagination(totalPages) {
+    if (!elements.actorSelectorPageInfo) return;
+
+    elements.actorSelectorPageInfo.textContent = `第 ${actorSelectorCurrentPage} / ${totalPages} 页`;
+
+    // 更新翻页按钮状态
+    if (elements.actorSelectorPrevBtn) {
+        elements.actorSelectorPrevBtn.disabled = actorSelectorCurrentPage <= 1;
+    }
+    if (elements.actorSelectorNextBtn) {
+        elements.actorSelectorNextBtn.disabled = actorSelectorCurrentPage >= totalPages;
+    }
 }
 
 /**
@@ -273,14 +372,13 @@ function toggleActorInSelection(actorName) {
     }
     // 更新演员显示
     renderSelectedActors();
-    // 更新选择弹窗中的复选框状态
-    const checkbox = document.querySelector(`#actor-selector-list input[value="${actorName}"]`);
-    if (checkbox) {
-        const label = checkbox.closest('.tag-checkbox');
+    // 更新列表中的选中状态
+    const row = document.querySelector(`#actor-selector-list tr[data-actor-name="${actorName}"]`);
+    if (row) {
         if (selectedActors.includes(actorName)) {
-            label.classList.add('selected');
+            row.classList.add('selected');
         } else {
-            label.classList.remove('selected');
+            row.classList.remove('selected');
         }
     }
 }
@@ -299,6 +397,16 @@ function closeActorSelectorModal() {
  */
 function confirmActorSelection() {
     closeActorSelectorModal();
+}
+
+/**
+ * HTML转义，防止XSS
+ */
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 /**
@@ -1474,6 +1582,71 @@ function bindEvents() {
         elements.actorSelectorModal.addEventListener('click', (e) => {
             if (e.target === elements.actorSelectorModal) {
                 closeActorSelectorModal();
+            }
+        });
+    }
+
+    // 演员选择弹窗搜索事件
+    if (elements.actorSelectorSearchBtn) {
+        elements.actorSelectorSearchBtn.addEventListener('click', () => {
+            actorSelectorSearchKeyword = elements.actorSelectorSearchInput.value.trim();
+            actorSelectorCurrentPage = 1;
+            renderActorSelectorList();
+        });
+    }
+
+    if (elements.actorSelectorClearBtn) {
+        elements.actorSelectorClearBtn.addEventListener('click', () => {
+            elements.actorSelectorSearchInput.value = '';
+            actorSelectorSearchKeyword = '';
+            actorSelectorCurrentPage = 1;
+            elements.actorSelectorClearBtn.style.display = 'none';
+            renderActorSelectorList();
+        });
+    }
+
+    if (elements.actorSelectorSearchInput) {
+        elements.actorSelectorSearchInput.addEventListener('input', () => {
+            if (elements.actorSelectorClearBtn) {
+                elements.actorSelectorClearBtn.style.display = elements.actorSelectorSearchInput.value ? 'block' : 'none';
+            }
+        });
+
+        elements.actorSelectorSearchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                actorSelectorSearchKeyword = elements.actorSelectorSearchInput.value.trim();
+                actorSelectorCurrentPage = 1;
+                renderActorSelectorList();
+            }
+        });
+    }
+
+    // 演员选择弹窗分页事件
+    if (elements.actorSelectorPrevBtn) {
+        elements.actorSelectorPrevBtn.addEventListener('click', () => {
+            if (actorSelectorCurrentPage > 1) {
+                actorSelectorCurrentPage--;
+                renderActorSelectorList();
+            }
+        });
+    }
+
+    if (elements.actorSelectorNextBtn) {
+        elements.actorSelectorNextBtn.addEventListener('click', () => {
+            // 计算总页数
+            let filteredActors = actorsCache;
+            if (actorSelectorSearchKeyword) {
+                const keyword = actorSelectorSearchKeyword.toLowerCase();
+                filteredActors = actorsCache.filter(actor => {
+                    const nameMatch = actor.name && actor.name.toLowerCase().includes(keyword);
+                    const nicknameMatch = actor.nickname && actor.nickname.toLowerCase().includes(keyword);
+                    return nameMatch || nicknameMatch;
+                });
+            }
+            const totalPages = Math.ceil(filteredActors.length / ACTOR_SELECTOR_PAGE_SIZE) || 1;
+            if (actorSelectorCurrentPage < totalPages) {
+                actorSelectorCurrentPage++;
+                renderActorSelectorList();
             }
         });
     }

@@ -1359,6 +1359,168 @@ body {
     font-size: 14px;
 }
 
+/* ==================== 演员选择列表样式 ==================== */
+
+/* 演员选择模态窗内容 - 继承 modal-large 并定制 */
+.actor-selector-modal-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.actor-selector-modal-content .modal-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+    min-height: 0;
+    max-height: none;
+}
+
+/* 演员选择搜索框 */
+.actor-selector-search {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.actor-selector-search .search-box {
+    width: 300px;
+}
+
+.actor-selector-search .search-box input {
+    width: 100%;
+}
+
+/* 演员选择列表容器 */
+.actor-selector-list {
+    flex: 1;
+    overflow-y: auto;
+    font-size: 13px;
+    min-height: 200px;
+    max-height: calc(100vh - 380px);
+}
+
+.actor-selector-list table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+/* 演员选择列表表头 */
+.actor-selector-list thead tr {
+    background-color: var(--sidebar-bg);
+    height: 40px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.actor-selector-list th {
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--border-color);
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.actor-selector-list th.actor-selector-col-name {
+    width: 150px;
+}
+
+.actor-selector-list th.actor-selector-col-nickname {
+    width: 120px;
+}
+
+.actor-selector-list th.actor-selector-col-birthday {
+    width: 100px;
+}
+
+.actor-selector-list th.actor-selector-col-memo {
+    width: auto;
+}
+
+/* 演员选择列表行 */
+.actor-selector-list tbody tr {
+    height: 50px;
+    cursor: pointer;
+}
+
+.actor-selector-list tbody tr:hover {
+    background-color: var(--hover-bg);
+}
+
+.actor-selector-list tbody tr.selected {
+    background-color: rgba(26, 115, 232, 0.15);
+    outline: 2px solid var(--primary-color);
+    outline-offset: -2px;
+}
+
+.actor-selector-list tbody tr.selected:hover {
+    background-color: rgba(26, 115, 232, 0.25);
+}
+
+.actor-selector-list td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.actor-selector-list td.actor-selector-col-name {
+    font-weight: 500;
+}
+
+.actor-selector-list td.actor-selector-col-nickname {
+    color: var(--text-secondary);
+}
+
+.actor-selector-list td.actor-selector-col-birthday {
+    color: var(--text-secondary);
+}
+
+.actor-selector-list td.actor-selector-col-memo {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.actor-selector-list td.actor-selector-col-birthday {
+    color: var(--text-secondary);
+}
+
+.actor-selector-list td.actor-selector-col-memo {
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+/* 演员选择分页组件 */
+.actor-selector-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+    flex-shrink: 0;
+}
+
+.actor-selector-pagination #actor-selector-page-info {
+    color: var(--text-secondary);
+    font-size: 13px;
+    margin-right: 8px;
+}
+
+.actor-selector-modal-content .modal-footer {
+    flex-shrink: 0;
+}
+
 /* ==================== 目录扫描样式 ==================== */
 
 .scan-type-group {
