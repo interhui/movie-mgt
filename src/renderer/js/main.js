@@ -334,12 +334,14 @@ function updateTagFilter() {
 /**
  * 打开演员过滤模态窗
  */
-function openActorFilterModal() {
+async function openActorFilterModal() {
     state.actorFilterModalVisible = true;
     state.actorFilterSearchKeyword = '';
     elements.actorFilterSearchInput.value = '';
     elements.actorRatingFilter.value = '';
     elements.actorFavoriteFilter.checked = false;
+    // 重新加载演员数据
+    await loadActors();
     // 使用之前选中的演员作为当前选中状态
     state.tempSelectedActors = [...state.currentActorFilter];
     renderActorFilterList();
