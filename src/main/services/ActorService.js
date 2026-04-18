@@ -181,6 +181,15 @@ class ActorService {
     clearCache() {
         this.actorsCache = null;
     }
+
+    /**
+     * 获取演员数量
+     * @returns {Promise<number>} 演员数量
+     */
+    async getActorCount() {
+        const actors = await this.loadActors();
+        return actors.length;
+    }
 }
 
 module.exports = ActorService;

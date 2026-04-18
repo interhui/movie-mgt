@@ -154,6 +154,15 @@ class CategoryService {
     clearCache() {
         this.categoriesCache = null;
     }
+
+    /**
+     * 获取分类数量
+     * @returns {Promise<number>} 分类数量
+     */
+    async getCategoryCount() {
+        const categories = await this.loadCategories();
+        return categories.length;
+    }
 }
 
 module.exports = CategoryService;

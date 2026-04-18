@@ -56,6 +56,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     closeDetailWindow: () => ipcRenderer.invoke('close-detail-window'),
     openBoxWindow: (boxName) => ipcRenderer.invoke('open-box-window', boxName),
     setDetailEditMode: (isEditing) => ipcRenderer.invoke('set-detail-edit-mode', isEditing),
+    openActorManagement: () => ipcRenderer.invoke('open-actor-management'),
+    openCategoryManagement: () => ipcRenderer.invoke('open-category-management'),
 
     // 文件选择对话框
     selectDirectory: () => ipcRenderer.invoke('select-directory'),

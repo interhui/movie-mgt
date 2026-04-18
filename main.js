@@ -450,6 +450,8 @@ app.whenReady().then(async () => {
         getMainWindow: () => mainWindow,
         createMovieDetailWindow,
         createBoxWindow,
+        createActorManagementWindow,
+        createCategoryManagementWindow,
         getPendingDetailMovieData: () => {
             return pendingDetailMovieData;
         },

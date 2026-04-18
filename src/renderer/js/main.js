@@ -55,9 +55,8 @@ const elements = {
     emptyState: document.getElementById('empty-state'),
     statsBar: {
         total: document.getElementById('total-movies'),
-        played: document.getElementById('played-movies'),
-        playing: document.getElementById('playing-movies'),
-        unplayed: document.getElementById('unplayed-movies')
+        actor: document.getElementById('total-actor'),
+        category: document.getElementById('total-category')
     },
     settingsModal: document.getElementById('settings-modal'),
     closeSettings: document.getElementById('close-settings'),
@@ -1316,9 +1315,8 @@ async function loadStats() {
         }
 
         elements.statsBar.total.textContent = `电影总数：${stats.totalMovies || 0}`;
-        elements.statsBar.played.textContent = `已看：${stats.watchedCount || 0}`;
-        elements.statsBar.playing.textContent = `观看中：${stats.watchingCount || 0}`;
-        elements.statsBar.unplayed.textContent = `未看：${stats.unwatchedCount || 0}`;
+        elements.statsBar.actor.textContent = `演员总数：${stats.totalActorCount || 0}`;
+        elements.statsBar.category.textContent = `分类总数：${stats.totalCategoryCount || 0}`;
     } catch (error) {
         console.error('Error loading stats:', error);
     }
@@ -1411,6 +1409,15 @@ function bindEvents() {
         state.actorFilterSearchKeyword = '';
         updateActorFilterClearButton();
         renderActorFilterList();
+    });
+
+    // 统计栏点击事件
+    elements.statsBar.actor.addEventListener('click', () => {
+        window.electronAPI.openActorManagement();
+    });
+
+    elements.statsBar.category.addEventListener('click', () => {
+        window.electronAPI.openCategoryManagement();
     });
 
     // 搜索

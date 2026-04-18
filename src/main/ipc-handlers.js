@@ -162,6 +162,8 @@ function setupIpcHandlers(services) {
         getMainWindow,
         createMovieDetailWindow,
         createBoxWindow,
+        createActorManagementWindow,
+        createCategoryManagementWindow,
         getPendingDetailMovieData,
         clearPendingDetailMovieData
     } = services;
@@ -333,6 +335,12 @@ function setupIpcHandlers(services) {
             const settings = settingsService.getSettings();
             const moviesDir = getMoviesDirPath(settings.library.moviesDir);
             const stats = await movieService.getStats(category, moviesDir);
+            // 获取演员数量
+            const totalActorCount = await actorService.getActorCount();
+            stats.totalActorCount = totalActorCount;
+            // 获取分类数量
+            const totalCategoryCount = await categoryService.getCategoryCount();
+            stats.totalCategoryCount = totalCategoryCount;
             return stats;
         } catch (error) {
             console.error('Error getting movie stats:', error);
@@ -922,6 +930,28 @@ function setupIpcHandlers(services) {
             return { success: true };
         } catch (error) {
             console.error('Error opening box window:', error);
+            return { error: error.message };
+        }
+    });
+
+    // 打开演员管理窗口
+    ipcMain.handle('open-actor-management', async () => {
+        try {
+            createActorManagementWindow();
+            return { success: true };
+        } catch (error) {
+            console.error('Error opening actor management:', error);
+            return { error: error.message };
+        }
+    });
+
+    // 打开分类管理窗口
+    ipcMain.handle('open-category-management', async () => {
+        try {
+            createCategoryManagementWindow();
+            return { success: true };
+        } catch (error) {
+            console.error('Error opening category management:', error);
             return { error: error.message };
         }
     });

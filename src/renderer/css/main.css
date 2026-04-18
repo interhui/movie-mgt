@@ -146,6 +146,16 @@ body {
     gap: 4px;
 }
 
+.stats-bar #total-actor,
+.stats-bar #total-category {
+    cursor: pointer;
+}
+
+.stats-bar #total-actor:hover,
+.stats-bar #total-category:hover {
+    color: var(--primary-color);
+}
+
 /* 主内容区 */
 .main-content {
     display: flex;

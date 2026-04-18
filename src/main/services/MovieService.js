@@ -431,18 +431,19 @@ class MovieService {
 
     /**
      * 获取电影统计数据
-     * @param {string} category - 分类筛选
+     * @param {string} category - 分类筛选（可选）
      * @param {string} moviesDir - 电影目录
      * @returns {Promise<object>} 统计数据
      */
     async getStats(category, moviesDir) {
         try {
-            let movies;
-            if (category) {
-                movies = await this.getMoviesByCategory(category, moviesDir);
-            } else {
-                movies = await this.getAllMovies(moviesDir);
-            }
+            // 获取所有电影用于统计
+            const allMovies = await this.getAllMovies(moviesDir);
+
+            // 根据分类筛选电影（如果指定了分类）
+            const movies = category
+                ? allMovies.filter(m => m.category === category)
+                : allMovies;
 
             const stats = {
                 totalMovies: movies.length,
