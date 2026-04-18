@@ -15,6 +15,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getMoviesByCategoryFromIndex: (filters) => ipcRenderer.invoke('get-movies-by-category-from-index', filters),
     getMovieDetail: (movieId) => ipcRenderer.invoke('get-movie-detail', movieId),
 
+    // 分页电影查询
+    getMoviesPaginated: (params) => ipcRenderer.invoke('get-movies-paginated', params),
+    getMoviesPaginatedFromIndex: (params) => ipcRenderer.invoke('get-movies-paginated-from-index', params),
+    getMoviesByCategoryPaginated: (params) => ipcRenderer.invoke('get-movies-by-category-paginated', params),
+
     // 电影状态管理
     saveMovieRating: (data) => ipcRenderer.invoke('save-movie-rating', data),
 

@@ -16,7 +16,8 @@ const state = {
     selectedMovies: new Set(),
     detailEditModeLocked: false,
     currentTag: '',         // 当前选中的标签筛选
-    currentRating: ''      // 当前选中的评分筛选
+    currentRating: '',      // 当前选中的评分筛选
+    lazyLoader: null        // 懒加载管理器
 };
 
 // DOM 元素
@@ -300,7 +301,12 @@ function bindEvents() {
     elements.viewToggle.addEventListener('click', () => {
         state.viewMode = state.viewMode === 'grid' ? 'list' : 'grid';
         elements.moviesGrid.classList.toggle('list-view');
-        renderMovies(state.movies);
+        // 视图切换时需要完整重新渲染
+        if (state.lazyLoader) {
+            state.lazyLoader.destroy();
+            state.lazyLoader = null;
+        }
+        renderMovies(state.movies, false);
         updateBatchButtonVisibility();
     });
 
@@ -448,27 +454,47 @@ async function loadBoxData() {
  */
 async function loadMoviesFromBox(boxData) {
     try {
+        // 提取盒子中的电影ID列表
+        const boxMovies = boxData.movie || [];
+        const boxMovieIds = boxMovies.map(bm => bm.id);
+        const boxMovieMap = new Map();
+        boxMovies.forEach(bm => {
+            boxMovieMap.set(bm.id, {
+                boxStatus: bm.status || 'unwatched',
+                boxRating: bm.rating || 0,
+                boxComment: bm.comment
+            });
+        });
+
+        // 盒子电影使用一次性加载（盒子通常不会太大，且需要完整的电影数据进行筛选）
+        await loadMoviesFromBoxAll(boxMovieIds, boxMovieMap);
+    } catch (error) {
+        console.error('Error loading movies from box:', error);
+    }
+}
+
+/**
+ * 一次性加载所有盒子电影（用于筛选模式）
+ */
+async function loadMoviesFromBoxAll(boxMovieIds, boxMovieMap) {
+    try {
         const allMovies = await window.electronAPI.getAllMovies({});
         const movies = [];
         const categoriesSet = new Set();
 
-        // 盒子中的电影是存储在 boxData.movie 中的扁平列表
-        // 结构为: { movie: [{id, comment, status, ...}], metadata: {...} }
-        const boxMovies = boxData.movie || [];
-
-        for (const boxMovie of boxMovies) {
-            // 在所有电影中查找对应的电影（根据 id 匹配）
-            // boxMovie.id 的格式应该是 "category-movieName" 或只是 "movieId"
-            const movie = allMovies.find(m => m.movieId === boxMovie.id || m.id === boxMovie.id);
-
-            if (movie) {
-                categoriesSet.add(movie.category);
-                movies.push({
-                    ...movie,
-                    boxStatus: boxMovie.status || 'unwatched',
-                    boxRating: boxMovie.rating || 0,
-                    boxComment: boxMovie.comment
-                });
+        for (const movie of allMovies) {
+            // 检查电影是否在盒子中
+            if (boxMovieIds.includes(movie.movieId) || boxMovieIds.includes(movie.id)) {
+                const boxInfo = boxMovieMap.get(movie.movieId) || boxMovieMap.get(movie.id);
+                if (boxInfo) {
+                    categoriesSet.add(movie.category);
+                    movies.push({
+                        ...movie,
+                        boxStatus: boxInfo.boxStatus,
+                        boxRating: boxInfo.boxRating,
+                        boxComment: boxInfo.boxComment
+                    });
+                }
             }
         }
 
@@ -482,13 +508,96 @@ async function loadMoviesFromBox(boxData) {
         updateCategoryFilter();
 
         // 渲染电影
-        renderMovies(movies);
+        renderMovies(movies, false);
 
         // 更新统计
         updateStats(movies);
     } catch (error) {
-        console.error('Error loading movies from box:', error);
+        console.error('Error loading all box movies:', error);
     }
+}
+
+/**
+ * 初始化盒子懒加载管理器
+ */
+async function initBoxLazyLoader(boxMovieIds, boxMovieMap) {
+    // 如果已存在懒加载器，先销毁
+    if (state.lazyLoader) {
+        state.lazyLoader.destroy();
+    }
+
+    const sortOptions = {
+        sortBy: state.currentSort.split('-')[0],
+        sortOrder: state.currentSort.split('-')[1]
+    };
+
+    // 用于存储已添加到盒子的电影ID（避免重复）
+    const addedMovieIds = new Set();
+
+    // 获取滚动容器（.movie-wall 或 #box-movie-wall）
+    const scrollContainer = document.getElementById('box-movie-wall') || document.getElementById('movie-wall');
+
+    state.lazyLoader = new LazyLoader({
+        pageSize: 100,
+        scrollContainer: scrollContainer,
+        loadPage: async (page, pageSize) => {
+            // 调用分页API获取电影
+            const result = await window.electronAPI.getMoviesPaginated({
+                page,
+                pageSize,
+                sortBy: sortOptions.sortBy,
+                sortOrder: sortOptions.sortOrder
+            });
+
+            if (result && result.movies) {
+                // 过滤出盒子中的电影，并添加盒子信息
+                const filteredMovies = [];
+                const categoriesSet = new Set();
+
+                for (const movie of result.movies) {
+                    const boxInfo = boxMovieMap.get(movie.movieId) || boxMovieMap.get(movie.id);
+                    if (boxInfo && !addedMovieIds.has(movie.movieId || movie.id)) {
+                        addedMovieIds.add(movie.movieId || movie.id);
+                        filteredMovies.push({
+                            ...movie,
+                            boxStatus: boxInfo.boxStatus,
+                            boxRating: boxInfo.boxRating,
+                            boxComment: boxInfo.boxComment
+                        });
+                        categoriesSet.add(movie.category);
+                    }
+                }
+
+                // 更新分类列表
+                categoriesSet.forEach(cat => {
+                    if (!state.categories.includes(cat)) {
+                        state.categories.push(cat);
+                    }
+                });
+
+                return {
+                    ...result,
+                    movies: filteredMovies,
+                    total: boxMovieIds.length  // 使用盒子电影总数作为总数
+                };
+            }
+
+            return result;
+        },
+        onRender: (movies, isAppend) => {
+            renderMovies(movies, isAppend);
+            // 更新分类列表
+            updateCategoryList();
+            updateCategoryFilter();
+        },
+        onComplete: () => {
+            console.log('All box movies loaded');
+            updateStats(state.movies);
+        },
+        onError: (error) => {
+            console.error('Box LazyLoader error:', error);
+        }
+    });
 }
 
 /**
@@ -626,8 +735,10 @@ function updateCategoryFilter() {
 
 /**
  * 渲染电影列表
+ * @param {Array} movies - 电影列表
+ * @param {boolean} isAppend - 是否追加模式（true=追加，false=替换）
  */
-function renderMovies(movies) {
+function renderMovies(movies, isAppend = false) {
     // 应用过滤
     let filteredMovies = movies;
 
@@ -673,9 +784,11 @@ function renderMovies(movies) {
     filteredMovies = sortMovies(filteredMovies, sortBy, sortOrder);
 
     if (!filteredMovies || filteredMovies.length === 0) {
-        elements.moviesGrid.innerHTML = '';
-        elements.moviesGrid.classList.remove('list-view');
-        elements.emptyState.style.display = 'flex';
+        if (!isAppend) {
+            elements.moviesGrid.innerHTML = '';
+            elements.moviesGrid.classList.remove('list-view');
+            elements.emptyState.style.display = 'flex';
+        }
         return;
     }
 
@@ -683,24 +796,27 @@ function renderMovies(movies) {
 
     let html = '';
 
-    if (state.viewMode === 'list') {
-        // 列表视图
-        html += `
-            <div class="list-view-header">
-                <div class="movie-checkbox">
-                    <input type="checkbox" id="select-all" ${state.selectedMovies.size === filteredMovies.length && filteredMovies.length > 0 ? 'checked' : ''}>
+    // 非追加模式时，需要渲染表头
+    if (!isAppend) {
+        if (state.viewMode === 'list') {
+            // 列表视图
+            html += `
+                <div class="list-view-header">
+                    <div class="movie-checkbox">
+                        <input type="checkbox" id="select-all" ${state.selectedMovies.size === filteredMovies.length && filteredMovies.length > 0 ? 'checked' : ''}>
+                    </div>
+                    <div class="movie-action-col">操作</div>
+                    <div class="movie-icon"></div>
+                    <div class="movie-id-col">电影ID</div>
+                    <div class="movie-name">名称</div>
+                    <div class="movie-actors-col">主演</div>
+                    <div class="movie-publish-date">上映时间</div>
+                    <div class="movie-publisher-col">发行商</div>
+                    <div class="movie-status">状态</div>
+                    <div class="movie-rating">评分</div>
                 </div>
-                <div class="movie-action-col">操作</div>
-                <div class="movie-icon"></div>
-                <div class="movie-id-col">电影ID</div>
-                <div class="movie-name">名称</div>
-                <div class="movie-actors-col">主演</div>
-                <div class="movie-publish-date">上映时间</div>
-                <div class="movie-publisher-col">发行商</div>
-                <div class="movie-status">状态</div>
-                <div class="movie-rating">评分</div>
-            </div>
-        `;
+            `;
+        }
     }
 
     html += filteredMovies.map(movie => {
@@ -755,7 +871,13 @@ function renderMovies(movies) {
         }
     }).join('');
 
-    elements.moviesGrid.innerHTML = html;
+    if (isAppend) {
+        // 追加模式：向现有内容追加
+        elements.moviesGrid.insertAdjacentHTML('beforeend', html);
+    } else {
+        // 替换模式：替换整个内容
+        elements.moviesGrid.innerHTML = html;
+    }
 
     // 绑定点击事件
     document.querySelectorAll('.box-movie-card').forEach(card => {
@@ -797,7 +919,7 @@ function renderMovies(movies) {
             } else {
                 state.selectedMovies.clear();
             }
-            renderMovies(state.movies);
+            renderMovies(state.movies, false);
             updateBatchButtonVisibility();
         });
     }

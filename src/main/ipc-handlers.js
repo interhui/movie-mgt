@@ -241,6 +241,68 @@ function setupIpcHandlers(services) {
         }
     });
 
+    // 获取分页电影列表（从缓存）
+    ipcMain.handle('get-movies-paginated', async (event, params) => {
+        try {
+            const settings = settingsService.getSettings();
+            const moviesDir = getMoviesDirPath(settings.library.moviesDir);
+            const { page, pageSize, sortBy, sortOrder, category, tagId, rating, actors } = params || {};
+            const result = await movieService.getMoviesPaginated(moviesDir, {
+                page: page || 1,
+                pageSize: pageSize || 100,
+                sortBy,
+                sortOrder,
+                category,
+                tagId,
+                rating,
+                actors
+            });
+            return result;
+        } catch (error) {
+            console.error('Error getting movies paginated:', error);
+            return { error: error.message };
+        }
+    });
+
+    // 获取分页电影列表（从index.json快速加载）
+    ipcMain.handle('get-movies-paginated-from-index', async (event, params) => {
+        try {
+            const settings = settingsService.getSettings();
+            const moviesDir = getMoviesDirPath(settings.library.moviesDir);
+            const { page, pageSize, sortBy, sortOrder } = params || {};
+            const result = await movieService.getMoviesPaginatedFromIndex(moviesDir, {
+                page: page || 1,
+                pageSize: pageSize || 100,
+                sortBy,
+                sortOrder
+            });
+            return result;
+        } catch (error) {
+            console.error('Error getting movies paginated from index:', error);
+            return { error: error.message };
+        }
+    });
+
+    // 获取分页电影列表（按分类）
+    ipcMain.handle('get-movies-by-category-paginated', async (event, params) => {
+        try {
+            const settings = settingsService.getSettings();
+            const moviesDir = getMoviesDirPath(settings.library.moviesDir);
+            const { category, page, pageSize, sortBy, sortOrder } = params || {};
+            const result = await movieService.getMoviesPaginated(moviesDir, {
+                category,
+                page: page || 1,
+                pageSize: pageSize || 100,
+                sortBy,
+                sortOrder
+            });
+            return result;
+        } catch (error) {
+            console.error('Error getting movies by category paginated:', error);
+            return { error: error.message };
+        }
+    });
+
     // 从 index.json 获取指定分类的电影
     ipcMain.handle('get-movies-by-category-from-index', async (event, filters) => {
         try {

@@ -313,6 +313,71 @@ class MovieCacheService {
     }
 
     /**
+     * 获取分页电影列表
+     * @param {number} page - 页码（从1开始）
+     * @param {number} pageSize - 每页数量，默认100
+     * @param {object} filters - 筛选条件 { category, tagId, rating, actors, sortBy, sortOrder }
+     * @returns {object} { movies: [], total, page, pageSize, totalPages }
+     */
+    getMoviesPaginated(page = 1, pageSize = 100, filters = {}) {
+        if (!this.cache) {
+            return { movies: [], total: 0, page, pageSize, totalPages: 0 };
+        }
+
+        // 先获取筛选后的所有电影
+        let results = [...this.cache.movies];
+
+        // 分类筛选
+        if (filters.category) {
+            results = results.filter(movie => movie.category === filters.category);
+        }
+
+        // 标签筛选
+        if (filters.tagId) {
+            results = results.filter(movie =>
+                movie.tags && movie.tags.includes(filters.tagId)
+            );
+        }
+
+        // 评分筛选
+        if (filters.rating !== undefined && filters.rating !== null && filters.rating !== '') {
+            const rating = parseInt(filters.rating, 10);
+            if (!isNaN(rating)) {
+                results = results.filter(movie =>
+                    movie.userRating !== undefined && movie.userRating === rating
+                );
+            }
+        }
+
+        // 演员筛选（多选）- OR逻辑：电影包含任一指定的演员即返回
+        if (filters.actors && Array.isArray(filters.actors) && filters.actors.length > 0) {
+            results = results.filter(movie =>
+                movie.actors && movie.actors.some(actorName =>
+                    filters.actors.includes(actorName)
+                )
+            );
+        }
+
+        // 排序
+        results = this.sortMovies(results, filters.sortBy, filters.sortOrder);
+
+        // 计算分页
+        const total = results.length;
+        const totalPages = Math.ceil(total / pageSize);
+        const startIndex = (page - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        const paginatedMovies = results.slice(startIndex, endIndex);
+
+        return {
+            movies: paginatedMovies,
+            total,
+            page,
+            pageSize,
+            totalPages
+        };
+    }
+
+    /**
      * 对电影列表进行排序
      * @param {Array} movies - 电影列表
      * @param {string} sortBy - 排序字段

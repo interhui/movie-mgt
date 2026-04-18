@@ -297,6 +297,82 @@ class MovieService {
     }
 
     /**
+     * 获取分页电影列表（从缓存）
+     * @param {string} moviesDir - 电影目录
+     * @param {object} options - { page, pageSize, sortBy, sortOrder, category, tagId, rating, actors }
+     * @returns {Promise<object>} 分页结果
+     */
+    async getMoviesPaginated(moviesDir, options = {}) {
+        try {
+            const { page = 1, pageSize = 100, sortBy, sortOrder, category, tagId, rating, actors } = options;
+
+            // 如果缓存未初始化，先初始化缓存
+            if (!this.cacheService.isCacheInitialized()) {
+                await this.refreshCache(moviesDir);
+            }
+
+            // 使用缓存的分页方法
+            return this.cacheService.getMoviesPaginated(page, pageSize, {
+                sortBy,
+                sortOrder,
+                category,
+                tagId,
+                rating,
+                actors
+            });
+        } catch (error) {
+            console.error('Error getting movies paginated:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * 获取分页电影列表（从index.json快速加载）
+     * @param {string} moviesDir - 电影目录
+     * @param {object} options - { page, pageSize, sortBy, sortOrder }
+     * @returns {Promise<object>} 分页结果
+     */
+    async getMoviesPaginatedFromIndex(moviesDir, options = {}) {
+        try {
+            const { page = 1, pageSize = 100, sortBy, sortOrder } = options;
+
+            // 从所有分类的 index.json 加载电影
+            const allIndexMovies = await this.indexService.getAllCategoriesIndexMovies(moviesDir);
+            const allMovies = [];
+
+            for (const [cat, movies] of Object.entries(allIndexMovies)) {
+                for (const movie of movies) {
+                    allMovies.push({
+                        ...movie,
+                        category: cat
+                    });
+                }
+            }
+
+            // 排序
+            const sortedMovies = this.sortMovies(allMovies, sortBy, sortOrder);
+
+            // 计算分页
+            const total = sortedMovies.length;
+            const totalPages = Math.ceil(total / pageSize);
+            const startIndex = (page - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const paginatedMovies = sortedMovies.slice(startIndex, endIndex);
+
+            return {
+                movies: paginatedMovies,
+                total,
+                page,
+                pageSize,
+                totalPages
+            };
+        } catch (error) {
+            console.error('Error getting movies paginated from index:', error);
+            throw error;
+        }
+    }
+
+    /**
      * 搜索电影
      * @param {string} keyword - 搜索关键词
      * @param {string} moviesDir - 电影存储目录

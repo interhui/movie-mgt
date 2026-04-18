@@ -123,6 +123,89 @@ class IndexService {
     }
 
     /**
+     * 获取分页的电影列表（从index.json）
+     * @param {string} category - 分类名称
+     * @param {string} moviesDir - 电影目录
+     * @param {object} options - { page, pageSize, sortBy, sortOrder }
+     * @returns {Promise<object>} 分页结果
+     */
+    async getMoviesFromIndexPaginated(category, moviesDir, options = {}) {
+        try {
+            const { page = 1, pageSize = 100, sortBy, sortOrder } = options;
+
+            const movies = await this.getMoviesFromIndex(category, moviesDir);
+            const moviesWithCategory = movies.map(m => ({ ...m, category }));
+
+            // 排序
+            const sortedMovies = this.sortMovies(moviesWithCategory, sortBy, sortOrder);
+
+            // 计算分页
+            const total = sortedMovies.length;
+            const totalPages = Math.ceil(total / pageSize);
+            const startIndex = (page - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const paginatedMovies = sortedMovies.slice(startIndex, endIndex);
+
+            return {
+                movies: paginatedMovies,
+                total,
+                page,
+                pageSize,
+                totalPages
+            };
+        } catch (error) {
+            console.error(`Error getting paginated movies from index for ${category}:`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * 对电影列表进行排序（内部使用）
+     * @param {Array} movies - 电影列表
+     * @param {string} sortBy - 排序字段
+     * @param {string} sortOrder - 排序方向
+     * @returns {Array} 排序后的列表
+     */
+    sortMovies(movies, sortBy = 'name', sortOrder = 'asc') {
+        if (!movies || movies.length === 0) {
+            return movies;
+        }
+
+        const sorted = [...movies];
+        sorted.sort((a, b) => {
+            let valA, valB;
+
+            switch (sortBy) {
+                case 'name':
+                    valA = (a.name || '').toLowerCase();
+                    valB = (b.name || '').toLowerCase();
+                    break;
+                case 'rating':
+                    valA = a.userRating || 0;
+                    valB = b.userRating || 0;
+                    break;
+                case 'year':
+                    valA = a.year || 0;
+                    valB = b.year || 0;
+                    break;
+                case 'releasedate':
+                    valA = a.year || 0;
+                    valB = b.year || 0;
+                    break;
+                default:
+                    valA = (a.name || '').toLowerCase();
+                    valB = (b.name || '').toLowerCase();
+            }
+
+            if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
+            if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
+            return 0;
+        });
+
+        return sorted;
+    }
+
+    /**
      * 更新单个电影在 index.json 中的数据
      * @param {object} movie - 电影数据（完整电影对象）
      * @param {string} category - 分类名称

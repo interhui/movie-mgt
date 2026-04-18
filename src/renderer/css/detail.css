@@ -237,7 +237,7 @@ body {
 
 .star {
     cursor: default;
-    font-size: 14px;
+    font-size: 24px;
     opacity: 0.3;
     transition: opacity 0.2s;
 }
@@ -249,6 +249,7 @@ body {
 .star:hover,
 .star.active {
     opacity: 1;
+    font-size: 20px;
 }
 
 /* 标签 */

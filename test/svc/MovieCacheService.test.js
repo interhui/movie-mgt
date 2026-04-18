@@ -270,4 +270,89 @@ describe('MovieCacheService', () => {
             expect(service.getAllMovies()).toHaveLength(1);
         });
     });
+
+    describe('getMoviesPaginated', () => {
+        beforeEach(() => {
+            service.initializeCache(testMovies, '/movies');
+        });
+
+        test('SVC-CACHE-030: 获取第一页数据', () => {
+            const result = service.getMoviesPaginated(1, 2);
+            expect(result.movies).toHaveLength(2);
+            expect(result.total).toBe(3);
+            expect(result.page).toBe(1);
+            expect(result.pageSize).toBe(2);
+            expect(result.totalPages).toBe(2);
+        });
+
+        test('SVC-CACHE-031: 获取第二页数据', () => {
+            const result = service.getMoviesPaginated(2, 2);
+            expect(result.movies).toHaveLength(1);
+            expect(result.total).toBe(3);
+            expect(result.page).toBe(2);
+        });
+
+        test('SVC-CACHE-032: 最后一页不足pageSize', () => {
+            const result = service.getMoviesPaginated(2, 2);
+            expect(result.movies).toHaveLength(1);
+        });
+
+        test('SVC-CACHE-033: pageSize大于总数据量', () => {
+            const result = service.getMoviesPaginated(1, 10);
+            expect(result.movies).toHaveLength(3);
+            expect(result.totalPages).toBe(1);
+        });
+
+        test('SVC-CACHE-034: 带分类筛选的分页', () => {
+            const result = service.getMoviesPaginated(1, 10, { category: 'movie' });
+            expect(result.movies).toHaveLength(2);
+            expect(result.total).toBe(2);
+        });
+
+        test('SVC-CACHE-035: 带标签筛选的分页', () => {
+            const result = service.getMoviesPaginated(1, 10, { tagId: 'action' });
+            expect(result.movies).toHaveLength(1);
+            expect(result.movies[0].tags).toContain('action');
+        });
+
+        test('SVC-CACHE-036: 带评分筛选的分页', () => {
+            const result = service.getMoviesPaginated(1, 10, { rating: 5 });
+            expect(result.movies).toHaveLength(1);
+            expect(result.movies[0].userRating).toBe(5);
+        });
+
+        test('SVC-CACHE-037: 带演员筛选的分页', () => {
+            const result = service.getMoviesPaginated(1, 10, { actors: ['李连杰'] });
+            expect(result.movies).toHaveLength(2);
+        });
+
+        test('SVC-CACHE-038: 组合筛选-演员+分类', () => {
+            const result = service.getMoviesPaginated(1, 10, { actors: ['李连杰'], category: 'movie' });
+            expect(result.movies).toHaveLength(1);
+            expect(result.movies[0].title).toBe('Action Movie');
+        });
+
+        test('SVC-CACHE-039: 分页时排序生效', () => {
+            // 按评分降序
+            const result = service.getMoviesPaginated(1, 10, { sortBy: 'rating', sortOrder: 'desc' });
+            expect(result.movies[0].userRating).toBe(5);
+        });
+
+        test('SVC-CACHE-040: page为0返回空', () => {
+            const result = service.getMoviesPaginated(0, 2);
+            expect(result.movies).toHaveLength(0);
+        });
+
+        test('SVC-CACHE-041: page超出范围返回空', () => {
+            const result = service.getMoviesPaginated(100, 2);
+            expect(result.movies).toHaveLength(0);
+        });
+
+        test('SVC-CACHE-042: 未初始化缓存返回空', () => {
+            const newService = new MovieCacheService();
+            const result = newService.getMoviesPaginated(1, 2);
+            expect(result.movies).toHaveLength(0);
+            expect(result.total).toBe(0);
+        });
+    });
 });

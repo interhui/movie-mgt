@@ -35,7 +35,9 @@ const state = {
     // 演员选择弹窗状态
     actorSelectorSearchKeyword: '',  // 搜索关键字
     actorSelectorCurrentPage: 1,  // 当前页码
-    actorSelectorPageSize: 10  // 每页记录数
+    actorSelectorPageSize: 10,  // 每页记录数
+    // 懒加载相关
+    lazyLoader: null  // 懒加载管理器
 };
 
 // DOM 元素
@@ -894,6 +896,39 @@ async function openBoxView(boxName) {
  */
 async function loadMovies() {
     try {
+        console.log('loadMovies: searchKeyword:', state.searchKeyword, 'currentTag:', state.currentTag, 'currentActorFilter.length:', state.currentActorFilter.length, 'currentCategory:', state.currentCategory);
+
+        // 搜索模式下使用原有的一次性加载逻辑
+        if (state.searchKeyword || state.currentTag || state.currentActorFilter.length > 0) {
+            // 销毁旧的懒加载器，避免滚动时继续加载未筛选的数据
+            if (state.lazyLoader) {
+                state.lazyLoader.destroy();
+                state.lazyLoader = null;
+            }
+            console.log('loadMovies: calling loadMoviesAll');
+            await loadMoviesAll();
+            return;
+        }
+
+        // 非搜索模式使用懒加载
+        // 如果之前有筛选激活过，先恢复侧边栏
+        if (state.sidebarSearchActive) {
+            renderSidebar(state.categories);
+            state.sidebarSearchActive = false;
+        }
+        console.log('loadMovies: calling initLazyLoader');
+        await initLazyLoader();
+        state.lazyLoader.loadFirstPage();
+    } catch (error) {
+        console.error('Error loading movies:', error);
+    }
+}
+
+/**
+ * 一次性加载所有电影（用于搜索模式）
+ */
+async function loadMoviesAll() {
+    try {
         let movies;
 
         // 构建筛选条件
@@ -906,6 +941,7 @@ async function loadMovies() {
 
         if (state.searchKeyword) {
             // 搜索电影
+            console.log('loadMoviesAll: search path, actors:', filterOptions.actors);
             movies = await window.electronAPI.searchMovies({
                 keyword: state.searchKeyword,
                 filters: {
@@ -918,6 +954,7 @@ async function loadMovies() {
             });
         } else if (state.currentCategory) {
             // 按分类加载
+            console.log('loadMoviesAll: category path, actors:', filterOptions.actors);
             movies = await window.electronAPI.getMoviesByCategory({
                 category: state.currentCategory,
                 sortBy: filterOptions.sortBy,
@@ -928,6 +965,7 @@ async function loadMovies() {
             });
         } else {
             // 加载所有电影
+            console.log('loadMoviesAll: all movies path, actors:', filterOptions.actors);
             movies = await window.electronAPI.getAllMovies({
                 sortBy: filterOptions.sortBy,
                 sortOrder: filterOptions.sortOrder,
@@ -943,7 +981,7 @@ async function loadMovies() {
         }
 
         state.movies = movies;
-        renderMovies(movies);
+        renderMovies(movies, false);
 
         // 检查是否有任何筛选条件激活
         const filtersActive = state.searchKeyword || state.currentTag || state.currentActorFilter.length > 0;
@@ -958,8 +996,67 @@ async function loadMovies() {
             state.sidebarSearchActive = false;
         }
     } catch (error) {
-        console.error('Error loading movies:', error);
+        console.error('Error loading movies all:', error);
     }
+}
+
+/**
+ * 初始化懒加载管理器
+ */
+async function initLazyLoader() {
+    // 如果已存在懒加载器，先销毁
+    if (state.lazyLoader) {
+        state.lazyLoader.destroy();
+    }
+
+    const filterOptions = {
+        sortBy: state.currentSort.split('-')[0],
+        sortOrder: state.currentSort.split('-')[1]
+    };
+
+    // 获取滚动容器（.movie-wall）
+    const scrollContainer = document.getElementById('movie-wall');
+    console.log('initLazyLoader: scrollContainer =', scrollContainer);
+
+    // 创建懒加载管理器
+    state.lazyLoader = new LazyLoader({
+        pageSize: 100,
+        scrollContainer: scrollContainer,
+        loadPage: async (page, pageSize) => {
+            // 根据是否有分类筛选选择API
+            if (state.currentCategory) {
+                return await window.electronAPI.getMoviesPaginated({
+                    category: state.currentCategory,
+                    page,
+                    pageSize,
+                    sortBy: filterOptions.sortBy,
+                    sortOrder: filterOptions.sortOrder
+                });
+            } else {
+                return await window.electronAPI.getMoviesPaginatedFromIndex({
+                    page,
+                    pageSize,
+                    sortBy: filterOptions.sortBy,
+                    sortOrder: filterOptions.sortOrder
+                });
+            }
+        },
+        onRender: (movies, isAppend) => {
+            // 更新 state.movies 以支持视图切换
+            if (isAppend) {
+                state.movies = [...(state.movies || []), ...movies];
+            } else {
+                state.movies = movies;
+            }
+            renderMovies(movies, isAppend);
+        },
+        onComplete: () => {
+            console.log('All movies loaded');
+        },
+        onError: (error) => {
+            console.error('LazyLoader error:', error);
+        }
+    });
 }
 
 /**
@@ -1007,11 +1104,15 @@ function updateSidebarWithSearchResults(movies) {
 
 /**
  * 渲染电影列表
+ * @param {Array} movies - 电影列表
+ * @param {boolean} isAppend - 是否追加模式（true=追加，false=替换）
  */
-function renderMovies(movies) {
+function renderMovies(movies, isAppend = false) {
     if (!movies || movies.length === 0) {
-        elements.moviesGrid.innerHTML = '';
-        elements.emptyState.style.display = 'flex';
+        if (!isAppend) {
+            elements.moviesGrid.innerHTML = '';
+            elements.emptyState.style.display = 'flex';
+        }
         return;
     }
 
@@ -1019,25 +1120,28 @@ function renderMovies(movies) {
 
     let html = '';
 
-    if (state.viewMode === 'list') {
-        // 列表视图 - 表格形式
-        html += `
-            <div class="list-view-header">
-                <div class="movie-checkbox">
-                    <input type="checkbox" id="select-all" ${state.selectedMovies.size === movies.length && movies.length > 0 ? 'checked' : ''}>
+    // 非追加模式时，需要渲染表头
+    if (!isAppend) {
+        if (state.viewMode === 'list') {
+            // 列表视图 - 表格形式
+            html += `
+                <div class="list-view-header">
+                    <div class="movie-checkbox">
+                        <input type="checkbox" id="select-all" ${state.selectedMovies.size === movies.length && movies.length > 0 ? 'checked' : ''}>
+                    </div>
+                    <div class="movie-icon"></div>
+                    <div class="movie-id-col">电影ID</div>
+                    <div class="movie-name">名称</div>
+                    <div class="movie-actors-col">主演</div>
+                    <div class="movie-description">描述</div>
+                    <div class="movie-publish-date">上映时间</div>
+                    <div class="movie-studio-col">发行商</div>
+                    <div class="movie-category-info">分类</div>
+                    <div class="movie-director-col">导演</div>
+                    <div class="movie-files-col">文件</div>
                 </div>
-                <div class="movie-icon"></div>
-                <div class="movie-id-col">电影ID</div>
-                <div class="movie-name">名称</div>
-                <div class="movie-actors-col">主演</div>
-                <div class="movie-description">描述</div>
-                <div class="movie-publish-date">上映时间</div>
-                <div class="movie-studio-col">发行商</div>
-                <div class="movie-category-info">分类</div>
-                <div class="movie-director-col">导演</div>
-                <div class="movie-files-col">文件</div>
-            </div>
-        `;
+            `;
+        }
     }
 
     html += movies.map(movie => {
@@ -1094,7 +1198,13 @@ function renderMovies(movies) {
         }
     }).join('');
 
-    elements.moviesGrid.innerHTML = html;
+    if (isAppend) {
+        // 追加模式：向现有内容追加
+        elements.moviesGrid.insertAdjacentHTML('beforeend', html);
+    } else {
+        // 替换模式：替换整个内容
+        elements.moviesGrid.innerHTML = html;
+    }
 
     // 绑定电影卡片点击事件（排除复选框）
     document.querySelectorAll('.movie-card').forEach(card => {
@@ -1456,7 +1566,8 @@ function bindEvents() {
     elements.viewToggle.addEventListener('click', () => {
         state.viewMode = state.viewMode === 'grid' ? 'list' : 'grid';
         elements.moviesGrid.classList.toggle('list-view');
-        renderMovies(state.movies);
+        // 视图切换时完整重新渲染，保留懒加载器以便继续加载
+        renderMovies(state.movies, false);
     });
 
     // 清除所有筛选条件
