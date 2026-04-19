@@ -362,6 +362,38 @@ class BoxService {
     }
 
     /**
+     * 清理盒子中已删除的电影
+     * @param {string} boxName - 盒子名称
+     * @param {Array<string>} validMovieIds - 有效的电影ID列表
+     * @param {string} movieboxDir - 基础目录
+     * @returns {Promise<object>} 清理结果 { success, removedCount }
+     */
+    async cleanBox(boxName, validMovieIds, movieboxDir) {
+        try {
+            const boxesDir = this.getBoxesDir(movieboxDir);
+            const boxData = await this.readBoxFile(boxesDir, boxName);
+
+            if (!boxData || !boxData.movie) {
+                return { success: true, removedCount: 0 };
+            }
+
+            const originalCount = boxData.movie.length;
+            boxData.movie = boxData.movie.filter(m => validMovieIds.includes(m.id));
+            const removedCount = originalCount - boxData.movie.length;
+
+            if (removedCount > 0) {
+                const boxPath = path.join(boxesDir, `${boxName}.json`);
+                await this.fileService.writeFile(boxPath, JSON.stringify(boxData, null, 2));
+            }
+
+            return { success: true, removedCount };
+        } catch (error) {
+            console.error('Error cleaning box:', error);
+            throw error;
+        }
+    }
+
+    /**
      * 更新盒子中电影的信息
      * @param {string} boxName - 盒子名称
      * @param {string} movieId - 电影ID

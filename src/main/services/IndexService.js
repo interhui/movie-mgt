@@ -33,6 +33,7 @@ class IndexService {
             title: movie.title || movie.name || '',
             description: movie.description || movie.outline || '',
             year: movie.year || '',
+            publishDate: movie.publishDate || movie.year || '',
             outline: movie.outline || '',
             director: movie.director || '',
             actors: movie.actors || [],

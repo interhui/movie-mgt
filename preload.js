@@ -53,6 +53,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getBoxDetail: (boxName) => ipcRenderer.invoke('get-box-detail', boxName),
     addMovieToBox: (data) => ipcRenderer.invoke('add-movie-to-box', data),
     removeMovieFromBox: (data) => ipcRenderer.invoke('remove-movie-from-box', data),
+    cleanBox: (data) => ipcRenderer.invoke('clean-box', data),
     updateMovieInBox: (data) => ipcRenderer.invoke('update-movie-in-box', data),
 
     // 窗口管理

@@ -911,6 +911,21 @@ function setupIpcHandlers(services) {
         }
     });
 
+    // 清理盒子中已删除的电影
+    ipcMain.handle('clean-box', async (event, data) => {
+        try {
+            const settings = settingsService.getSettings();
+            const movieboxDir = getMovieboxDirPath(settings.moviebox?.movieboxDir);
+            const { boxName, validMovieIds } = data;
+            const result = await boxService.cleanBox(boxName, validMovieIds, movieboxDir);
+            notifyBoxUpdated();
+            return result;
+        } catch (error) {
+            console.error('Error cleaning box:', error);
+            return { error: error.message };
+        }
+    });
+
     // 更新盒子中电影的状态
     ipcMain.handle('update-movie-in-box', async (event, data) => {
         try {

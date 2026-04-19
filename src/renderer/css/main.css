@@ -578,7 +578,7 @@ body {
 
 .modal-body {
     padding: 20px;
-    max-height: 60vh;
+    max-height: 70vh;
     overflow-y: auto;
 }
 
@@ -1983,7 +1983,7 @@ body {
 /* 演员卡片视图 */
 .actor-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
     gap: 20px;
 }
 
@@ -2024,7 +2024,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 48px;
+    font-size: 36px;
     color: var(--text-secondary);
     background: var(--bg-secondary);
 }
@@ -2493,7 +2493,7 @@ body {
     position: relative;
     border: 1px solid var(--border-color);
     background-color: var(--card-bg);
-    min-height: 190px;
+    min-height: 200px;
 }
 
 .actor-filter-card:hover {

@@ -481,11 +481,13 @@ async function loadMoviesFromBoxAll(boxMovieIds, boxMovieMap) {
         const allMovies = await window.electronAPI.getAllMovies({});
         const movies = [];
         const categoriesSet = new Set();
+        const validMovieIds = new Set();
 
         for (const movie of allMovies) {
             // 检查电影是否在盒子中
-            if (boxMovieIds.includes(movie.movieId) || boxMovieIds.includes(movie.id)) {
-                const boxInfo = boxMovieMap.get(movie.movieId) || boxMovieMap.get(movie.id);
+            const matchedBoxId = boxMovieIds.includes(movie.movieId) ? movie.movieId : (boxMovieIds.includes(movie.id) ? movie.id : null);
+            if (matchedBoxId) {
+                const boxInfo = boxMovieMap.get(matchedBoxId);
                 if (boxInfo) {
                     categoriesSet.add(movie.category);
                     movies.push({
@@ -494,7 +496,21 @@ async function loadMoviesFromBoxAll(boxMovieIds, boxMovieMap) {
                         boxRating: boxInfo.boxRating,
                         boxComment: boxInfo.boxComment
                     });
+                    validMovieIds.add(matchedBoxId);
                 }
+            }
+        }
+
+        // 检查是否有电影已从库中删除，如果有则清理盒子
+        const deletedMovieIds = boxMovieIds.filter(id => !validMovieIds.has(id));
+        if (deletedMovieIds.length > 0) {
+            console.log(`发现 ${deletedMovieIds.length} 个电影已从库中删除，正在清理盒子...`);
+            const cleanResult = await window.electronAPI.cleanBox({
+                boxName: state.boxName,
+                validMovieIds: Array.from(validMovieIds)
+            });
+            if (cleanResult.success && cleanResult.removedCount > 0) {
+                console.log(`已从盒子中移除 ${cleanResult.removedCount} 个已删除的电影`);
             }
         }
 

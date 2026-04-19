@@ -1928,7 +1928,7 @@ function bindEvents() {
                         boxName: boxName,
                         category: movie.category,
                         movieInfo: {
-                            id: movie.movieId,
+                            id: movie.id,
                             status: 'unwatched',
                             firstWatched: '',
                             lastWatched: '',
