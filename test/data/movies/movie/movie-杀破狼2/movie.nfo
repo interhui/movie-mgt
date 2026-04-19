@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-杀破狼2</id>
+    <title>杀破狼2</title>
+    <year>2015</year>
+    <studio>银都机构</studio>
+    <director>郑保瑞</director>
+    <description>卧底警察的生死危机</description>
+    <tag>action</tag>
+    <tag>crime</tag>
+    <actor>
+        <name>吴京</name>
+        <name>托尼·贾</name>
+        <name>张晋</name>
+        <name>任达华</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

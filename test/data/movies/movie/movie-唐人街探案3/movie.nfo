@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-唐人街探案3</id>
+    <title>唐人街探案3</title>
+    <year>2021</year>
+    <studio>万达影视</studio>
+    <director>陈思诚</director>
+    <description>唐仁和秦风在东京破案的故事</description>
+    <tag>comedy</tag>
+    <tag>crime</tag>
+    <actor>
+        <name>王宝强</name>
+        <name>刘昊然</name>
+        <name>妻夫木聪</name>
+        <name>托尼·贾</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

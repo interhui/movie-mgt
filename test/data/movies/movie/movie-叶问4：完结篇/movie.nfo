@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-叶问4：完结篇</id>
+    <title>叶问4：完结篇</title>
+    <year>2019</year>
+    <studio>东方电影</studio>
+    <director>叶伟信</director>
+    <description>叶问最后一战</description>
+    <tag>action</tag>
+    <tag>history</tag>
+    <actor>
+        <name>甄子丹</name>
+        <name>吴樾</name>
+        <name>吴建豪</name>
+        <name>斯科特·阿金斯</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

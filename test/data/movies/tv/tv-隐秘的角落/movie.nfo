@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-隐秘的角落</id>
+    <title>隐秘的角落</title>
+    <year>2020</year>
+    <studio>爱奇艺</studio>
+    <director>辛爽</director>
+    <description>三个孩子在景区游玩时意外拍下谋杀案</description>
+    <tag>suspense</tag>
+    <tag>crime</tag>
+    <actor>
+        <name>秦昊</name>
+        <name>王景春</name>
+        <name>荣梓杉</name>
+        <name>史彭元</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

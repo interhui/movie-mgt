@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-叶问2</id>
+    <title>叶问2</title>
+    <year>2010</year>
+    <studio>东方电影</studio>
+    <director>叶伟信</director>
+    <description>叶问在香港开馆授徒</description>
+    <tag>action</tag>
+    <tag>history</tag>
+    <actor>
+        <name>甄子丹</name>
+        <name>洪金宝</name>
+        <name>熊黛林</name>
+        <name>黄晓明</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

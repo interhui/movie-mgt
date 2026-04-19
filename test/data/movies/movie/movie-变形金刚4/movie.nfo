@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-变形金刚4</id>
+    <title>变形金刚4</title>
+    <year>2014</year>
+    <studio>派拉蒙</studio>
+    <director>迈克尔·贝</director>
+    <description>机器人与人类的故事</description>
+    <tag>sci-fi</tag>
+    <tag>action</tag>
+    <actor>
+        <name>马克·沃尔伯格</name>
+        <name>李冰冰</name>
+        <name>斯坦利·图齐</name>
+        <name>凯尔西·格兰莫</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

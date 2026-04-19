@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-奇门遁甲</id>
+    <title>奇门遁甲</title>
+    <year>2017</year>
+    <studio>博纳影业</studio>
+    <director>袁和平</director>
+    <description>江湖奇侠与神秘组织的故事</description>
+    <tag>fantasy</tag>
+    <tag>action</tag>
+    <actor>
+        <name>大鹏</name>
+        <name>倪妮</name>
+        <name>李治廷</name>
+        <name>周冬雨</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

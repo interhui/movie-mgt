@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-我和我的祖国</id>
+    <title>我和我的祖国</title>
+    <year>2019</year>
+    <studio>华夏电影</studio>
+    <director>陈凯歌</director>
+    <description>七个故事讲述新中国成立70年来的重要历史瞬间</description>
+    <tag>drama</tag>
+    <tag>history</tag>
+    <actor>
+        <name>黄渤</name>
+        <name>张译</name>
+        <name>吴京</name>
+        <name>葛优</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

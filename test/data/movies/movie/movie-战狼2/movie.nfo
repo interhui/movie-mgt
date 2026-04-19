@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-战狼2</id>
+    <title>战狼2</title>
+    <year>2017</year>
+    <studio>春秋时代</studio>
+    <director>吴京</director>
+    <description>中国特种兵在海外执行任务，保护同胞安全</description>
+    <tag>action</tag>
+    <tag>war</tag>
+    <actor>
+        <name>吴京</name>
+        <name>弗兰克·格里罗</name>
+        <name>吴刚</name>
+        <name>卢靖姗</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

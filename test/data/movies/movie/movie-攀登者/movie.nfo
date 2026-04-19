@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-攀登者</id>
+    <title>攀登者</title>
+    <year>2019</year>
+    <studio>华谊兄弟</studio>
+    <director>李仁港</director>
+    <description>中国登山队攀登珠穆朗玛峰</description>
+    <tag>adventure</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>吴京</name>
+        <name>章子怡</name>
+        <name>张译</name>
+        <name>井柏然</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

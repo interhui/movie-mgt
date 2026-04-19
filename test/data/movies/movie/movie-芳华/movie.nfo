@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-芳华</id>
+    <title>芳华</title>
+    <year>2017</year>
+    <studio>华谊兄弟</studio>
+    <director>冯小刚</director>
+    <description>文工团青年的青春故事</description>
+    <tag>drama</tag>
+    <tag>youth</tag>
+    <actor>
+        <name>黄轩</name>
+        <name>苗苗</name>
+        <name>钟楚曦</name>
+        <name>杨采钰</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

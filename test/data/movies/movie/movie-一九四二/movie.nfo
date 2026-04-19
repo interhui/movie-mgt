@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-一九四二</id>
+    <title>一九四二</title>
+    <year>2012</year>
+    <studio>华谊兄弟</studio>
+    <director>冯小刚</director>
+    <description>河南大饥荒的真实历史</description>
+    <tag>drama</tag>
+    <tag>history</tag>
+    <actor>
+        <name>张国立</name>
+        <name>陈道明</name>
+        <name>徐帆</name>
+        <name>张涵予</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-冒险王</id>
+    <title>冒险王</title>
+    <year>1996</year>
+    <studio>嘉禾</studio>
+    <director>程小东</director>
+    <description>冒险王寻找圣经的故事</description>
+    <tag>action</tag>
+    <tag>adventure</tag>
+    <actor>
+        <name>李连杰</name>
+        <name>关之琳</name>
+        <name>金城武</name>
+        <name>杨采妮</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

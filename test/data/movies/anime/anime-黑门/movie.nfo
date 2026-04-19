@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-黑门</id>
+    <title>黑门</title>
+    <year>2022</year>
+    <studio>三格动画</studio>
+    <director>李相国</director>
+    <description>未来世界脑机接口引发的危机</description>
+    <tag>animation</tag>
+    <tag>sci-fi</tag>
+    <actor>
+        <name>阿杰</name>
+        <name>郭浩然</name>
+        <name>聂曦映</name>
+        <name>钱琛</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

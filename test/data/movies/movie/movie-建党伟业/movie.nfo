@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-建党伟业</id>
+    <title>建党伟业</title>
+    <year>2011</year>
+    <studio>中国电影</studio>
+    <director>韩三平</director>
+    <description>从辛亥革命到中共建党的历史</description>
+    <tag>history</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>刘烨</name>
+        <name>陈坤</name>
+        <name>张嘉译</name>
+        <name>李沁</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

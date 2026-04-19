@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-猛虎出笼</id>
+    <title>猛虎出笼</title>
+    <year>2005</year>
+    <studio>焦点影业</studio>
+    <director>路易斯·莱特里尔</director>
+    <description>被当作武器培养的男人的觉醒</description>
+    <tag>action</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>李连杰</name>
+        <name>摩根·弗里曼</name>
+        <name>鲍勃·霍斯金斯</name>
+        <name>凯瑞·康顿</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

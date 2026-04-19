@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-罗小黑战记</id>
+    <title>罗小黑战记</title>
+    <year>2019</year>
+    <studio>寒木春华</studio>
+    <director>MTJJ</director>
+    <description>猫妖罗小黑与人类师父的冒险故事</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>山新</name>
+        <name>郝祥海</name>
+        <name>刘明月</name>
+        <name>图特哈蒙</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

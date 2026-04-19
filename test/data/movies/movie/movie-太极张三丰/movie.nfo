@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-太极张三丰</id>
+    <title>太极张三丰</title>
+    <year>1993</year>
+    <studio>嘉禾</studio>
+    <director>袁和平</director>
+    <description>张三丰创立太极拳的故事</description>
+    <tag>action</tag>
+    <tag>history</tag>
+    <actor>
+        <name>李连杰</name>
+        <name>杨紫琼</name>
+        <name>钱小豪</name>
+        <name>袁洁莹</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

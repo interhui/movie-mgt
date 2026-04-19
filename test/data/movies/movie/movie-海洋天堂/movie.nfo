@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-海洋天堂</id>
+    <title>海洋天堂</title>
+    <year>2010</year>
+    <studio>中国电影</studio>
+    <director>薛晓路</director>
+    <description>父亲与孤独症儿子的故事</description>
+    <tag>drama</tag>
+    <tag>family</tag>
+    <actor>
+        <name>李连杰</name>
+        <name>文章</name>
+        <name>高圆圆</name>
+        <name>朱媛媛</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-吞噬星空</id>
+    <title>吞噬星空</title>
+    <year>2020</year>
+    <studio>玄机科技</studio>
+    <director>沈乐平</director>
+    <description>地球青年罗峰成长为宇宙强者的故事</description>
+    <tag>animation</tag>
+    <tag>sci-fi</tag>
+    <actor>
+        <name>赵乾景</name>
+        <name>谢莹</name>
+        <name>宋国庆</name>
+        <name>黄骥</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

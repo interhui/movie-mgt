@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-影</id>
+    <title>影</title>
+    <year>2018</year>
+    <studio>乐视影业</studio>
+    <director>张艺谋</director>
+    <description>替身与真身的权谋故事</description>
+    <tag>action</tag>
+    <tag>costume</tag>
+    <actor>
+        <name>邓超</name>
+        <name>孙俪</name>
+        <name>郑恺</name>
+        <name>王千源</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-雾山五行</id>
+    <title>雾山五行</title>
+    <year>2020</year>
+    <studio>好传动画</studio>
+    <director>林魂</director>
+    <description>五行使者守护人间的故事</description>
+    <tag>animation</tag>
+    <tag>action</tag>
+    <actor>
+        <name>郭盛</name>
+        <name>郝祥海</name>
+        <name>叶知秋</name>
+        <name>李轻扬</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

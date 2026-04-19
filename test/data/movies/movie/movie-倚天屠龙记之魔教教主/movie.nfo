@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-倚天屠龙记之魔教教主</id>
+    <title>倚天屠龙记之魔教教主</title>
+    <year>1993</year>
+    <studio>嘉禾</studio>
+    <director>王晶</director>
+    <description>张无忌成长与明教的故事</description>
+    <tag>action</tag>
+    <tag>costume</tag>
+    <actor>
+        <name>李连杰</name>
+        <name>张敏</name>
+        <name>黎姿</name>
+        <name>邱淑贞</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

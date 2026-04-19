@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-灵笼</id>
+    <title>灵笼</title>
+    <year>2019</year>
+    <studio>艺画开天</studio>
+    <director>董相博</director>
+    <description>末日世界中人类最后的生存堡垒</description>
+    <tag>animation</tag>
+    <tag>sci-fi</tag>
+    <actor>
+        <name>李元韬</name>
+        <name>陶典</name>
+        <name>黄莺</name>
+        <name>赵路</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

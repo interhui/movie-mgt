@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-沐浴之王</id>
+    <title>沐浴之王</title>
+    <year>2020</year>
+    <studio>易小星工作室</studio>
+    <director>易小星</director>
+    <description>搓澡技艺的传承故事</description>
+    <tag>comedy</tag>
+    <tag>family</tag>
+    <actor>
+        <name>彭昱畅</name>
+        <name>乔杉</name>
+        <name>卜冠今</name>
+        <name>苇青</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

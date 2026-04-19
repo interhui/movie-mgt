@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-霍元甲</id>
+    <title>霍元甲</title>
+    <year>2006</year>
+    <studio>中影集团</studio>
+    <director>于仁泰</director>
+    <description>霍元甲的一生</description>
+    <tag>action</tag>
+    <tag>history</tag>
+    <actor>
+        <name>李连杰</name>
+        <name>董勇</name>
+        <name>孙俪</name>
+        <name>中村狮童</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

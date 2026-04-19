@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-我和我的父辈</id>
+    <title>我和我的父辈</title>
+    <year>2021</year>
+    <studio>中国电影</studio>
+    <director>吴京</director>
+    <description>四个时代的父辈故事</description>
+    <tag>drama</tag>
+    <tag>history</tag>
+    <actor>
+        <name>吴京</name>
+        <name>章子怡</name>
+        <name>徐峥</name>
+        <name>沈腾</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

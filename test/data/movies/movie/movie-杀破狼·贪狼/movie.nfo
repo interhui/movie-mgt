@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-杀破狼·贪狼</id>
+    <title>杀破狼·贪狼</title>
+    <year>2017</year>
+    <studio>银都机构</studio>
+    <director>叶伟信</director>
+    <description>警察跨国寻女的故事</description>
+    <tag>action</tag>
+    <tag>crime</tag>
+    <actor>
+        <name>古天乐</name>
+        <name>吴樾</name>
+        <name>林家栋</name>
+        <name>克里斯·柯林斯</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

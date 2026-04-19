@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-狄仁杰之通天帝国</id>
+    <title>狄仁杰之通天帝国</title>
+    <year>2010</year>
+    <studio>华谊兄弟</studio>
+    <director>徐克</director>
+    <description>狄仁杰侦破皇宫奇案</description>
+    <tag>costume</tag>
+    <tag>suspense</tag>
+    <actor>
+        <name>刘德华</name>
+        <name>刘嘉玲</name>
+        <name>李冰冰</name>
+        <name>邓超</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

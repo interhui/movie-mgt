@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-人世间</id>
+    <title>人世间</title>
+    <year>2022</year>
+    <studio>腾讯视频</studio>
+    <director>李路</director>
+    <description>周家三代人在五十年时代变迁中的命运</description>
+    <tag>drama</tag>
+    <tag>family</tag>
+    <actor>
+        <name>雷佳音</name>
+        <name>宋佳</name>
+        <name>辛柏青</name>
+        <name>殷桃</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-狄仁杰之神都龙王</id>
+    <title>狄仁杰之神都龙王</title>
+    <year>2013</year>
+    <studio>华谊兄弟</studio>
+    <director>徐克</director>
+    <description>狄仁杰侦破龙王案</description>
+    <tag>costume</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>赵又廷</name>
+        <name>冯绍峰</name>
+        <name>林更新</name>
+        <name>刘嘉玲</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

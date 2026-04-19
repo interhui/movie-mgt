@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-烈火英雄</id>
+    <title>烈火英雄</title>
+    <year>2019</year>
+    <studio>博纳影业</studio>
+    <director>陈国辉</director>
+    <description>消防员扑灭油罐火灾的故事</description>
+    <tag>action</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>黄晓明</name>
+        <name>杜江</name>
+        <name>谭卓</name>
+        <name>杨紫</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

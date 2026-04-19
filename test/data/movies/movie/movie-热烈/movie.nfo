@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-热烈</id>
+    <title>热烈</title>
+    <year>2023</year>
+    <studio>大鹏工作室</studio>
+    <director>大鹏</director>
+    <description>街舞少年追逐梦想的故事</description>
+    <tag>dance</tag>
+    <tag>youth</tag>
+    <actor>
+        <name>黄渤</name>
+        <name>王一博</name>
+        <name>刘敏涛</name>
+        <name>小沈阳</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

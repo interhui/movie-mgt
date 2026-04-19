@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-倩女幽魂</id>
+    <title>倩女幽魂</title>
+    <year>1987</year>
+    <studio>新艺城</studio>
+    <director>程小东</director>
+    <description>书生与女鬼的爱情故事</description>
+    <tag>fantasy</tag>
+    <tag>romance</tag>
+    <actor>
+        <name>张国荣</name>
+        <name>王祖贤</name>
+        <name>午马</name>
+        <name>刘兆铭</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

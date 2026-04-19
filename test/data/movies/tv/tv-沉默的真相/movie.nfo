@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-沉默的真相</id>
+    <title>沉默的真相</title>
+    <year>2020</year>
+    <studio>爱奇艺</studio>
+    <director>陈奕甫</director>
+    <description>检察官历经十年追寻真相</description>
+    <tag>suspense</tag>
+    <tag>crime</tag>
+    <actor>
+        <name>廖凡</name>
+        <name>白宇</name>
+        <name>谭卓</name>
+        <name>宁理</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

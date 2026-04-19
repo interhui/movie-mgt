@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-八佰</id>
+    <title>八佰</title>
+    <year>2020</year>
+    <studio>华谊兄弟</studio>
+    <director>管虎</director>
+    <description>1937年淞沪会战末期，四行仓库保卫战</description>
+    <tag>war</tag>
+    <tag>history</tag>
+    <actor>
+        <name>张译</name>
+        <name>姜武</name>
+        <name>王千源</name>
+        <name>黄志忠</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

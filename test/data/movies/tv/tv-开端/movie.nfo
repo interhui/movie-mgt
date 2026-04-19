@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-开端</id>
+    <title>开端</title>
+    <year>2022</year>
+    <studio>正午阳光</studio>
+    <director>孙墨龙</director>
+    <description>公交车爆炸案的时间循环故事</description>
+    <tag>sci-fi</tag>
+    <tag>suspense</tag>
+    <actor>
+        <name>白敬亭</name>
+        <name>赵今麦</name>
+        <name>刘奕君</name>
+        <name>刘涛</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

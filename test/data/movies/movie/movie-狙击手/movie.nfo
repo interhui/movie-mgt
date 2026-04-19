@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-狙击手</id>
+    <title>狙击手</title>
+    <year>2022</year>
+    <studio>中国电影</studio>
+    <director>张艺谋</director>
+    <description>抗美援朝战场上的狙击对决</description>
+    <tag>war</tag>
+    <tag>action</tag>
+    <actor>
+        <name>陈永胜</name>
+        <name>章宇</name>
+        <name>张译</name>
+        <name>柯蓝</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

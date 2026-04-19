@@ -17,7 +17,8 @@
     "sortOrder": "asc"
   },
   "library": {
-    "moviesDir": "D:\\Develop\\Workspace\\movie-mgt\\movies",
+    "moviesDir": "D:\\Develop\\Workspaces\\movie-mgt\\movies",
+    "actorPhotoDir": "D:\\Develop\\Workspaces\\movie-mgt\\actors",
     "scanOnStartup": true,
     "autoRefresh": false,
     "showHiddenFiles": false,
@@ -44,6 +45,6 @@
     "importPaths": []
   },
   "moviebox": {
-    "movieboxDir": "D:\\Develop\\Workspace\\movie-mgt\\boxes"
+    "movieboxDir": "D:\\Develop\\Workspaces\\movie-mgt\\boxes"
   }
 }

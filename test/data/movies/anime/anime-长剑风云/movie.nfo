@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-长剑风云</id>
+    <title>长剑风云</title>
+    <year>2021</year>
+    <studio>虚纪文化</studio>
+    <director>韦琪</director>
+    <description>末世中少女贺将的战斗故事</description>
+    <tag>animation</tag>
+    <tag>action</tag>
+    <actor>
+        <name>季冠霖</name>
+        <name>图特哈蒙</name>
+        <name>林帽帽</name>
+        <name>李轻扬</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

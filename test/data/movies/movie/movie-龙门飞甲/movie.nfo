@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-龙门飞甲</id>
+    <title>龙门飞甲</title>
+    <year>2011</year>
+    <studio>博纳影业</studio>
+    <director>徐克</director>
+    <description>江湖侠客与东厂的斗争</description>
+    <tag>action</tag>
+    <tag>costume</tag>
+    <actor>
+        <name>陈坤</name>
+        <name>周迅</name>
+        <name>李宇春</name>
+        <name>桂纶镁</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

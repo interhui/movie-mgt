@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-罚罪</id>
+    <title>罚罪</title>
+    <year>2022</year>
+    <studio>爱奇艺</studio>
+    <director>天毅</director>
+    <description>警察与黑恶势力的正邪较量</description>
+    <tag>crime</tag>
+    <tag>suspense</tag>
+    <actor>
+        <name>黄景瑜</name>
+        <name>杨佑宁</name>
+        <name>盖玥希</name>
+        <name>赵荀</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

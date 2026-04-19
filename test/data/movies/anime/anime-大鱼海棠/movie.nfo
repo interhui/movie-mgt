@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-大鱼海棠</id>
+    <title>大鱼海棠</title>
+    <year>2016</year>
+    <studio>光线传媒</studio>
+    <director>梁旋</director>
+    <description>掌管海棠花的少女湫为报恩而违反天规的故事</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>季冠霖</name>
+        <name>苏尚卿</name>
+        <name>许魏洲</name>
+        <name>金士杰</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-飞驰人生2</id>
+    <title>飞驰人生2</title>
+    <year>2024</year>
+    <studio>开心麻花</studio>
+    <director>韩寒</director>
+    <description>赛车手重返赛场追求梦想</description>
+    <tag>comedy</tag>
+    <tag>sports</tag>
+    <actor>
+        <name>沈腾</name>
+        <name>范丞丞</name>
+        <name>尹正</name>
+        <name>张本煜</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

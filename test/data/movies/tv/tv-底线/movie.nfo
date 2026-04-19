@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-底线</id>
+    <title>底线</title>
+    <year>2022</year>
+    <studio>芒果TV</studio>
+    <director>刘国彤</director>
+    <description>法官们面对复杂案件的职业与人性考验</description>
+    <tag>drama</tag>
+    <tag>legal</tag>
+    <actor>
+        <name>靳东</name>
+        <name>成毅</name>
+        <name>蔡文静</name>
+        <name>王秀竹</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

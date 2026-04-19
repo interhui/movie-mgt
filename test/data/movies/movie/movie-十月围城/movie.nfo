@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-十月围城</id>
+    <title>十月围城</title>
+    <year>2009</year>
+    <studio>博纳影业</studio>
+    <director>陈德森</director>
+    <description>保护孙中山的故事</description>
+    <tag>history</tag>
+    <tag>action</tag>
+    <actor>
+        <name>甄子丹</name>
+        <name>谢霆锋</name>
+        <name>王学圻</name>
+        <name>梁家辉</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

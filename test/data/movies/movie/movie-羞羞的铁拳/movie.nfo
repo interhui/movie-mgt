@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-羞羞的铁拳</id>
+    <title>羞羞的铁拳</title>
+    <year>2017</year>
+    <studio>开心麻花</studio>
+    <director>宋阳</director>
+    <description>男女身体互换后的搞笑故事</description>
+    <tag>comedy</tag>
+    <tag>sports</tag>
+    <actor>
+        <name>马丽</name>
+        <name>艾伦</name>
+        <name>沈腾</name>
+        <name>田雨</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

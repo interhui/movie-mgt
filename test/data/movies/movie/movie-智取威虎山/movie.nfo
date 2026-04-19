@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-智取威虎山</id>
+    <title>智取威虎山</title>
+    <year>2014</year>
+    <studio>博纳影业</studio>
+    <director>徐克</director>
+    <description>解放军剿匪的故事</description>
+    <tag>war</tag>
+    <tag>action</tag>
+    <actor>
+        <name>张涵予</name>
+        <name>梁家辉</name>
+        <name>林更新</name>
+        <name>佟丽娅</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

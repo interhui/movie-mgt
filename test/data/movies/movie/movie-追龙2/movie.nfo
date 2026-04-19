@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-追龙2</id>
+    <title>追龙2</title>
+    <year>2019</year>
+    <studio>博纳影业</studio>
+    <director>王晶</director>
+    <description>世纪悍匪张子强的故事</description>
+    <tag>crime</tag>
+    <tag>history</tag>
+    <actor>
+        <name>古天乐</name>
+        <name>梁家辉</name>
+        <name>林家栋</name>
+        <name>任达华</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

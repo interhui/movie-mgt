@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-庆余年2</id>
+    <title>庆余年2</title>
+    <year>2024</year>
+    <studio>新丽传媒</studio>
+    <director>孙皓</director>
+    <description>范闲在朝堂与江湖中的权谋斗争</description>
+    <tag>costume</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>张若昀</name>
+        <name>李沁</name>
+        <name>陈道明</name>
+        <name>吴刚</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

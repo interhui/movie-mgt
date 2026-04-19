@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-长津湖</id>
+    <title>长津湖</title>
+    <year>2021</year>
+    <studio>博纳影业</studio>
+    <director>陈凯歌</director>
+    <description>抗美援朝战争中长津湖战役的真实历史</description>
+    <tag>war</tag>
+    <tag>history</tag>
+    <actor>
+        <name>吴京</name>
+        <name>易烊千玺</name>
+        <name>段奕宏</name>
+        <name>朱亚文</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

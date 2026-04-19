@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-万界仙踪</id>
+    <title>万界仙踪</title>
+    <year>2018</year>
+    <studio>若鸿文化</studio>
+    <director>叶老酒</director>
+    <description>少年叶星云的修仙之路</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>钟巍</name>
+        <name>弓与蛇</name>
+        <name>谢莹</name>
+        <name>秦且歌</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

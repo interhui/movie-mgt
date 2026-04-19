@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-寒战</id>
+    <title>寒战</title>
+    <year>2012</year>
+    <studio>银都机构</studio>
+    <director>梁乐民</director>
+    <description>香港警队内部的权力斗争</description>
+    <tag>crime</tag>
+    <tag>suspense</tag>
+    <actor>
+        <name>郭富城</name>
+        <name>梁家辉</name>
+        <name>李治廷</name>
+        <name>彭于晏</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-邪不压正</id>
+    <title>邪不压正</title>
+    <year>2018</year>
+    <studio>不亦乐乎</studio>
+    <director>姜文</director>
+    <description>李天然复仇的故事</description>
+    <tag>action</tag>
+    <tag>history</tag>
+    <actor>
+        <name>彭于晏</name>
+        <name>姜文</name>
+        <name>廖凡</name>
+        <name>周韵</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-黄飞鸿之三狮王争霸</id>
+    <title>黄飞鸿之三狮王争霸</title>
+    <year>1993</year>
+    <studio>嘉禾</studio>
+    <director>徐克</director>
+    <description>黄飞鸿参加狮王争霸赛</description>
+    <tag>action</tag>
+    <tag>history</tag>
+    <actor>
+        <name>李连杰</name>
+        <name>关之琳</name>
+        <name>莫少聪</name>
+        <name>熊欣欣</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

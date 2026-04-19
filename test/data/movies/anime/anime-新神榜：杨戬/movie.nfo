@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-新神榜：杨戬</id>
+    <title>新神榜：杨戬</title>
+    <year>2022</year>
+    <studio>追光动画</studio>
+    <director>赵霁</director>
+    <description>杨戬在封神大战后的故事</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>王凯</name>
+        <name>季冠霖</name>
+        <name>李诗萌</name>
+        <name>赵路</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

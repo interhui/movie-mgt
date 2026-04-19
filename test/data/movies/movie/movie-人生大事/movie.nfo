@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-人生大事</id>
+    <title>人生大事</title>
+    <year>2022</year>
+    <studio>联瑞影业</studio>
+    <director>刘江江</director>
+    <description>殡葬师与孤儿之间的温情故事</description>
+    <tag>drama</tag>
+    <tag>family</tag>
+    <actor>
+        <name>朱一龙</name>
+        <name>杨恩又</name>
+        <name>王戈</name>
+        <name>刘陆</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

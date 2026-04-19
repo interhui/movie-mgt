@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-三十而已</id>
+    <title>三十而已</title>
+    <year>2020</year>
+    <studio>柠萌影业</studio>
+    <director>张晓波</director>
+    <description>三位三十岁女性面对生活与事业的选择</description>
+    <tag>modern</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>江疏影</name>
+        <name>童瑶</name>
+        <name>毛晓彤</name>
+        <name>杨玏</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

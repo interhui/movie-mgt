@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-青蛇</id>
+    <title>青蛇</title>
+    <year>1993</year>
+    <studio>思远影业</studio>
+    <director>徐克</director>
+    <description>白蛇与青蛇的人间情缘</description>
+    <tag>fantasy</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>张曼玉</name>
+        <name>王祖贤</name>
+        <name>赵文卓</name>
+        <name>吴兴国</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-陈情令</id>
+    <title>陈情令</title>
+    <year>2019</year>
+    <studio>新湃传媒</studio>
+    <director>郑伟文</director>
+    <description>魏无羡与蓝忘机携手探寻真相，匡扶正义</description>
+    <tag>costume</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>肖战</name>
+        <name>王一博</name>
+        <name>孟子义</name>
+        <name>宣璐</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

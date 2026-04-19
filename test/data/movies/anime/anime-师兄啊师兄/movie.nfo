@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-师兄啊师兄</id>
+    <title>师兄啊师兄</title>
+    <year>2022</year>
+    <studio>玄机科技</studio>
+    <director>沈乐平</director>
+    <description>李长寿在修仙界的稳健生活</description>
+    <tag>animation</tag>
+    <tag>comedy</tag>
+    <actor>
+        <name>杨天翔</name>
+        <name>赵爽</name>
+        <name>赵成晨</name>
+        <name>张馨予</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

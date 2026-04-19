@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-金刚川</id>
+    <title>金刚川</title>
+    <year>2020</year>
+    <studio>中国电影</studio>
+    <director>管虎</director>
+    <description>抗美援朝战争中架桥的故事</description>
+    <tag>war</tag>
+    <tag>history</tag>
+    <actor>
+        <name>张译</name>
+        <name>吴京</name>
+        <name>李九霄</name>
+        <name>魏晨</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

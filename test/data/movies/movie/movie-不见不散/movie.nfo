@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-不见不散</id>
+    <title>不见不散</title>
+    <year>1998</year>
+    <studio>中国电影</studio>
+    <director>冯小刚</director>
+    <description>刘元和李清在洛杉矶的爱情故事</description>
+    <tag>comedy</tag>
+    <tag>romance</tag>
+    <actor>
+        <name>葛优</name>
+        <name>徐帆</name>
+        <name>李明</name>
+        <name>杜功海</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

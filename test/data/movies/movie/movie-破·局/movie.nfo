@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-破·局</id>
+    <title>破·局</title>
+    <year>2017</year>
+    <studio>博纳影业</studio>
+    <director>李天柱</director>
+    <description>富豪家族的权谋斗争</description>
+    <tag>crime</tag>
+    <tag>suspense</tag>
+    <actor>
+        <name>郭富城</name>
+        <name>王千源</name>
+        <name>王景春</name>
+        <name>任达华</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

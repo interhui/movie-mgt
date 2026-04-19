@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-幸福到万家</id>
+    <title>幸福到万家</title>
+    <year>2022</year>
+    <studio>优酷</studio>
+    <director>郑晓龙</director>
+    <description>农村女性维护正义与公平的故事</description>
+    <tag>drama</tag>
+    <tag>realistic</tag>
+    <actor>
+        <name>赵丽颖</name>
+        <name>罗晋</name>
+        <name>刘威</name>
+        <name>唐曾</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-熊出没·变形记</id>
+    <title>熊出没·变形记</title>
+    <year>2018</year>
+    <studio>华强方特</studio>
+    <director>丁亮</director>
+    <description>光头强和熊大熊二缩小后微观世界冒险</description>
+    <tag>animation</tag>
+    <tag>comedy</tag>
+    <actor>
+        <name>张伟</name>
+        <name>张秉君</name>
+        <name>谭笑</name>
+        <name>周子瑜</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

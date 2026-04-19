@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-狐妖小红娘</id>
+    <title>狐妖小红娘</title>
+    <year>2015</year>
+    <studio>腾讯动漫</studio>
+    <director>王昕</director>
+    <description>狐妖为人类再续前缘的奇幻故事</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>涂山苏苏</name>
+        <name>白月初</name>
+        <name>涂山雅雅</name>
+        <name>东方月初</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

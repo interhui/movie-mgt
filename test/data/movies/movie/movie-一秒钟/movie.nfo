@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-一秒钟</id>
+    <title>一秒钟</title>
+    <year>2020</year>
+    <studio>欢喜传媒</studio>
+    <director>张艺谋</director>
+    <description>劳改犯为看女儿电影而逃亡的故事</description>
+    <tag>drama</tag>
+    <tag>history</tag>
+    <actor>
+        <name>张译</name>
+        <name>刘浩存</name>
+        <name>范伟</name>
+        <name>于和伟</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

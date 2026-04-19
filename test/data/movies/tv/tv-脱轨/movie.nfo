@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-脱轨</id>
+    <title>脱轨</title>
+    <year>2023</year>
+    <studio>优酷</studio>
+    <director>沈阳</director>
+    <description>两个时空的爱情故事</description>
+    <tag>modern</tag>
+    <tag>romance</tag>
+    <actor>
+        <name>刘浩存</name>
+        <name>林一</name>
+        <name>黄圣池</name>
+        <name>樊霖锋</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

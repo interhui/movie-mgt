@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-悬崖之上</id>
+    <title>悬崖之上</title>
+    <year>2021</year>
+    <studio>中国电影</studio>
+    <director>张艺谋</director>
+    <description>特工在哈尔滨执行任务的故事</description>
+    <tag>suspense</tag>
+    <tag>history</tag>
+    <actor>
+        <name>张译</name>
+        <name>于和伟</name>
+        <name>秦海璐</name>
+        <name>朱亚文</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

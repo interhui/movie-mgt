@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-哪吒之魔童降世</id>
+    <title>哪吒之魔童降世</title>
+    <year>2019</year>
+    <studio>彩条屋影业</studio>
+    <director>饺子</director>
+    <description>哪吒逆天而行，反抗命运的故事</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>吕艳婷</name>
+        <name>囧森瑟夫</name>
+        <name>瀚墨</name>
+        <name>陈浩</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

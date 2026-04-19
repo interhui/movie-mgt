@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-少年的你</id>
+    <title>少年的你</title>
+    <year>2019</year>
+    <studio>青春光线</studio>
+    <director>曾国祥</director>
+    <description>校园霸凌背景下两个少年的成长故事</description>
+    <tag>drama</tag>
+    <tag>youth</tag>
+    <actor>
+        <name>周冬雨</name>
+        <name>易烊千玺</name>
+        <name>尹昉</name>
+        <name>黄觉</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

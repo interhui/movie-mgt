@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-满城尽带黄金甲</id>
+    <title>满城尽带黄金甲</title>
+    <year>2006</year>
+    <studio>新画面影业</studio>
+    <director>张艺谋</director>
+    <description>宫廷权谋与家族恩怨的故事</description>
+    <tag>costume</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>周润发</name>
+        <name>巩俐</name>
+        <name>周杰伦</name>
+        <name>刘烨</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

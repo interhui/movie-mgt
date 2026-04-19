@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-十面埋伏</id>
+    <title>十面埋伏</title>
+    <year>2004</year>
+    <studio>新画面影业</studio>
+    <director>张艺谋</director>
+    <description>唐朝捕快与飞刀门的故事</description>
+    <tag>action</tag>
+    <tag>costume</tag>
+    <actor>
+        <name>刘德华</name>
+        <name>章子怡</name>
+        <name>金城武</name>
+        <name>宋丹丹</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

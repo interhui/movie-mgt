@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-非诚勿扰</id>
+    <title>非诚勿扰</title>
+    <year>2008</year>
+    <studio>华谊兄弟</studio>
+    <director>冯小刚</director>
+    <description>秦奋的征婚之旅</description>
+    <tag>comedy</tag>
+    <tag>romance</tag>
+    <actor>
+        <name>葛优</name>
+        <name>舒淇</name>
+        <name>范伟</name>
+        <name>方中信</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

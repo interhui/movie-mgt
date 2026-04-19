@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-给爸爸的信</id>
+    <title>给爸爸的信</title>
+    <year>1995</year>
+    <studio>嘉禾</studio>
+    <director>元奎</director>
+    <description>父亲与儿子的感人故事</description>
+    <tag>action</tag>
+    <tag>family</tag>
+    <actor>
+        <name>李连杰</name>
+        <name>梅艳芳</name>
+        <name>谢苗</name>
+        <name>于荣光</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

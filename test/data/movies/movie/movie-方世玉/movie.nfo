@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-方世玉</id>
+    <title>方世玉</title>
+    <year>1993</year>
+    <studio>嘉禾</studio>
+    <director>元奎</director>
+    <description>方世玉的行侠仗义</description>
+    <tag>action</tag>
+    <tag>comedy</tag>
+    <actor>
+        <name>李连杰</name>
+        <name>萧芳芳</name>
+        <name>李嘉欣</name>
+        <name>陈松勇</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

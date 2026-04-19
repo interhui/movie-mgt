@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-天下无贼</id>
+    <title>天下无贼</title>
+    <year>2004</year>
+    <studio>华谊兄弟</studio>
+    <director>冯小刚</director>
+    <description>贼夫妻保护傻根的故事</description>
+    <tag>crime</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>刘德华</name>
+        <name>刘若英</name>
+        <name>葛优</name>
+        <name>王宝强</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

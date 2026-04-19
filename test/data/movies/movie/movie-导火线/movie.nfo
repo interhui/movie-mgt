@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-导火线</id>
+    <title>导火线</title>
+    <year>2007</year>
+    <studio>博纳影业</studio>
+    <director>叶伟信</director>
+    <description>卧底警察搜集犯罪证据</description>
+    <tag>action</tag>
+    <tag>crime</tag>
+    <actor>
+        <name>甄子丹</name>
+        <name>古天乐</name>
+        <name>范冰冰</name>
+        <name>邹兆龙</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-姜子牙</id>
+    <title>姜子牙</title>
+    <year>2020</year>
+    <studio>彩条屋影业</studio>
+    <director>程腾</director>
+    <description>姜子牙在封神之后的自我救赎之旅</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>郑希</name>
+        <name>杨凝</name>
+        <name>王敏纳</name>
+        <name>姜广涛</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

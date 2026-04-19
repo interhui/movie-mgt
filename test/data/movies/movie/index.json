@@ -1,0 +1,3173 @@
+{
+  "movies": [
+    {
+      "id": "movie-1921",
+      "name": "1921",
+      "title": "1921",
+      "description": "中国共产党成立的故事",
+      "year": "2021",
+      "publishDate": "2021",
+      "outline": "",
+      "director": "黄建新",
+      "actors": [
+        "黄轩",
+        "倪妮",
+        "王仁君",
+        "刘昊然"
+      ],
+      "studio": "腾讯影业",
+      "tags": [
+        "history",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-一个人的武林",
+      "name": "一个人的武林",
+      "title": "一个人的武林",
+      "description": "退役警察与武术狂人的对决",
+      "year": "2014",
+      "publishDate": "2014",
+      "outline": "",
+      "director": "陈德森",
+      "actors": [
+        "甄子丹",
+        "王宝强",
+        "白百何",
+        "杨采妮"
+      ],
+      "studio": "英皇电影",
+      "tags": [
+        "action",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-一九四二",
+      "name": "一九四二",
+      "title": "一九四二",
+      "description": "河南大饥荒的真实历史",
+      "year": "2012",
+      "publishDate": "2012",
+      "outline": "",
+      "director": "冯小刚",
+      "actors": [
+        "张国立",
+        "陈道明",
+        "徐帆",
+        "张涵予"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "drama",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-一步之遥",
+      "name": "一步之遥",
+      "title": "一步之遥",
+      "description": "民国时期的选美大赛与阴谋",
+      "year": "2014",
+      "publishDate": "2014",
+      "outline": "",
+      "director": "姜文",
+      "actors": [
+        "姜文",
+        "葛优",
+        "周韵",
+        "舒淇"
+      ],
+      "studio": "不亦乐乎",
+      "tags": [
+        "comedy",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-一点就到家",
+      "name": "一点就到家",
+      "title": "一点就到家",
+      "description": "三个年轻人在云南创业的故事",
+      "year": "2020",
+      "publishDate": "2020",
+      "outline": "",
+      "director": "许宏宇",
+      "actors": [
+        "刘昊然",
+        "彭昱畅",
+        "尹昉",
+        "姜珮瑶"
+      ],
+      "studio": "中国电影",
+      "tags": [
+        "comedy",
+        "youth"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-一秒钟",
+      "name": "一秒钟",
+      "title": "一秒钟",
+      "description": "劳改犯为看女儿电影而逃亡的故事",
+      "year": "2020",
+      "publishDate": "2020",
+      "outline": "",
+      "director": "张艺谋",
+      "actors": [
+        "张译",
+        "刘浩存",
+        "范伟",
+        "于和伟"
+      ],
+      "studio": "欢喜传媒",
+      "tags": [
+        "drama",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-七剑",
+      "name": "七剑",
+      "title": "七剑",
+      "description": "七位剑客拯救苍生的故事",
+      "year": "2005",
+      "publishDate": "2005",
+      "outline": "",
+      "director": "徐克",
+      "actors": [
+        "甄子丹",
+        "黎明",
+        "杨采妮",
+        "陆毅"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "action",
+        "costume"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-万里归途",
+      "name": "万里归途",
+      "title": "万里归途",
+      "description": "外交官撤侨的真实故事改编",
+      "year": "2022",
+      "publishDate": "2022",
+      "outline": "",
+      "director": "饶晓志",
+      "actors": [
+        "张译",
+        "王俊凯",
+        "殷桃",
+        "成泰燊"
+      ],
+      "studio": "华策影视",
+      "tags": [
+        "drama",
+        "war"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-不二神探",
+      "name": "不二神探",
+      "title": "不二神探",
+      "description": "搞笑警察搭档破案",
+      "year": "2013",
+      "publishDate": "2013",
+      "outline": "",
+      "director": "王子鸣",
+      "actors": [
+        "文章",
+        "李连杰",
+        "刘诗诗",
+        "陈妍希"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "comedy",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-不见不散",
+      "name": "不见不散",
+      "title": "不见不散",
+      "description": "刘元和李清在洛杉矶的爱情故事",
+      "year": "1998",
+      "publishDate": "1998",
+      "outline": "",
+      "director": "冯小刚",
+      "actors": [
+        "葛优",
+        "徐帆",
+        "李明",
+        "杜功海"
+      ],
+      "studio": "中国电影",
+      "tags": [
+        "comedy",
+        "romance"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-东方不败风云再起",
+      "name": "东方不败风云再起",
+      "title": "东方不败风云再起",
+      "description": "东方不败重出江湖",
+      "year": "1992",
+      "publishDate": "1992",
+      "outline": "",
+      "director": "李惠民",
+      "actors": [
+        "林青霞",
+        "李连杰",
+        "关之琳",
+        "李嘉欣"
+      ],
+      "studio": "金公主",
+      "tags": [
+        "action",
+        "costume"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-中南海保镖",
+      "name": "中南海保镖",
+      "title": "中南海保镖",
+      "description": "中南海保镖保护证人的故事",
+      "year": "1994",
+      "publishDate": "1994",
+      "outline": "",
+      "director": "元奎",
+      "actors": [
+        "李连杰",
+        "钟丽缇",
+        "郑则仕",
+        "邹兆龙"
+      ],
+      "studio": "嘉禾",
+      "tags": [
+        "action",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-中国医生",
+      "name": "中国医生",
+      "title": "中国医生",
+      "description": "武汉抗疫期间的医生故事",
+      "year": "2021",
+      "publishDate": "2021",
+      "outline": "",
+      "director": "刘伟强",
+      "actors": [
+        "张涵予",
+        "袁泉",
+        "朱亚文",
+        "李晨"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "drama",
+        "realistic"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-中国机长",
+      "name": "中国机长",
+      "title": "中国机长",
+      "description": "川航8633航班备降的真实事件",
+      "year": "2019",
+      "publishDate": "2019",
+      "outline": "",
+      "director": "刘伟强",
+      "actors": [
+        "张涵予",
+        "欧豪",
+        "杜江",
+        "袁泉"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "drama",
+        "action"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-人潮汹涌",
+      "name": "人潮汹涌",
+      "title": "人潮汹涌",
+      "description": "杀手和群演互换人生的故事",
+      "year": "2021",
+      "publishDate": "2021",
+      "outline": "",
+      "director": "饶晓志",
+      "actors": [
+        "刘德华",
+        "肖央",
+        "万茜",
+        "程怡"
+      ],
+      "studio": "饶晓志工作室",
+      "tags": [
+        "comedy",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-人生大事",
+      "name": "人生大事",
+      "title": "人生大事",
+      "description": "殡葬师与孤儿之间的温情故事",
+      "year": "2022",
+      "publishDate": "2022",
+      "outline": "",
+      "director": "刘江江",
+      "actors": [
+        "朱一龙",
+        "杨恩又",
+        "王戈",
+        "刘陆"
+      ],
+      "studio": "联瑞影业",
+      "tags": [
+        "drama",
+        "family"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-你好，李焕英",
+      "name": "你好，李焕英",
+      "title": "你好，李焕英",
+      "description": "女儿穿越时空回到过去，与年轻时的母亲相遇的故事",
+      "year": "2021",
+      "publishDate": "2021",
+      "outline": "",
+      "director": "贾玲",
+      "actors": [
+        "贾玲",
+        "张小斐",
+        "沈腾",
+        "陈赫"
+      ],
+      "studio": "新丽传媒",
+      "tags": [
+        "comedy",
+        "drama",
+        "family"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-倚天屠龙记之魔教教主",
+      "name": "倚天屠龙记之魔教教主",
+      "title": "倚天屠龙记之魔教教主",
+      "description": "张无忌成长与明教的故事",
+      "year": "1993",
+      "publishDate": "1993",
+      "outline": "",
+      "director": "王晶",
+      "actors": [
+        "李连杰",
+        "张敏",
+        "黎姿",
+        "邱淑贞"
+      ],
+      "studio": "嘉禾",
+      "tags": [
+        "action",
+        "costume"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-倩女幽魂",
+      "name": "倩女幽魂",
+      "title": "倩女幽魂",
+      "description": "书生与女鬼的爱情故事",
+      "year": "1987",
+      "publishDate": "1987",
+      "outline": "",
+      "director": "程小东",
+      "actors": [
+        "张国荣",
+        "王祖贤",
+        "午马",
+        "刘兆铭"
+      ],
+      "studio": "新艺城",
+      "tags": [
+        "fantasy",
+        "romance"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-八佰",
+      "name": "八佰",
+      "title": "八佰",
+      "description": "1937年淞沪会战末期，四行仓库保卫战",
+      "year": "2020",
+      "publishDate": "2020",
+      "outline": "",
+      "director": "管虎",
+      "actors": [
+        "张译",
+        "姜武",
+        "王千源",
+        "黄志忠"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "war",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-冒险王",
+      "name": "冒险王",
+      "title": "冒险王",
+      "description": "冒险王寻找圣经的故事",
+      "year": "1996",
+      "publishDate": "1996",
+      "outline": "",
+      "director": "程小东",
+      "actors": [
+        "李连杰",
+        "关之琳",
+        "金城武",
+        "杨采妮"
+      ],
+      "studio": "嘉禾",
+      "tags": [
+        "action",
+        "adventure"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-刺杀小说家",
+      "name": "刺杀小说家",
+      "title": "刺杀小说家",
+      "description": "现实与小说世界交织的奇幻故事",
+      "year": "2021",
+      "publishDate": "2021",
+      "outline": "",
+      "director": "路阳",
+      "actors": [
+        "雷佳音",
+        "杨幂",
+        "董子健",
+        "于和伟"
+      ],
+      "studio": "华策影视",
+      "tags": [
+        "fantasy",
+        "action"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-功夫之王",
+      "name": "功夫之王",
+      "title": "功夫之王",
+      "description": "美国少年穿越到中国学习功夫",
+      "year": "2008",
+      "publishDate": "2008",
+      "outline": "",
+      "director": "罗伯·明可夫",
+      "actors": [
+        "李连杰",
+        "成龙",
+        "刘亦菲",
+        "迈克尔·安格拉诺"
+      ],
+      "studio": "狮门影业",
+      "tags": [
+        "action",
+        "fantasy"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-功守道",
+      "name": "功守道",
+      "title": "功守道",
+      "description": "太极高手的传奇故事",
+      "year": "2017",
+      "publishDate": "2017",
+      "outline": "",
+      "director": "马云",
+      "actors": [
+        "马云",
+        "李连杰",
+        "甄子丹",
+        "吴京"
+      ],
+      "studio": "功守道影业",
+      "tags": [
+        "action",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-十月围城",
+      "name": "十月围城",
+      "title": "十月围城",
+      "description": "保护孙中山的故事",
+      "year": "2009",
+      "publishDate": "2009",
+      "outline": "",
+      "director": "陈德森",
+      "actors": [
+        "甄子丹",
+        "谢霆锋",
+        "王学圻",
+        "梁家辉"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "history",
+        "action"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-十面埋伏",
+      "name": "十面埋伏",
+      "title": "十面埋伏",
+      "description": "唐朝捕快与飞刀门的故事",
+      "year": "2004",
+      "publishDate": "2004",
+      "outline": "",
+      "director": "张艺谋",
+      "actors": [
+        "刘德华",
+        "章子怡",
+        "金城武",
+        "宋丹丹"
+      ],
+      "studio": "新画面影业",
+      "tags": [
+        "action",
+        "costume"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-变形金刚4",
+      "name": "变形金刚4",
+      "title": "变形金刚4",
+      "description": "机器人与人类的故事",
+      "year": "2014",
+      "publishDate": "2014",
+      "outline": "",
+      "director": "迈克尔·贝",
+      "actors": [
+        "马克·沃尔伯格",
+        "李冰冰",
+        "斯坦利·图齐",
+        "凯尔西·格兰莫"
+      ],
+      "studio": "派拉蒙",
+      "tags": [
+        "sci-fi",
+        "action"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-叶问",
+      "name": "叶问",
+      "title": "叶问",
+      "description": "咏春宗师叶问的故事",
+      "year": "2008",
+      "publishDate": "2008",
+      "outline": "",
+      "director": "叶伟信",
+      "actors": [
+        "甄子丹",
+        "任达华",
+        "熊黛林",
+        "樊少皇"
+      ],
+      "studio": "东方电影",
+      "tags": [
+        "action",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-叶问2",
+      "name": "叶问2",
+      "title": "叶问2",
+      "description": "叶问在香港开馆授徒",
+      "year": "2010",
+      "publishDate": "2010",
+      "outline": "",
+      "director": "叶伟信",
+      "actors": [
+        "甄子丹",
+        "洪金宝",
+        "熊黛林",
+        "黄晓明"
+      ],
+      "studio": "东方电影",
+      "tags": [
+        "action",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-叶问3",
+      "name": "叶问3",
+      "title": "叶问3",
+      "description": "叶问面对人生重大抉择",
+      "year": "2015",
+      "publishDate": "2015",
+      "outline": "",
+      "director": "叶伟信",
+      "actors": [
+        "甄子丹",
+        "张晋",
+        "熊黛林",
+        "谭耀文"
+      ],
+      "studio": "东方电影",
+      "tags": [
+        "action",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-叶问4：完结篇",
+      "name": "叶问4：完结篇",
+      "title": "叶问4：完结篇",
+      "description": "叶问最后一战",
+      "year": "2019",
+      "publishDate": "2019",
+      "outline": "",
+      "director": "叶伟信",
+      "actors": [
+        "甄子丹",
+        "吴樾",
+        "吴建豪",
+        "斯科特·阿金斯"
+      ],
+      "studio": "东方电影",
+      "tags": [
+        "action",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-哪吒之魔童降世",
+      "name": "哪吒之魔童降世",
+      "title": "哪吒之魔童降世",
+      "description": "哪吒逆天而行，反抗命运的故事",
+      "year": "2019",
+      "publishDate": "2019",
+      "outline": "",
+      "director": "饺子",
+      "actors": [
+        "吕艳婷",
+        "囧森瑟夫",
+        "瀚墨",
+        "陈浩"
+      ],
+      "studio": "彩条屋影业",
+      "tags": [
+        "animation",
+        "fantasy"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-唐人街探案",
+      "name": "唐人街探案",
+      "title": "唐人街探案",
+      "description": "天赋异禀的结巴少年和精于偷窃的猥琐大叔在泰国破案",
+      "year": "2015",
+      "publishDate": "2015",
+      "outline": "",
+      "director": "陈思诚",
+      "actors": [
+        "王宝强",
+        "刘昊然",
+        "陈赫",
+        "佟丽娅"
+      ],
+      "studio": "万达影视",
+      "tags": [
+        "comedy",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-唐人街探案2",
+      "name": "唐人街探案2",
+      "title": "唐人街探案2",
+      "description": "唐仁和秦风在纽约破案的故事",
+      "year": "2018",
+      "publishDate": "2018",
+      "outline": "",
+      "director": "陈思诚",
+      "actors": [
+        "王宝强",
+        "刘昊然",
+        "肖央",
+        "刘承羽"
+      ],
+      "studio": "万达影视",
+      "tags": [
+        "comedy",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-唐人街探案3",
+      "name": "唐人街探案3",
+      "title": "唐人街探案3",
+      "description": "唐仁和秦风在东京破案的故事",
+      "year": "2021",
+      "publishDate": "2021",
+      "outline": "",
+      "director": "陈思诚",
+      "actors": [
+        "王宝强",
+        "刘昊然",
+        "妻夫木聪",
+        "托尼·贾"
+      ],
+      "studio": "万达影视",
+      "tags": [
+        "comedy",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-唐山大地震",
+      "name": "唐山大地震",
+      "title": "唐山大地震",
+      "description": "地震中家庭的离散与重逢",
+      "year": "2010",
+      "publishDate": "2010",
+      "outline": "",
+      "director": "冯小刚",
+      "actors": [
+        "徐帆",
+        "张静初",
+        "李晨",
+        "陈道明"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "drama",
+        "disaster"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-夏洛特烦恼",
+      "name": "夏洛特烦恼",
+      "title": "夏洛特烦恼",
+      "description": "夏洛穿越回到高中时代的故事",
+      "year": "2015",
+      "publishDate": "2015",
+      "outline": "",
+      "director": "闫非",
+      "actors": [
+        "沈腾",
+        "马丽",
+        "尹正",
+        "艾伦"
+      ],
+      "studio": "开心麻花",
+      "tags": [
+        "comedy",
+        "youth"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-夜宴",
+      "name": "夜宴",
+      "title": "夜宴",
+      "description": "宫廷权谋与爱情悲剧",
+      "year": "2006",
+      "publishDate": "2006",
+      "outline": "",
+      "director": "冯小刚",
+      "actors": [
+        "章子怡",
+        "葛优",
+        "吴彦祖",
+        "周迅"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "costume",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-大腕",
+      "name": "大腕",
+      "title": "大腕",
+      "description": "葬礼策划引发的故事",
+      "year": "2001",
+      "publishDate": "2001",
+      "outline": "",
+      "director": "冯小刚",
+      "actors": [
+        "葛优",
+        "关之琳",
+        "英达",
+        "保罗·克塞"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "comedy",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-天下无贼",
+      "name": "天下无贼",
+      "title": "天下无贼",
+      "description": "贼夫妻保护傻根的故事",
+      "year": "2004",
+      "publishDate": "2004",
+      "outline": "",
+      "director": "冯小刚",
+      "actors": [
+        "刘德华",
+        "刘若英",
+        "葛优",
+        "王宝强"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "crime",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-太极张三丰",
+      "name": "太极张三丰",
+      "title": "太极张三丰",
+      "description": "张三丰创立太极拳的故事",
+      "year": "1993",
+      "publishDate": "1993",
+      "outline": "",
+      "director": "袁和平",
+      "actors": [
+        "李连杰",
+        "杨紫琼",
+        "钱小豪",
+        "袁洁莹"
+      ],
+      "studio": "嘉禾",
+      "tags": [
+        "action",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-太阳照常升起",
+      "name": "太阳照常升起",
+      "title": "太阳照常升起",
+      "description": "四个时空交织的魔幻故事",
+      "year": "2007",
+      "publishDate": "2007",
+      "outline": "",
+      "director": "姜文",
+      "actors": [
+        "房祖名",
+        "周韵",
+        "姜文",
+        "黄秋生"
+      ],
+      "studio": "不亦乐乎",
+      "tags": [
+        "drama",
+        "fantasy"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-夺冠",
+      "name": "夺冠",
+      "title": "夺冠",
+      "description": "中国女排的奋斗历程",
+      "year": "2020",
+      "publishDate": "2020",
+      "outline": "",
+      "director": "陈可辛",
+      "actors": [
+        "巩俐",
+        "黄渤",
+        "吴刚",
+        "彭昱畅"
+      ],
+      "studio": "我们制作",
+      "tags": [
+        "sports",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-奇门遁甲",
+      "name": "奇门遁甲",
+      "title": "奇门遁甲",
+      "description": "江湖奇侠与神秘组织的故事",
+      "year": "2017",
+      "publishDate": "2017",
+      "outline": "",
+      "director": "袁和平",
+      "actors": [
+        "大鹏",
+        "倪妮",
+        "李治廷",
+        "周冬雨"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "fantasy",
+        "action"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-孤注一掷",
+      "name": "孤注一掷",
+      "title": "孤注一掷",
+      "description": "网络诈骗题材电影，揭露境外诈骗产业链",
+      "year": "2023",
+      "publishDate": "2023",
+      "outline": "",
+      "director": "申奥",
+      "actors": [
+        "张艺兴",
+        "金晨",
+        "咏梅",
+        "王传君"
+      ],
+      "studio": "坏猴子影业",
+      "tags": [
+        "crime",
+        "suspense"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-宇宙追缉令",
+      "name": "宇宙追缉令",
+      "title": "宇宙追缉令",
+      "description": "平行宇宙中的对决",
+      "year": "2001",
+      "publishDate": "2001",
+      "outline": "",
+      "director": "黄毅瑜",
+      "actors": [
+        "李连杰",
+        "杰森·斯坦森",
+        "卡拉·古奇诺",
+        "德尔罗伊·林多"
+      ],
+      "studio": "新线影业",
+      "tags": [
+        "action",
+        "sci-fi"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-寒战",
+      "name": "寒战",
+      "title": "寒战",
+      "description": "香港警队内部的权力斗争",
+      "year": "2012",
+      "publishDate": "2012",
+      "outline": "",
+      "director": "梁乐民",
+      "actors": [
+        "郭富城",
+        "梁家辉",
+        "李治廷",
+        "彭于晏"
+      ],
+      "studio": "银都机构",
+      "tags": [
+        "crime",
+        "suspense"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-寒战2",
+      "name": "寒战2",
+      "title": "寒战2",
+      "description": "刘杰辉继续追查真相",
+      "year": "2016",
+      "publishDate": "2016",
+      "outline": "",
+      "director": "梁乐民",
+      "actors": [
+        "郭富城",
+        "梁家辉",
+        "周润发",
+        "彭于晏"
+      ],
+      "studio": "银都机构",
+      "tags": [
+        "crime",
+        "suspense"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-导火线",
+      "name": "导火线",
+      "title": "导火线",
+      "description": "卧底警察搜集犯罪证据",
+      "year": "2007",
+      "publishDate": "2007",
+      "outline": "",
+      "director": "叶伟信",
+      "actors": [
+        "甄子丹",
+        "古天乐",
+        "范冰冰",
+        "邹兆龙"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "action",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-封神传奇",
+      "name": "封神传奇",
+      "title": "封神传奇",
+      "description": "姜子牙辅佐武王伐纣",
+      "year": "2016",
+      "publishDate": "2016",
+      "outline": "",
+      "director": "许安",
+      "actors": [
+        "李连杰",
+        "范冰冰",
+        "古天乐",
+        "黄晓明"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "fantasy",
+        "action"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-封神第一部",
+      "name": "封神第一部",
+      "title": "封神第一部",
+      "description": "商王殷寿与狐妖妲己勾结，姜子牙携封神榜下山寻找天下共主",
+      "year": "2023",
+      "publishDate": "2023",
+      "outline": "",
+      "director": "乌尔善",
+      "actors": [
+        "费翔",
+        "李雪健",
+        "黄渤",
+        "于适"
+      ],
+      "studio": "北京文化",
+      "tags": [
+        "fantasy",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-少年的你",
+      "name": "少年的你",
+      "title": "少年的你",
+      "description": "校园霸凌背景下两个少年的成长故事",
+      "year": "2019",
+      "publishDate": "2019",
+      "outline": "",
+      "director": "曾国祥",
+      "actors": [
+        "周冬雨",
+        "易烊千玺",
+        "尹昉",
+        "黄觉"
+      ],
+      "studio": "青春光线",
+      "tags": [
+        "drama",
+        "youth"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-建党伟业",
+      "name": "建党伟业",
+      "title": "建党伟业",
+      "description": "从辛亥革命到中共建党的历史",
+      "year": "2011",
+      "publishDate": "2011",
+      "outline": "",
+      "director": "韩三平",
+      "actors": [
+        "刘烨",
+        "陈坤",
+        "张嘉译",
+        "李沁"
+      ],
+      "studio": "中国电影",
+      "tags": [
+        "history",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-建军大业",
+      "name": "建军大业",
+      "title": "建军大业",
+      "description": "人民军队的创建历程",
+      "year": "2017",
+      "publishDate": "2017",
+      "outline": "",
+      "director": "刘伟强",
+      "actors": [
+        "刘烨",
+        "朱亚文",
+        "黄志忠",
+        "王景春"
+      ],
+      "studio": "中国电影",
+      "tags": [
+        "war",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-建国大业",
+      "name": "建国大业",
+      "title": "建国大业",
+      "description": "新中国成立的历史进程",
+      "year": "2009",
+      "publishDate": "2009",
+      "outline": "",
+      "director": "韩三平",
+      "actors": [
+        "唐国强",
+        "张国立",
+        "许晴",
+        "刘劲"
+      ],
+      "studio": "中国电影",
+      "tags": [
+        "history",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-影",
+      "name": "影",
+      "title": "影",
+      "description": "替身与真身的权谋故事",
+      "year": "2018",
+      "publishDate": "2018",
+      "outline": "",
+      "director": "张艺谋",
+      "actors": [
+        "邓超",
+        "孙俪",
+        "郑恺",
+        "王千源"
+      ],
+      "studio": "乐视影业",
+      "tags": [
+        "action",
+        "costume"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-怒火·重案",
+      "name": "怒火·重案",
+      "title": "怒火·重案",
+      "description": "警察与悍匪的正邪对决",
+      "year": "2021",
+      "publishDate": "2021",
+      "outline": "",
+      "director": "陈木胜",
+      "actors": [
+        "甄子丹",
+        "谢霆锋",
+        "秦岚",
+        "谭耀文"
+      ],
+      "studio": "英皇电影",
+      "tags": [
+        "action",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-悟空传",
+      "name": "悟空传",
+      "title": "悟空传",
+      "description": "孙悟空大闹天宫的故事",
+      "year": "2017",
+      "publishDate": "2017",
+      "outline": "",
+      "director": "郭子健",
+      "actors": [
+        "彭于晏",
+        "倪妮",
+        "余文乐",
+        "俞飞鸿"
+      ],
+      "studio": "新丽传媒",
+      "tags": [
+        "fantasy",
+        "action"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-悬崖之上",
+      "name": "悬崖之上",
+      "title": "悬崖之上",
+      "description": "特工在哈尔滨执行任务的故事",
+      "year": "2021",
+      "publishDate": "2021",
+      "outline": "",
+      "director": "张艺谋",
+      "actors": [
+        "张译",
+        "于和伟",
+        "秦海璐",
+        "朱亚文"
+      ],
+      "studio": "中国电影",
+      "tags": [
+        "suspense",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-我不是药神",
+      "name": "我不是药神",
+      "title": "我不是药神",
+      "description": "普通人从印度代购抗癌药物，救助白血病患者的真实故事改编",
+      "year": "2018",
+      "publishDate": "2018",
+      "outline": "",
+      "director": "文牧野",
+      "actors": [
+        "徐峥",
+        "周一围",
+        "王传君",
+        "谭卓"
+      ],
+      "studio": "坏猴子影业",
+      "tags": [
+        "drama",
+        "realistic"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-我和我的家乡",
+      "name": "我和我的家乡",
+      "title": "我和我的家乡",
+      "description": "五个故事讲述家乡的变化",
+      "year": "2020",
+      "publishDate": "2020",
+      "outline": "",
+      "director": "宁浩",
+      "actors": [
+        "葛优",
+        "黄渤",
+        "范伟",
+        "邓超"
+      ],
+      "studio": "中国电影",
+      "tags": [
+        "drama",
+        "comedy"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-我和我的父辈",
+      "name": "我和我的父辈",
+      "title": "我和我的父辈",
+      "description": "四个时代的父辈故事",
+      "year": "2021",
+      "publishDate": "2021",
+      "outline": "",
+      "director": "吴京",
+      "actors": [
+        "吴京",
+        "章子怡",
+        "徐峥",
+        "沈腾"
+      ],
+      "studio": "中国电影",
+      "tags": [
+        "drama",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-我和我的祖国",
+      "name": "我和我的祖国",
+      "title": "我和我的祖国",
+      "description": "七个故事讲述新中国成立70年来的重要历史瞬间",
+      "year": "2019",
+      "publishDate": "2019",
+      "outline": "",
+      "director": "陈凯歌",
+      "actors": [
+        "黄渤",
+        "张译",
+        "吴京",
+        "葛优"
+      ],
+      "studio": "华夏电影",
+      "tags": [
+        "drama",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-战狼2",
+      "name": "战狼2",
+      "title": "战狼2",
+      "description": "中国特种兵在海外执行任务，保护同胞安全",
+      "year": "2017",
+      "publishDate": "2017",
+      "outline": "",
+      "director": "吴京",
+      "actors": [
+        "吴京",
+        "弗兰克·格里罗",
+        "吴刚",
+        "卢靖姗"
+      ],
+      "studio": "春秋时代",
+      "tags": [
+        "action",
+        "war"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-手机",
+      "name": "手机",
+      "title": "手机",
+      "description": "手机引发的情感危机",
+      "year": "2003",
+      "publishDate": "2003",
+      "outline": "",
+      "director": "冯小刚",
+      "actors": [
+        "葛优",
+        "徐帆",
+        "张国立",
+        "范冰冰"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "drama",
+        "comedy"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-扫毒",
+      "name": "扫毒",
+      "title": "扫毒",
+      "description": "三兄弟与毒枭的较量",
+      "year": "2013",
+      "publishDate": "2013",
+      "outline": "",
+      "director": "陈木胜",
+      "actors": [
+        "刘青云",
+        "古天乐",
+        "张家辉",
+        "袁泉"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "action",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-扫毒2：天地对决",
+      "name": "扫毒2：天地对决",
+      "title": "扫毒2：天地对决",
+      "description": "毒品交易引发的恩怨情仇",
+      "year": "2019",
+      "publishDate": "2019",
+      "outline": "",
+      "director": "邱礼涛",
+      "actors": [
+        "刘德华",
+        "古天乐",
+        "苗侨伟",
+        "林嘉欣"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "action",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-投名状",
+      "name": "投名状",
+      "title": "投名状",
+      "description": "三兄弟的恩怨情仇",
+      "year": "2007",
+      "publishDate": "2007",
+      "outline": "",
+      "director": "陈可辛",
+      "actors": [
+        "李连杰",
+        "刘德华",
+        "金城武",
+        "徐静蕾"
+      ],
+      "studio": "中影集团",
+      "tags": [
+        "action",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-拆弹专家",
+      "name": "拆弹专家",
+      "title": "拆弹专家",
+      "description": "拆弹专家与恐怖分子的对决",
+      "year": "2017",
+      "publishDate": "2017",
+      "outline": "",
+      "director": "邱礼涛",
+      "actors": [
+        "刘德华",
+        "姜武",
+        "宋佳",
+        "吴卓羲"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "action",
+        "suspense"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-拆弹专家2",
+      "name": "拆弹专家2",
+      "title": "拆弹专家2",
+      "description": "潘乘风失去记忆后的故事",
+      "year": "2020",
+      "publishDate": "2020",
+      "outline": "",
+      "director": "邱礼涛",
+      "actors": [
+        "刘德华",
+        "刘青云",
+        "倪妮",
+        "谢君豪"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "action",
+        "suspense"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-攀登者",
+      "name": "攀登者",
+      "title": "攀登者",
+      "description": "中国登山队攀登珠穆朗玛峰",
+      "year": "2019",
+      "publishDate": "2019",
+      "outline": "",
+      "director": "李仁港",
+      "actors": [
+        "吴京",
+        "章子怡",
+        "张译",
+        "井柏然"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "adventure",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-敢死队",
+      "name": "敢死队",
+      "title": "敢死队",
+      "description": "雇佣兵团队执行任务",
+      "year": "2010",
+      "publishDate": "2010",
+      "outline": "",
+      "director": "西尔维斯特·史泰龙",
+      "actors": [
+        "西尔维斯特·史泰龙",
+        "杰森·斯坦森",
+        "李连杰",
+        "米基·洛克"
+      ],
+      "studio": "狮门影业",
+      "tags": [
+        "action",
+        "war"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-敢死队2",
+      "name": "敢死队2",
+      "title": "敢死队2",
+      "description": "雇佣兵团队再次出击",
+      "year": "2012",
+      "publishDate": "2012",
+      "outline": "",
+      "director": "西蒙·韦斯特",
+      "actors": [
+        "西尔维斯特·史泰龙",
+        "杰森·斯坦森",
+        "李连杰",
+        "余男"
+      ],
+      "studio": "狮门影业",
+      "tags": [
+        "action",
+        "war"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-新龙门客栈",
+      "name": "新龙门客栈",
+      "title": "新龙门客栈",
+      "description": "大漠客栈中的恩怨情仇",
+      "year": "1992",
+      "publishDate": "1992",
+      "outline": "",
+      "director": "李惠民",
+      "actors": [
+        "林青霞",
+        "张曼玉",
+        "梁家辉",
+        "甄子丹"
+      ],
+      "studio": "思远影业",
+      "tags": [
+        "action",
+        "costume"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-方世玉",
+      "name": "方世玉",
+      "title": "方世玉",
+      "description": "方世玉的行侠仗义",
+      "year": "1993",
+      "publishDate": "1993",
+      "outline": "",
+      "director": "元奎",
+      "actors": [
+        "李连杰",
+        "萧芳芳",
+        "李嘉欣",
+        "陈松勇"
+      ],
+      "studio": "嘉禾",
+      "tags": [
+        "action",
+        "comedy"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-无名",
+      "name": "无名",
+      "title": "无名",
+      "description": "抗日战争时期地下工作者的故事",
+      "year": "2023",
+      "publishDate": "2023",
+      "outline": "",
+      "director": "程耳",
+      "actors": [
+        "梁朝伟",
+        "王一博",
+        "周迅",
+        "黄磊"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "history",
+        "suspense"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-智取威虎山",
+      "name": "智取威虎山",
+      "title": "智取威虎山",
+      "description": "解放军剿匪的故事",
+      "year": "2014",
+      "publishDate": "2014",
+      "outline": "",
+      "director": "徐克",
+      "actors": [
+        "张涵予",
+        "梁家辉",
+        "林更新",
+        "佟丽娅"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "war",
+        "action"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-杀手之王",
+      "name": "杀手之王",
+      "title": "杀手之王",
+      "description": "顶级杀手的故事",
+      "year": "1998",
+      "publishDate": "1998",
+      "outline": "",
+      "director": "董玮",
+      "actors": [
+        "李连杰",
+        "任达华",
+        "梁咏琪",
+        "曾志伟"
+      ],
+      "studio": "嘉禾",
+      "tags": [
+        "action",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-杀破狼",
+      "name": "杀破狼",
+      "title": "杀破狼",
+      "description": "警察与黑帮的殊死搏斗",
+      "year": "2005",
+      "publishDate": "2005",
+      "outline": "",
+      "director": "叶伟信",
+      "actors": [
+        "甄子丹",
+        "吴京",
+        "任达华",
+        "洪金宝"
+      ],
+      "studio": "银都机构",
+      "tags": [
+        "action",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-杀破狼2",
+      "name": "杀破狼2",
+      "title": "杀破狼2",
+      "description": "卧底警察的生死危机",
+      "year": "2015",
+      "publishDate": "2015",
+      "outline": "",
+      "director": "郑保瑞",
+      "actors": [
+        "吴京",
+        "托尼·贾",
+        "张晋",
+        "任达华"
+      ],
+      "studio": "银都机构",
+      "tags": [
+        "action",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-杀破狼·贪狼",
+      "name": "杀破狼·贪狼",
+      "title": "杀破狼·贪狼",
+      "description": "警察跨国寻女的故事",
+      "year": "2017",
+      "publishDate": "2017",
+      "outline": "",
+      "director": "叶伟信",
+      "actors": [
+        "古天乐",
+        "吴樾",
+        "林家栋",
+        "克里斯·柯林斯"
+      ],
+      "studio": "银都机构",
+      "tags": [
+        "action",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-李茶的姑妈",
+      "name": "李茶的姑妈",
+      "title": "李茶的姑妈",
+      "description": "真假姑妈引发的搞笑故事",
+      "year": "2018",
+      "publishDate": "2018",
+      "outline": "",
+      "director": "吴昱翰",
+      "actors": [
+        "黄才伦",
+        "艾伦",
+        "宋阳",
+        "卢靖姗"
+      ],
+      "studio": "开心麻花",
+      "tags": [
+        "comedy",
+        "family"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-沐浴之王",
+      "name": "沐浴之王",
+      "title": "沐浴之王",
+      "description": "搓澡技艺的传承故事",
+      "year": "2020",
+      "publishDate": "2020",
+      "outline": "",
+      "director": "易小星",
+      "actors": [
+        "彭昱畅",
+        "乔杉",
+        "卜冠今",
+        "苇青"
+      ],
+      "studio": "易小星工作室",
+      "tags": [
+        "comedy",
+        "family"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-没完没了",
+      "name": "没完没了",
+      "title": "没完没了",
+      "description": "韩冬绑架阮大伟女友的故事",
+      "year": "1999",
+      "publishDate": "1999",
+      "outline": "",
+      "director": "冯小刚",
+      "actors": [
+        "葛优",
+        "吴倩莲",
+        "傅彪",
+        "徐帆"
+      ],
+      "studio": "中国电影",
+      "tags": [
+        "comedy",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-流浪地球",
+      "name": "流浪地球",
+      "title": "流浪地球",
+      "description": "太阳即将毁灭，人类启动流浪地球计划，带着地球逃离太阳系",
+      "year": "2019",
+      "publishDate": "2019",
+      "outline": "",
+      "director": "郭帆",
+      "actors": [
+        "吴京",
+        "屈楚萧",
+        "李光洁",
+        "吴孟达"
+      ],
+      "studio": "中国电影",
+      "tags": [
+        "sci-fi",
+        "action"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-流浪地球2",
+      "name": "流浪地球2",
+      "title": "流浪地球2",
+      "description": "太阳危机前的全球救援行动",
+      "year": "2023",
+      "publishDate": "2023",
+      "outline": "",
+      "director": "郭帆",
+      "actors": [
+        "吴京",
+        "刘德华",
+        "李雪健",
+        "沙溢"
+      ],
+      "studio": "中国电影",
+      "tags": [
+        "sci-fi",
+        "action"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-海洋天堂",
+      "name": "海洋天堂",
+      "title": "海洋天堂",
+      "description": "父亲与孤独症儿子的故事",
+      "year": "2010",
+      "publishDate": "2010",
+      "outline": "",
+      "director": "薛晓路",
+      "actors": [
+        "李连杰",
+        "文章",
+        "高圆圆",
+        "朱媛媛"
+      ],
+      "studio": "中国电影",
+      "tags": [
+        "drama",
+        "family"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-消失的她",
+      "name": "消失的她",
+      "title": "消失的她",
+      "description": "妻子在旅行中离奇失踪，丈夫寻找真相",
+      "year": "2023",
+      "publishDate": "2023",
+      "outline": "",
+      "director": "崔睿",
+      "actors": [
+        "朱一龙",
+        "倪妮",
+        "文咏珊",
+        "杜江"
+      ],
+      "studio": "壹同制作",
+      "tags": [
+        "suspense",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-温暖的抱抱",
+      "name": "温暖的抱抱",
+      "title": "温暖的抱抱",
+      "description": "强迫症患者的治愈之旅",
+      "year": "2020",
+      "publishDate": "2020",
+      "outline": "",
+      "director": "常远",
+      "actors": [
+        "常远",
+        "李沁",
+        "沈腾",
+        "乔杉"
+      ],
+      "studio": "开心麻花",
+      "tags": [
+        "comedy",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-游侠",
+      "name": "游侠",
+      "title": "游侠",
+      "description": "FBI追捕神秘杀手",
+      "year": "2007",
+      "publishDate": "2007",
+      "outline": "",
+      "director": "菲利普·G·阿特威尔",
+      "actors": [
+        "李连杰",
+        "杰森·斯坦森",
+        "娜迪亚·法尔丝",
+        "路易斯·古兹曼"
+      ],
+      "studio": "狮门影业",
+      "tags": [
+        "action",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-湄公河行动",
+      "name": "湄公河行动",
+      "title": "湄公河行动",
+      "description": "中国警察跨境缉毒的故事",
+      "year": "2016",
+      "publishDate": "2016",
+      "outline": "",
+      "director": "林超贤",
+      "actors": [
+        "张涵予",
+        "彭于晏",
+        "孙淳",
+        "陈宝国"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "action",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-满城尽带黄金甲",
+      "name": "满城尽带黄金甲",
+      "title": "满城尽带黄金甲",
+      "description": "宫廷权谋与家族恩怨的故事",
+      "year": "2006",
+      "publishDate": "2006",
+      "outline": "",
+      "director": "张艺谋",
+      "actors": [
+        "周润发",
+        "巩俐",
+        "周杰伦",
+        "刘烨"
+      ],
+      "studio": "新画面影业",
+      "tags": [
+        "costume",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-满江红",
+      "name": "满江红",
+      "title": "满江红",
+      "description": "南宋时期寻找岳飞遗作的故事",
+      "year": "2023",
+      "publishDate": "2023",
+      "outline": "",
+      "director": "张艺谋",
+      "actors": [
+        "沈腾",
+        "易烊千玺",
+        "张译",
+        "雷佳音"
+      ],
+      "studio": "欢喜传媒",
+      "tags": [
+        "history",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-烈火英雄",
+      "name": "烈火英雄",
+      "title": "烈火英雄",
+      "description": "消防员扑灭油罐火灾的故事",
+      "year": "2019",
+      "publishDate": "2019",
+      "outline": "",
+      "director": "陈国辉",
+      "actors": [
+        "黄晓明",
+        "杜江",
+        "谭卓",
+        "杨紫"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "action",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-热烈",
+      "name": "热烈",
+      "title": "热烈",
+      "description": "街舞少年追逐梦想的故事",
+      "year": "2023",
+      "publishDate": "2023",
+      "outline": "",
+      "director": "大鹏",
+      "actors": [
+        "黄渤",
+        "王一博",
+        "刘敏涛",
+        "小沈阳"
+      ],
+      "studio": "大鹏工作室",
+      "tags": [
+        "dance",
+        "youth"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-热辣滚烫",
+      "name": "热辣滚烫",
+      "title": "热辣滚烫",
+      "description": "宅女通过拳击实现自我蜕变",
+      "year": "2024",
+      "publishDate": "2024",
+      "outline": "",
+      "director": "贾玲",
+      "actors": [
+        "贾玲",
+        "雷佳音",
+        "张小斐",
+        "杨紫"
+      ],
+      "studio": "新丽传媒",
+      "tags": [
+        "comedy",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-狄仁杰之四大天王",
+      "name": "狄仁杰之四大天王",
+      "title": "狄仁杰之四大天王",
+      "description": "狄仁杰破解四大天王之谜",
+      "year": "2018",
+      "publishDate": "2018",
+      "outline": "",
+      "director": "徐克",
+      "actors": [
+        "赵又廷",
+        "冯绍峰",
+        "刘嘉玲",
+        "阮经天"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "costume",
+        "fantasy"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-狄仁杰之神都龙王",
+      "name": "狄仁杰之神都龙王",
+      "title": "狄仁杰之神都龙王",
+      "description": "狄仁杰侦破龙王案",
+      "year": "2013",
+      "publishDate": "2013",
+      "outline": "",
+      "director": "徐克",
+      "actors": [
+        "赵又廷",
+        "冯绍峰",
+        "林更新",
+        "刘嘉玲"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "costume",
+        "fantasy"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-狄仁杰之通天帝国",
+      "name": "狄仁杰之通天帝国",
+      "title": "狄仁杰之通天帝国",
+      "description": "狄仁杰侦破皇宫奇案",
+      "year": "2010",
+      "publishDate": "2010",
+      "outline": "",
+      "director": "徐克",
+      "actors": [
+        "刘德华",
+        "刘嘉玲",
+        "李冰冰",
+        "邓超"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "costume",
+        "suspense"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-狗阵",
+      "name": "狗阵",
+      "title": "狗阵",
+      "description": "西北小镇上人与狗的故事",
+      "year": "2024",
+      "publishDate": "2024",
+      "outline": "",
+      "director": "管虎",
+      "actors": [
+        "彭于晏",
+        "佟丽娅",
+        "贾樟柯",
+        "周游"
+      ],
+      "studio": "七印象",
+      "tags": [
+        "drama",
+        "realistic"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-狙击手",
+      "name": "狙击手",
+      "title": "狙击手",
+      "description": "抗美援朝战场上的狙击对决",
+      "year": "2022",
+      "publishDate": "2022",
+      "outline": "",
+      "director": "张艺谋",
+      "actors": [
+        "陈永胜",
+        "章宇",
+        "张译",
+        "柯蓝"
+      ],
+      "studio": "中国电影",
+      "tags": [
+        "war",
+        "action"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-独行月球",
+      "name": "独行月球",
+      "title": "独行月球",
+      "description": "维修工意外被遗落在月球，独自生存的故事",
+      "year": "2022",
+      "publishDate": "2022",
+      "outline": "",
+      "director": "张吃鱼",
+      "actors": [
+        "沈腾",
+        "马丽",
+        "常远",
+        "李成儒"
+      ],
+      "studio": "开心麻花",
+      "tags": [
+        "comedy",
+        "sci-fi"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-狼犬丹尼",
+      "name": "狼犬丹尼",
+      "title": "狼犬丹尼",
+      "description": "被训练成杀手的好男人",
+      "year": "2005",
+      "publishDate": "2005",
+      "outline": "",
+      "director": "路易斯·莱特里尔",
+      "actors": [
+        "李连杰",
+        "摩根·弗里曼",
+        "鲍勃·霍斯金斯",
+        "凯瑞·康顿"
+      ],
+      "studio": "焦点影业",
+      "tags": [
+        "action",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-猛虎出笼",
+      "name": "猛虎出笼",
+      "title": "猛虎出笼",
+      "description": "被当作武器培养的男人的觉醒",
+      "year": "2005",
+      "publishDate": "2005",
+      "outline": "",
+      "director": "路易斯·莱特里尔",
+      "actors": [
+        "李连杰",
+        "摩根·弗里曼",
+        "鲍勃·霍斯金斯",
+        "凯瑞·康顿"
+      ],
+      "studio": "焦点影业",
+      "tags": [
+        "action",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-甲方乙方",
+      "name": "甲方乙方",
+      "title": "甲方乙方",
+      "description": "好梦一日游公司的故事",
+      "year": "1997",
+      "publishDate": "1997",
+      "outline": "",
+      "director": "冯小刚",
+      "actors": [
+        "葛优",
+        "刘蓓",
+        "何冰",
+        "傅彪"
+      ],
+      "studio": "中国电影",
+      "tags": [
+        "comedy",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-破·局",
+      "name": "破·局",
+      "title": "破·局",
+      "description": "富豪家族的权谋斗争",
+      "year": "2017",
+      "publishDate": "2017",
+      "outline": "",
+      "director": "李天柱",
+      "actors": [
+        "郭富城",
+        "王千源",
+        "王景春",
+        "任达华"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "crime",
+        "suspense"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-私人订制",
+      "name": "私人订制",
+      "title": "私人订制",
+      "description": "梦想定制公司的故事",
+      "year": "2013",
+      "publishDate": "2013",
+      "outline": "",
+      "director": "冯小刚",
+      "actors": [
+        "葛优",
+        "白百何",
+        "李小璐",
+        "郑恺"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "comedy",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-笑傲江湖",
+      "name": "笑傲江湖",
+      "title": "笑傲江湖",
+      "description": "令狐冲的江湖冒险",
+      "year": "1990",
+      "publishDate": "1990",
+      "outline": "",
+      "director": "胡金铨",
+      "actors": [
+        "许冠杰",
+        "叶童",
+        "张学友",
+        "张敏"
+      ],
+      "studio": "金公主",
+      "tags": [
+        "action",
+        "costume"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-精武英雄",
+      "name": "精武英雄",
+      "title": "精武英雄",
+      "description": "陈真为师报仇的故事",
+      "year": "1994",
+      "publishDate": "1994",
+      "outline": "",
+      "director": "陈嘉上",
+      "actors": [
+        "李连杰",
+        "中山忍",
+        "钱小豪",
+        "仓田保昭"
+      ],
+      "studio": "嘉禾",
+      "tags": [
+        "action",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-红海行动",
+      "name": "红海行动",
+      "title": "红海行动",
+      "description": "中国海军陆战队执行撤侨任务",
+      "year": "2018",
+      "publishDate": "2018",
+      "outline": "",
+      "director": "林超贤",
+      "actors": [
+        "张译",
+        "黄景瑜",
+        "海清",
+        "杜江"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "action",
+        "war"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-给爸爸的信",
+      "name": "给爸爸的信",
+      "title": "给爸爸的信",
+      "description": "父亲与儿子的感人故事",
+      "year": "1995",
+      "publishDate": "1995",
+      "outline": "",
+      "director": "元奎",
+      "actors": [
+        "李连杰",
+        "梅艳芳",
+        "谢苗",
+        "于荣光"
+      ],
+      "studio": "嘉禾",
+      "tags": [
+        "action",
+        "family"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-羞羞的铁拳",
+      "name": "羞羞的铁拳",
+      "title": "羞羞的铁拳",
+      "description": "男女身体互换后的搞笑故事",
+      "year": "2017",
+      "publishDate": "2017",
+      "outline": "",
+      "director": "宋阳",
+      "actors": [
+        "马丽",
+        "艾伦",
+        "沈腾",
+        "田雨"
+      ],
+      "studio": "开心麻花",
+      "tags": [
+        "comedy",
+        "sports"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-老炮儿",
+      "name": "老炮儿",
+      "title": "老炮儿",
+      "description": "老北京混混的时代变迁",
+      "year": "2015",
+      "publishDate": "2015",
+      "outline": "",
+      "director": "管虎",
+      "actors": [
+        "冯小刚",
+        "张涵予",
+        "许晴",
+        "李易峰"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "drama",
+        "action"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-老炮儿2",
+      "name": "老炮儿2",
+      "title": "老炮儿2",
+      "description": "六爷后人的江湖故事",
+      "year": "2024",
+      "publishDate": "2024",
+      "outline": "",
+      "director": "管虎",
+      "actors": [
+        "张涵予",
+        "陈伟霆",
+        "李易峰",
+        "管虎"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "drama",
+        "action"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-致命罗密欧",
+      "name": "致命罗密欧",
+      "title": "致命罗密欧",
+      "description": "警察为弟弟复仇的故事",
+      "year": "2000",
+      "publishDate": "2000",
+      "outline": "",
+      "director": "安德烈·巴柯维亚",
+      "actors": [
+        "李连杰",
+        "艾莉雅",
+        "以赛亚·华盛顿",
+        "亨利·欧"
+      ],
+      "studio": "华纳兄弟",
+      "tags": [
+        "action",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-花木兰",
+      "name": "花木兰",
+      "title": "花木兰",
+      "description": "花木兰替父从军的故事",
+      "year": "2020",
+      "publishDate": "2020",
+      "outline": "",
+      "director": "妮琪·卡罗",
+      "actors": [
+        "刘亦菲",
+        "甄子丹",
+        "巩俐",
+        "李连杰"
+      ],
+      "studio": "迪士尼",
+      "tags": [
+        "action",
+        "costume"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-芳华",
+      "name": "芳华",
+      "title": "芳华",
+      "description": "文工团青年的青春故事",
+      "year": "2017",
+      "publishDate": "2017",
+      "outline": "",
+      "director": "冯小刚",
+      "actors": [
+        "黄轩",
+        "苗苗",
+        "钟楚曦",
+        "杨采钰"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "drama",
+        "youth"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-英雄",
+      "name": "英雄",
+      "title": "英雄",
+      "description": "刺客刺秦王的故事",
+      "year": "2002",
+      "publishDate": "2002",
+      "outline": "",
+      "director": "张艺谋",
+      "actors": [
+        "李连杰",
+        "梁朝伟",
+        "张曼玉",
+        "章子怡"
+      ],
+      "studio": "新画面影业",
+      "tags": [
+        "action",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-西虹市首富",
+      "name": "西虹市首富",
+      "title": "西虹市首富",
+      "description": "穷小子继承巨额遗产的故事",
+      "year": "2018",
+      "publishDate": "2018",
+      "outline": "",
+      "director": "闫非",
+      "actors": [
+        "沈腾",
+        "宋芸桦",
+        "张一鸣",
+        "常远"
+      ],
+      "studio": "开心麻花",
+      "tags": [
+        "comedy",
+        "family"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-让子弹飞",
+      "name": "让子弹飞",
+      "title": "让子弹飞",
+      "description": "张牧之与黄四郎斗智斗勇",
+      "year": "2010",
+      "publishDate": "2010",
+      "outline": "",
+      "director": "姜文",
+      "actors": [
+        "姜文",
+        "葛优",
+        "周润发",
+        "刘嘉玲"
+      ],
+      "studio": "不亦乐乎",
+      "tags": [
+        "comedy",
+        "action"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-误杀",
+      "name": "误杀",
+      "title": "误杀",
+      "description": "父亲为保护家人而掩盖真相",
+      "year": "2019",
+      "publishDate": "2019",
+      "outline": "",
+      "director": "柯汶利",
+      "actors": [
+        "肖央",
+        "谭卓",
+        "陈冲",
+        "姜皓文"
+      ],
+      "studio": "卓然影业",
+      "tags": [
+        "crime",
+        "suspense"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-误杀2",
+      "name": "误杀2",
+      "title": "误杀2",
+      "description": "父亲为救儿子而铤而走险",
+      "year": "2021",
+      "publishDate": "2021",
+      "outline": "",
+      "director": "戴墨",
+      "actors": [
+        "肖央",
+        "任达华",
+        "文咏珊",
+        "张颂文"
+      ],
+      "studio": "卓然影业",
+      "tags": [
+        "crime",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-这个杀手不太冷静",
+      "name": "这个杀手不太冷静",
+      "title": "这个杀手不太冷静",
+      "description": "群演被误认为杀手的故事",
+      "year": "2022",
+      "publishDate": "2022",
+      "outline": "",
+      "director": "邢文雄",
+      "actors": [
+        "马丽",
+        "魏翔",
+        "陈明昊",
+        "周大勇"
+      ],
+      "studio": "开心麻花",
+      "tags": [
+        "comedy",
+        "crime"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-追龙",
+      "name": "追龙",
+      "title": "追龙",
+      "description": "跛豪与雷洛的黑白故事",
+      "year": "2017",
+      "publishDate": "2017",
+      "outline": "",
+      "director": "王晶",
+      "actors": [
+        "甄子丹",
+        "刘德华",
+        "姜皓文",
+        "惠英红"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "crime",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-追龙2",
+      "name": "追龙2",
+      "title": "追龙2",
+      "description": "世纪悍匪张子强的故事",
+      "year": "2019",
+      "publishDate": "2019",
+      "outline": "",
+      "director": "王晶",
+      "actors": [
+        "古天乐",
+        "梁家辉",
+        "林家栋",
+        "任达华"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "crime",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-邪不压正",
+      "name": "邪不压正",
+      "title": "邪不压正",
+      "description": "李天然复仇的故事",
+      "year": "2018",
+      "publishDate": "2018",
+      "outline": "",
+      "director": "姜文",
+      "actors": [
+        "彭于晏",
+        "姜文",
+        "廖凡",
+        "周韵"
+      ],
+      "studio": "不亦乐乎",
+      "tags": [
+        "action",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-金刚川",
+      "name": "金刚川",
+      "title": "金刚川",
+      "description": "抗美援朝战争中架桥的故事",
+      "year": "2020",
+      "publishDate": "2020",
+      "outline": "",
+      "director": "管虎",
+      "actors": [
+        "张译",
+        "吴京",
+        "李九霄",
+        "魏晨"
+      ],
+      "studio": "中国电影",
+      "tags": [
+        "war",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-长津湖",
+      "name": "长津湖",
+      "title": "长津湖",
+      "description": "抗美援朝战争中长津湖战役的真实历史",
+      "year": "2021",
+      "publishDate": "2021",
+      "outline": "",
+      "director": "陈凯歌",
+      "actors": [
+        "吴京",
+        "易烊千玺",
+        "段奕宏",
+        "朱亚文"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "war",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-阳光灿烂的日子",
+      "name": "阳光灿烂的日子",
+      "title": "阳光灿烂的日子",
+      "description": "文革时期北京少年马小军的故事",
+      "year": "1994",
+      "publishDate": "1994",
+      "outline": "",
+      "director": "姜文",
+      "actors": [
+        "夏雨",
+        "宁静",
+        "陶虹",
+        "耿乐"
+      ],
+      "studio": "中国电影",
+      "tags": [
+        "drama",
+        "youth"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-集结号",
+      "name": "集结号",
+      "title": "集结号",
+      "description": "连长谷子地为战友正名的故事",
+      "year": "2007",
+      "publishDate": "2007",
+      "outline": "",
+      "director": "冯小刚",
+      "actors": [
+        "张涵予",
+        "邓超",
+        "袁文康",
+        "汤嬿"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "war",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-霍元甲",
+      "name": "霍元甲",
+      "title": "霍元甲",
+      "description": "霍元甲的一生",
+      "year": "2006",
+      "publishDate": "2006",
+      "outline": "",
+      "director": "于仁泰",
+      "actors": [
+        "李连杰",
+        "董勇",
+        "孙俪",
+        "中村狮童"
+      ],
+      "studio": "中影集团",
+      "tags": [
+        "action",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-青蛇",
+      "name": "青蛇",
+      "title": "青蛇",
+      "description": "白蛇与青蛇的人间情缘",
+      "year": "1993",
+      "publishDate": "1993",
+      "outline": "",
+      "director": "徐克",
+      "actors": [
+        "张曼玉",
+        "王祖贤",
+        "赵文卓",
+        "吴兴国"
+      ],
+      "studio": "思远影业",
+      "tags": [
+        "fantasy",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-非诚勿扰",
+      "name": "非诚勿扰",
+      "title": "非诚勿扰",
+      "description": "秦奋的征婚之旅",
+      "year": "2008",
+      "publishDate": "2008",
+      "outline": "",
+      "director": "冯小刚",
+      "actors": [
+        "葛优",
+        "舒淇",
+        "范伟",
+        "方中信"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "comedy",
+        "romance"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-非诚勿扰2",
+      "name": "非诚勿扰2",
+      "title": "非诚勿扰2",
+      "description": "秦奋与笑笑的情感故事",
+      "year": "2010",
+      "publishDate": "2010",
+      "outline": "",
+      "director": "冯小刚",
+      "actors": [
+        "葛优",
+        "舒淇",
+        "孙红雷",
+        "姚晨"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "comedy",
+        "romance"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-革命者",
+      "name": "革命者",
+      "title": "革命者",
+      "description": "李大钊的革命生涯",
+      "year": "2021",
+      "publishDate": "2021",
+      "outline": "",
+      "director": "徐展雄",
+      "actors": [
+        "张颂文",
+        "李易峰",
+        "佟丽娅",
+        "彭昱畅"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "history",
+        "drama"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-飞驰人生",
+      "name": "飞驰人生",
+      "title": "飞驰人生",
+      "description": "赛车手张驰重返赛场的故事",
+      "year": "2019",
+      "publishDate": "2019",
+      "outline": "",
+      "director": "韩寒",
+      "actors": [
+        "沈腾",
+        "黄景瑜",
+        "尹正",
+        "张本煜"
+      ],
+      "studio": "开心麻花",
+      "tags": [
+        "comedy",
+        "sports"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-飞驰人生2",
+      "name": "飞驰人生2",
+      "title": "飞驰人生2",
+      "description": "赛车手重返赛场追求梦想",
+      "year": "2024",
+      "publishDate": "2024",
+      "outline": "",
+      "director": "韩寒",
+      "actors": [
+        "沈腾",
+        "范丞丞",
+        "尹正",
+        "张本煜"
+      ],
+      "studio": "开心麻花",
+      "tags": [
+        "comedy",
+        "sports"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-鬼子来了",
+      "name": "鬼子来了",
+      "title": "鬼子来了",
+      "description": "抗战时期村民与日本俘虏的故事",
+      "year": "2000",
+      "publishDate": "2000",
+      "outline": "",
+      "director": "姜文",
+      "actors": [
+        "姜文",
+        "姜鸿波",
+        "陈强",
+        "陈述"
+      ],
+      "studio": "华谊兄弟",
+      "tags": [
+        "drama",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-黄飞鸿",
+      "name": "黄飞鸿",
+      "title": "黄飞鸿",
+      "description": "黄飞鸿在广州的故事",
+      "year": "1991",
+      "publishDate": "1991",
+      "outline": "",
+      "director": "徐克",
+      "actors": [
+        "李连杰",
+        "关之琳",
+        "元彪",
+        "张学友"
+      ],
+      "studio": "嘉禾",
+      "tags": [
+        "action",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-黄飞鸿之三狮王争霸",
+      "name": "黄飞鸿之三狮王争霸",
+      "title": "黄飞鸿之三狮王争霸",
+      "description": "黄飞鸿参加狮王争霸赛",
+      "year": "1993",
+      "publishDate": "1993",
+      "outline": "",
+      "director": "徐克",
+      "actors": [
+        "李连杰",
+        "关之琳",
+        "莫少聪",
+        "熊欣欣"
+      ],
+      "studio": "嘉禾",
+      "tags": [
+        "action",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-黄飞鸿之二男儿当自强",
+      "name": "黄飞鸿之二男儿当自强",
+      "title": "黄飞鸿之二男儿当自强",
+      "description": "黄飞鸿对抗白莲教",
+      "year": "1992",
+      "publishDate": "1992",
+      "outline": "",
+      "director": "徐克",
+      "actors": [
+        "李连杰",
+        "关之琳",
+        "莫少聪",
+        "甄子丹"
+      ],
+      "studio": "嘉禾",
+      "tags": [
+        "action",
+        "history"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-黑侠",
+      "name": "黑侠",
+      "title": "黑侠",
+      "description": "超级英雄打击犯罪的故事",
+      "year": "1996",
+      "publishDate": "1996",
+      "outline": "",
+      "director": "李仁港",
+      "actors": [
+        "李连杰",
+        "刘青云",
+        "莫文蔚",
+        "黄秋生"
+      ],
+      "studio": "嘉禾",
+      "tags": [
+        "action",
+        "sci-fi"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-龙虎门",
+      "name": "龙虎门",
+      "title": "龙虎门",
+      "description": "龙虎门弟子与黑帮斗争",
+      "year": "2006",
+      "publishDate": "2006",
+      "outline": "",
+      "director": "叶伟信",
+      "actors": [
+        "甄子丹",
+        "谢霆锋",
+        "余文乐",
+        "董洁"
+      ],
+      "studio": "东方电影",
+      "tags": [
+        "action",
+        "fantasy"
+      ],
+      "fileCount": 0
+    },
+    {
+      "id": "movie-龙门飞甲",
+      "name": "龙门飞甲",
+      "title": "龙门飞甲",
+      "description": "江湖侠客与东厂的斗争",
+      "year": "2011",
+      "publishDate": "2011",
+      "outline": "",
+      "director": "徐克",
+      "actors": [
+        "陈坤",
+        "周迅",
+        "李宇春",
+        "桂纶镁"
+      ],
+      "studio": "博纳影业",
+      "tags": [
+        "action",
+        "costume"
+      ],
+      "fileCount": 0
+    }
+  ]
+}

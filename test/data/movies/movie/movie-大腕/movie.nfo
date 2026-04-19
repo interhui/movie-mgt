@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-大腕</id>
+    <title>大腕</title>
+    <year>2001</year>
+    <studio>华谊兄弟</studio>
+    <director>冯小刚</director>
+    <description>葬礼策划引发的故事</description>
+    <tag>comedy</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>葛优</name>
+        <name>关之琳</name>
+        <name>英达</name>
+        <name>保罗·克塞</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

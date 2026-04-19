@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-不二神探</id>
+    <title>不二神探</title>
+    <year>2013</year>
+    <studio>博纳影业</studio>
+    <director>王子鸣</director>
+    <description>搞笑警察搭档破案</description>
+    <tag>comedy</tag>
+    <tag>crime</tag>
+    <actor>
+        <name>文章</name>
+        <name>李连杰</name>
+        <name>刘诗诗</name>
+        <name>陈妍希</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

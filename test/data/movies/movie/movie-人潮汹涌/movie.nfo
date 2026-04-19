@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-人潮汹涌</id>
+    <title>人潮汹涌</title>
+    <year>2021</year>
+    <studio>饶晓志工作室</studio>
+    <director>饶晓志</director>
+    <description>杀手和群演互换人生的故事</description>
+    <tag>comedy</tag>
+    <tag>crime</tag>
+    <actor>
+        <name>刘德华</name>
+        <name>肖央</name>
+        <name>万茜</name>
+        <name>程怡</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

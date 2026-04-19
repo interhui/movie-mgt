@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-敢死队</id>
+    <title>敢死队</title>
+    <year>2010</year>
+    <studio>狮门影业</studio>
+    <director>西尔维斯特·史泰龙</director>
+    <description>雇佣兵团队执行任务</description>
+    <tag>action</tag>
+    <tag>war</tag>
+    <actor>
+        <name>西尔维斯特·史泰龙</name>
+        <name>杰森·斯坦森</name>
+        <name>李连杰</name>
+        <name>米基·洛克</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

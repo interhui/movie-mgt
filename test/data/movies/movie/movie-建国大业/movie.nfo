@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-建国大业</id>
+    <title>建国大业</title>
+    <year>2009</year>
+    <studio>中国电影</studio>
+    <director>韩三平</director>
+    <description>新中国成立的历史进程</description>
+    <tag>history</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>唐国强</name>
+        <name>张国立</name>
+        <name>许晴</name>
+        <name>刘劲</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

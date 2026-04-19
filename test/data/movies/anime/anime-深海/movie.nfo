@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-深海</id>
+    <title>深海</title>
+    <year>2023</year>
+    <studio>十月文化</studio>
+    <director>田晓鹏</director>
+    <description>少女参宿在深海大饭店的奇幻冒险</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>苏鑫</name>
+        <name>王亭文</name>
+        <name>滕奎兴</name>
+        <name>阎么么</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

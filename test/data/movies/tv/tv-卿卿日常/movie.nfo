@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-卿卿日常</id>
+    <title>卿卿日常</title>
+    <year>2022</year>
+    <studio>爱奇艺</studio>
+    <director>赵启辰</director>
+    <description>古代女性的独立与成长故事</description>
+    <tag>costume</tag>
+    <tag>comedy</tag>
+    <actor>
+        <name>白敬亭</name>
+        <name>田曦薇</name>
+        <name>陈小纭</name>
+        <name>刘冠麟</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

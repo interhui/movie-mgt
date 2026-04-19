@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-封神第一部</id>
+    <title>封神第一部</title>
+    <year>2023</year>
+    <studio>北京文化</studio>
+    <director>乌尔善</director>
+    <description>商王殷寿与狐妖妲己勾结，姜子牙携封神榜下山寻找天下共主</description>
+    <tag>fantasy</tag>
+    <tag>history</tag>
+    <actor>
+        <name>费翔</name>
+        <name>李雪健</name>
+        <name>黄渤</name>
+        <name>于适</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

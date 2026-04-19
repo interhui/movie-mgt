@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-一个人的武林</id>
+    <title>一个人的武林</title>
+    <year>2014</year>
+    <studio>英皇电影</studio>
+    <director>陈德森</director>
+    <description>退役警察与武术狂人的对决</description>
+    <tag>action</tag>
+    <tag>crime</tag>
+    <actor>
+        <name>甄子丹</name>
+        <name>王宝强</name>
+        <name>白百何</name>
+        <name>杨采妮</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

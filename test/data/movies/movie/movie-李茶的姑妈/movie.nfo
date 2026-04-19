@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-李茶的姑妈</id>
+    <title>李茶的姑妈</title>
+    <year>2018</year>
+    <studio>开心麻花</studio>
+    <director>吴昱翰</director>
+    <description>真假姑妈引发的搞笑故事</description>
+    <tag>comedy</tag>
+    <tag>family</tag>
+    <actor>
+        <name>黄才伦</name>
+        <name>艾伦</name>
+        <name>宋阳</name>
+        <name>卢靖姗</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

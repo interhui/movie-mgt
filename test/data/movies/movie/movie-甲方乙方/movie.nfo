@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-甲方乙方</id>
+    <title>甲方乙方</title>
+    <year>1997</year>
+    <studio>中国电影</studio>
+    <director>冯小刚</director>
+    <description>好梦一日游公司的故事</description>
+    <tag>comedy</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>葛优</name>
+        <name>刘蓓</name>
+        <name>何冰</name>
+        <name>傅彪</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

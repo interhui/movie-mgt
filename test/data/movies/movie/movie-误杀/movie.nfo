@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-误杀</id>
+    <title>误杀</title>
+    <year>2019</year>
+    <studio>卓然影业</studio>
+    <director>柯汶利</director>
+    <description>父亲为保护家人而掩盖真相</description>
+    <tag>crime</tag>
+    <tag>suspense</tag>
+    <actor>
+        <name>肖央</name>
+        <name>谭卓</name>
+        <name>陈冲</name>
+        <name>姜皓文</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

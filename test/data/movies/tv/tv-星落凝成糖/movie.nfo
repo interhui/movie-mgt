@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-星落凝成糖</id>
+    <title>星落凝成糖</title>
+    <year>2023</year>
+    <studio>优酷</studio>
+    <director>朱锐斌</director>
+    <description>双胞胎姐妹与天界神君的奇幻爱情</description>
+    <tag>fantasy</tag>
+    <tag>costume</tag>
+    <actor>
+        <name>陈星旭</name>
+        <name>李兰迪</name>
+        <name>陈牧驰</name>
+        <name>何宣林</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

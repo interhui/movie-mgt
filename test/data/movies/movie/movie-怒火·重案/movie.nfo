@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-怒火·重案</id>
+    <title>怒火·重案</title>
+    <year>2021</year>
+    <studio>英皇电影</studio>
+    <director>陈木胜</director>
+    <description>警察与悍匪的正邪对决</description>
+    <tag>action</tag>
+    <tag>crime</tag>
+    <actor>
+        <name>甄子丹</name>
+        <name>谢霆锋</name>
+        <name>秦岚</name>
+        <name>谭耀文</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

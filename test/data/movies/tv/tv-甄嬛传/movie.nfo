@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-甄嬛传</id>
+    <title>甄嬛传</title>
+    <year>2011</year>
+    <studio>东申影业</studio>
+    <director>郑晓龙</director>
+    <description>少女甄嬛在后宫中从单纯走向权谋的故事</description>
+    <tag>costume</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>孙俪</name>
+        <name>陈建斌</name>
+        <name>蔡少芬</name>
+        <name>蒋欣</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

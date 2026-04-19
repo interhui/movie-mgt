@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-流浪地球2</id>
+    <title>流浪地球2</title>
+    <year>2023</year>
+    <studio>中国电影</studio>
+    <director>郭帆</director>
+    <description>太阳危机前的全球救援行动</description>
+    <tag>sci-fi</tag>
+    <tag>action</tag>
+    <actor>
+        <name>吴京</name>
+        <name>刘德华</name>
+        <name>李雪健</name>
+        <name>沙溢</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

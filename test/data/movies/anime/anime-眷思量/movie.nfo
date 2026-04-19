@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-眷思量</id>
+    <title>眷思量</title>
+    <year>2021</year>
+    <studio>燃烧映画</studio>
+    <director>赵禹晴</director>
+    <description>思量岛上神仙与凡人的故事</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>凃雄飞</name>
+        <name>段艺璇</name>
+        <name>赵成晨</name>
+        <name>赵双</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-一人之下</id>
+    <title>一人之下</title>
+    <year>2016</year>
+    <studio>腾讯动漫</studio>
+    <director>王昕</director>
+    <description>张楚岚隐藏身份进入异人世界的故事</description>
+    <tag>animation</tag>
+    <tag>action</tag>
+    <actor>
+        <name>张楚岚</name>
+        <name>冯宝宝</name>
+        <name>王也</name>
+        <name>张灵玉</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

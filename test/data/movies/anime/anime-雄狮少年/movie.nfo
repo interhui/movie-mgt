@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-雄狮少年</id>
+    <title>雄狮少年</title>
+    <year>2021</year>
+    <studio>易动文化</studio>
+    <director>孙海鹏</director>
+    <description>留守少年参加舞狮比赛实现梦想</description>
+    <tag>animation</tag>
+    <tag>youth</tag>
+    <actor>
+        <name>大昕</name>
+        <name>大雄</name>
+        <name>郭皓</name>
+        <name>李盟</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

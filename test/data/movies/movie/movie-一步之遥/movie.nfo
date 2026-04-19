@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-一步之遥</id>
+    <title>一步之遥</title>
+    <year>2014</year>
+    <studio>不亦乐乎</studio>
+    <director>姜文</director>
+    <description>民国时期的选美大赛与阴谋</description>
+    <tag>comedy</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>姜文</name>
+        <name>葛优</name>
+        <name>周韵</name>
+        <name>舒淇</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

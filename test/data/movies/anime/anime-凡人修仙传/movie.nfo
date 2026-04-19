@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-凡人修仙传</id>
+    <title>凡人修仙传</title>
+    <year>2020</year>
+    <studio>万维猫动画</studio>
+    <director>王裕仁</director>
+    <description>普通少年韩立在修仙界中的成长历程</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>钱文青</name>
+        <name>杨天翔</name>
+        <name>唐小喜</name>
+        <name>姜广涛</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

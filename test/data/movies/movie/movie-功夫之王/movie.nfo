@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-功夫之王</id>
+    <title>功夫之王</title>
+    <year>2008</year>
+    <studio>狮门影业</studio>
+    <director>罗伯·明可夫</director>
+    <description>美国少年穿越到中国学习功夫</description>
+    <tag>action</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>李连杰</name>
+        <name>成龙</name>
+        <name>刘亦菲</name>
+        <name>迈克尔·安格拉诺</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

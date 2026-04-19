@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-1921</id>
+    <title>1921</title>
+    <year>2021</year>
+    <studio>腾讯影业</studio>
+    <director>黄建新</director>
+    <description>中国共产党成立的故事</description>
+    <tag>history</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>黄轩</name>
+        <name>倪妮</name>
+        <name>王仁君</name>
+        <name>刘昊然</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

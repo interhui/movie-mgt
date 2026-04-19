@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-花木兰</id>
+    <title>花木兰</title>
+    <year>2020</year>
+    <studio>迪士尼</studio>
+    <director>妮琪·卡罗</director>
+    <description>花木兰替父从军的故事</description>
+    <tag>action</tag>
+    <tag>costume</tag>
+    <actor>
+        <name>刘亦菲</name>
+        <name>甄子丹</name>
+        <name>巩俐</name>
+        <name>李连杰</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

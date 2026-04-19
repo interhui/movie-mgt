@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-漫长的季节</id>
+    <title>漫长的季节</title>
+    <year>2023</year>
+    <studio>腾讯视频</studio>
+    <director>辛爽</director>
+    <description>出租车司机追寻18年前碎尸案真相</description>
+    <tag>suspense</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>范伟</name>
+        <name>秦昊</name>
+        <name>陈明昊</name>
+        <name>李庚希</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

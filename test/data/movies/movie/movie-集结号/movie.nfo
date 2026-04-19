@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-集结号</id>
+    <title>集结号</title>
+    <year>2007</year>
+    <studio>华谊兄弟</studio>
+    <director>冯小刚</director>
+    <description>连长谷子地为战友正名的故事</description>
+    <tag>war</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>张涵予</name>
+        <name>邓超</name>
+        <name>袁文康</name>
+        <name>汤嬿</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

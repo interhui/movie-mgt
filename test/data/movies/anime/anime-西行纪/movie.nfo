@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-西行纪</id>
+    <title>西行纪</title>
+    <year>2018</year>
+    <studio>百漫文化</studio>
+    <director>钟智行</director>
+    <description>唐僧师徒西天取经后的奇幻故事</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>夏磊</name>
+        <name>吴磊</name>
+        <name>沈达威</name>
+        <name>鬼月</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

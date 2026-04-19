@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-长安十二时辰</id>
+    <title>长安十二时辰</title>
+    <year>2019</year>
+    <studio>娱跃传媒</studio>
+    <director>曹盾</director>
+    <description>死囚张小敬必须在十二时辰内阻止恐怖袭击</description>
+    <tag>costume</tag>
+    <tag>suspense</tag>
+    <actor>
+        <name>雷佳音</name>
+        <name>易烊千玺</name>
+        <name>周一围</name>
+        <name>热依扎</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

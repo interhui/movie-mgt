@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-私人订制</id>
+    <title>私人订制</title>
+    <year>2013</year>
+    <studio>华谊兄弟</studio>
+    <director>冯小刚</director>
+    <description>梦想定制公司的故事</description>
+    <tag>comedy</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>葛优</name>
+        <name>白百何</name>
+        <name>李小璐</name>
+        <name>郑恺</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

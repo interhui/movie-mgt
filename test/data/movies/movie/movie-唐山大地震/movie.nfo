@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-唐山大地震</id>
+    <title>唐山大地震</title>
+    <year>2010</year>
+    <studio>华谊兄弟</studio>
+    <director>冯小刚</director>
+    <description>地震中家庭的离散与重逢</description>
+    <tag>drama</tag>
+    <tag>disaster</tag>
+    <actor>
+        <name>徐帆</name>
+        <name>张静初</name>
+        <name>李晨</name>
+        <name>陈道明</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

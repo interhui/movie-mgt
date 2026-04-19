@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-手机</id>
+    <title>手机</title>
+    <year>2003</year>
+    <studio>华谊兄弟</studio>
+    <director>冯小刚</director>
+    <description>手机引发的情感危机</description>
+    <tag>drama</tag>
+    <tag>comedy</tag>
+    <actor>
+        <name>葛优</name>
+        <name>徐帆</name>
+        <name>张国立</name>
+        <name>范冰冰</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

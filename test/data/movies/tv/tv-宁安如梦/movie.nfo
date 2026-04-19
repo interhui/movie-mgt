@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-宁安如梦</id>
+    <title>宁安如梦</title>
+    <year>2023</year>
+    <studio>爱奇艺</studio>
+    <director>朱锐斌</director>
+    <description>重生后的复仇与爱情</description>
+    <tag>costume</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>白鹿</name>
+        <name>张凌赫</name>
+        <name>王星越</name>
+        <name>周峻伟</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

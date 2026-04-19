@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-时光代理人</id>
+    <title>时光代理人</title>
+    <year>2021</year>
+    <studio>bilibili</studio>
+    <director>李豪凌</director>
+    <description>通过照片进入过去，改变他人命运的故事</description>
+    <tag>animation</tag>
+    <tag>suspense</tag>
+    <actor>
+        <name>苏尚卿</name>
+        <name>歪歪</name>
+        <name>李诗萌</name>
+        <name>赵熠彤</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

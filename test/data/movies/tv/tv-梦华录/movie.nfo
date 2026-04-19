@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-梦华录</id>
+    <title>梦华录</title>
+    <year>2022</year>
+    <studio>腾讯视频</studio>
+    <director>杨阳</director>
+    <description>赵盼儿在东京开办茶坊的故事</description>
+    <tag>costume</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>刘亦菲</name>
+        <name>陈晓</name>
+        <name>柳岩</name>
+        <name>林允</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-黑侠</id>
+    <title>黑侠</title>
+    <year>1996</year>
+    <studio>嘉禾</studio>
+    <director>李仁港</director>
+    <description>超级英雄打击犯罪的故事</description>
+    <tag>action</tag>
+    <tag>sci-fi</tag>
+    <actor>
+        <name>李连杰</name>
+        <name>刘青云</name>
+        <name>莫文蔚</name>
+        <name>黄秋生</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-斗罗大陆</id>
+    <title>斗罗大陆</title>
+    <year>2018</year>
+    <studio>玄机科技</studio>
+    <director>沈乐平</director>
+    <description>唐三穿越到斗罗大陆，修炼武魂的故事</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>唐三</name>
+        <name>小舞</name>
+        <name>戴沐白</name>
+        <name>奥斯卡</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

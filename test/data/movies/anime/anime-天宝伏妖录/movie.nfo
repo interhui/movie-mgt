@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-天宝伏妖录</id>
+    <title>天宝伏妖录</title>
+    <year>2020</year>
+    <studio>玄机科技</studio>
+    <director>沈乐平</director>
+    <description>唐朝驱魔师的奇幻冒险</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>锦鲤</name>
+        <name>彭尧</name>
+        <name>北辰</name>
+        <name>胡良伟</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

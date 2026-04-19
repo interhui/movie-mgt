@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-长月烬明</id>
+    <title>长月烬明</title>
+    <year>2023</year>
+    <studio>优酷</studio>
+    <director>鞠觉亮</director>
+    <description>神女与魔神的三世爱恨</description>
+    <tag>fantasy</tag>
+    <tag>costume</tag>
+    <actor>
+        <name>罗云熙</name>
+        <name>白鹿</name>
+        <name>陈都灵</name>
+        <name>邓为</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

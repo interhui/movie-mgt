@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-湄公河行动</id>
+    <title>湄公河行动</title>
+    <year>2016</year>
+    <studio>博纳影业</studio>
+    <director>林超贤</director>
+    <description>中国警察跨境缉毒的故事</description>
+    <tag>action</tag>
+    <tag>crime</tag>
+    <actor>
+        <name>张涵予</name>
+        <name>彭于晏</name>
+        <name>孙淳</name>
+        <name>陈宝国</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

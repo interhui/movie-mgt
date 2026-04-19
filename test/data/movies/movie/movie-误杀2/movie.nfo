@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-误杀2</id>
+    <title>误杀2</title>
+    <year>2021</year>
+    <studio>卓然影业</studio>
+    <director>戴墨</director>
+    <description>父亲为救儿子而铤而走险</description>
+    <tag>crime</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>肖央</name>
+        <name>任达华</name>
+        <name>文咏珊</name>
+        <name>张颂文</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-满江红</id>
+    <title>满江红</title>
+    <year>2023</year>
+    <studio>欢喜传媒</studio>
+    <director>张艺谋</director>
+    <description>南宋时期寻找岳飞遗作的故事</description>
+    <tag>history</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>沈腾</name>
+        <name>易烊千玺</name>
+        <name>张译</name>
+        <name>雷佳音</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

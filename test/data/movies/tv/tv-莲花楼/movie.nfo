@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-莲花楼</id>
+    <title>莲花楼</title>
+    <year>2023</year>
+    <studio>爱奇艺</studio>
+    <director>郭虎</director>
+    <description>神医楼主人闯荡江湖探案</description>
+    <tag>costume</tag>
+    <tag>suspense</tag>
+    <actor>
+        <name>成毅</name>
+        <name>曾舜晞</name>
+        <name>肖顺尧</name>
+        <name>陈都灵</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

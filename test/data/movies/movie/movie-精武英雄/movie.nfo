@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-精武英雄</id>
+    <title>精武英雄</title>
+    <year>1994</year>
+    <studio>嘉禾</studio>
+    <director>陈嘉上</director>
+    <description>陈真为师报仇的故事</description>
+    <tag>action</tag>
+    <tag>history</tag>
+    <actor>
+        <name>李连杰</name>
+        <name>中山忍</name>
+        <name>钱小豪</name>
+        <name>仓田保昭</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

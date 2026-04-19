@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-斗破苍穹</id>
+    <title>斗破苍穹</title>
+    <year>2017</year>
+    <studio>福煦影视</studio>
+    <director>丁磊</director>
+    <description>天才少年萧炎从天才变成废柴后重新崛起</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>萧炎</name>
+        <name>药老</name>
+        <name>萧薰儿</name>
+        <name>美杜莎</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

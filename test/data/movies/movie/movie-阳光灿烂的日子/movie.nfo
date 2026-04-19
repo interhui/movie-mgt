@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-阳光灿烂的日子</id>
+    <title>阳光灿烂的日子</title>
+    <year>1994</year>
+    <studio>中国电影</studio>
+    <director>姜文</director>
+    <description>文革时期北京少年马小军的故事</description>
+    <tag>drama</tag>
+    <tag>youth</tag>
+    <actor>
+        <name>夏雨</name>
+        <name>宁静</name>
+        <name>陶虹</name>
+        <name>耿乐</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

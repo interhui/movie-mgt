@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-一念关山</id>
+    <title>一念关山</title>
+    <year>2023</year>
+    <studio>爱奇艺</studio>
+    <director>周靖韬</director>
+    <description>女刺客与将军的江湖传奇</description>
+    <tag>costume</tag>
+    <tag>action</tag>
+    <actor>
+        <name>刘诗诗</name>
+        <name>刘宇宁</name>
+        <name>方逸伦</name>
+        <name>何蓝逗</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

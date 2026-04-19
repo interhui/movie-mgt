@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-悟空传</id>
+    <title>悟空传</title>
+    <year>2017</year>
+    <studio>新丽传媒</studio>
+    <director>郭子健</director>
+    <description>孙悟空大闹天宫的故事</description>
+    <tag>fantasy</tag>
+    <tag>action</tag>
+    <actor>
+        <name>彭于晏</name>
+        <name>倪妮</name>
+        <name>余文乐</name>
+        <name>俞飞鸿</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

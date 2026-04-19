@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-独步逍遥</id>
+    <title>独步逍遥</title>
+    <year>2020</year>
+    <studio>索以文化</studio>
+    <director>龚朝</director>
+    <description>叶宇在修仙界的传奇故事</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>张恩泽</name>
+        <name>王梦华</name>
+        <name>王宁</name>
+        <name>赵双</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-妖神记</id>
+    <title>妖神记</title>
+    <year>2017</year>
+    <studio>若鸿文化</studio>
+    <director>叶老酒</director>
+    <description>聂离重生回到少年时代的故事</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>谷江山</name>
+        <name>柳知萧</name>
+        <name>默伶</name>
+        <name>张妮</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

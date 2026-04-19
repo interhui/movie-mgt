@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-新神榜：哪吒重生</id>
+    <title>新神榜：哪吒重生</title>
+    <year>2021</year>
+    <studio>追光动画</studio>
+    <director>赵霁</director>
+    <description>哪吒转世到现代都市，与龙族再次对决</description>
+    <tag>animation</tag>
+    <tag>action</tag>
+    <actor>
+        <name>杨天翔</name>
+        <name>张赫</name>
+        <name>宣晓鸣</name>
+        <name>李诗萌</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

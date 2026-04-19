@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-白蛇：缘起</id>
+    <title>白蛇：缘起</title>
+    <year>2019</year>
+    <studio>追光动画</studio>
+    <director>黄家康</director>
+    <description>白素贞与许仙前世的爱情故事</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>张喆</name>
+        <name>杨天翔</name>
+        <name>唐小喜</name>
+        <name>郑小璞</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

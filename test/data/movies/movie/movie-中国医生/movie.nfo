@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-中国医生</id>
+    <title>中国医生</title>
+    <year>2021</year>
+    <studio>博纳影业</studio>
+    <director>刘伟强</director>
+    <description>武汉抗疫期间的医生故事</description>
+    <tag>drama</tag>
+    <tag>realistic</tag>
+    <actor>
+        <name>张涵予</name>
+        <name>袁泉</name>
+        <name>朱亚文</name>
+        <name>李晨</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

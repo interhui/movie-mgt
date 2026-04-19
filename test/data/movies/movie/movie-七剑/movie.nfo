@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-七剑</id>
+    <title>七剑</title>
+    <year>2005</year>
+    <studio>博纳影业</studio>
+    <director>徐克</director>
+    <description>七位剑客拯救苍生的故事</description>
+    <tag>action</tag>
+    <tag>costume</tag>
+    <actor>
+        <name>甄子丹</name>
+        <name>黎明</name>
+        <name>杨采妮</name>
+        <name>陆毅</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-我是江小白</id>
+    <title>我是江小白</title>
+    <year>2017</year>
+    <studio>两点十分动漫</studio>
+    <director>金冬</director>
+    <description>大学校园的青春爱情故事</description>
+    <tag>animation</tag>
+    <tag>youth</tag>
+    <actor>
+        <name>陈张太康</name>
+        <name>佟心竹</name>
+        <name>李兰陵</name>
+        <name>常蓉珊</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

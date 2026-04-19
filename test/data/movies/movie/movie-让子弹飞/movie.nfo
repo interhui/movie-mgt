@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-让子弹飞</id>
+    <title>让子弹飞</title>
+    <year>2010</year>
+    <studio>不亦乐乎</studio>
+    <director>姜文</director>
+    <description>张牧之与黄四郎斗智斗勇</description>
+    <tag>comedy</tag>
+    <tag>action</tag>
+    <actor>
+        <name>姜文</name>
+        <name>葛优</name>
+        <name>周润发</name>
+        <name>刘嘉玲</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

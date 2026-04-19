@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-黄飞鸿之二男儿当自强</id>
+    <title>黄飞鸿之二男儿当自强</title>
+    <year>1992</year>
+    <studio>嘉禾</studio>
+    <director>徐克</director>
+    <description>黄飞鸿对抗白莲教</description>
+    <tag>action</tag>
+    <tag>history</tag>
+    <actor>
+        <name>李连杰</name>
+        <name>关之琳</name>
+        <name>莫少聪</name>
+        <name>甄子丹</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-全职高手</id>
+    <title>全职高手</title>
+    <year>2017</year>
+    <studio>腾讯视频</studio>
+    <director>熊可</director>
+    <description>职业选手叶修被俱乐部驱逐后重新崛起</description>
+    <tag>animation</tag>
+    <tag>sports</tag>
+    <actor>
+        <name>叶修</name>
+        <name>苏沐橙</name>
+        <name>黄少天</name>
+        <name>王杰希</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

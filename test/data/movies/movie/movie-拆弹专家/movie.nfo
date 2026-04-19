@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-拆弹专家</id>
+    <title>拆弹专家</title>
+    <year>2017</year>
+    <studio>博纳影业</studio>
+    <director>邱礼涛</director>
+    <description>拆弹专家与恐怖分子的对决</description>
+    <tag>action</tag>
+    <tag>suspense</tag>
+    <actor>
+        <name>刘德华</name>
+        <name>姜武</name>
+        <name>宋佳</name>
+        <name>吴卓羲</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

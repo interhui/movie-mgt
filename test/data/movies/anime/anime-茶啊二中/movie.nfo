@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-茶啊二中</id>
+    <title>茶啊二中</title>
+    <year>2023</year>
+    <studio>凝羽动画</studio>
+    <director>夏铭泽</director>
+    <description>东北中学校园生活喜剧</description>
+    <tag>animation</tag>
+    <tag>comedy</tag>
+    <actor>
+        <name>邢原源</name>
+        <name>王博文</name>
+        <name>高禹</name>
+        <name>黄恒</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

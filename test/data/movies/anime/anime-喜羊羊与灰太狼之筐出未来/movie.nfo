@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-喜羊羊与灰太狼之筐出未来</id>
+    <title>喜羊羊与灰太狼之筐出未来</title>
+    <year>2022</year>
+    <studio>原创动力</studio>
+    <director>黄伟明</director>
+    <description>羊狼联合篮球队参加篮球大赛</description>
+    <tag>animation</tag>
+    <tag>sports</tag>
+    <actor>
+        <name>祖晴</name>
+        <name>张琳</name>
+        <name>梁颖</name>
+        <name>邓玉婷</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

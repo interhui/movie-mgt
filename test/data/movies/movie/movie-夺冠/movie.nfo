@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-夺冠</id>
+    <title>夺冠</title>
+    <year>2020</year>
+    <studio>我们制作</studio>
+    <director>陈可辛</director>
+    <description>中国女排的奋斗历程</description>
+    <tag>sports</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>巩俐</name>
+        <name>黄渤</name>
+        <name>吴刚</name>
+        <name>彭昱畅</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

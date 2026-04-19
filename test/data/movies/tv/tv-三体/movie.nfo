@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-三体</id>
+    <title>三体</title>
+    <year>2023</year>
+    <studio>腾讯视频</studio>
+    <director>杨磊</director>
+    <description>根据刘慈欣同名小说改编的科幻剧集</description>
+    <tag>sci-fi</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>张鲁一</name>
+        <name>于和伟</name>
+        <name>陈瑾</name>
+        <name>王子文</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

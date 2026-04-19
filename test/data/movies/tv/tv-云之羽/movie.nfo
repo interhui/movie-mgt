@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-云之羽</id>
+    <title>云之羽</title>
+    <year>2023</year>
+    <studio>爱奇艺</studio>
+    <director>郭敬明</director>
+    <description>刺客与宫门之间的爱恨情仇</description>
+    <tag>costume</tag>
+    <tag>action</tag>
+    <actor>
+        <name>虞书欣</name>
+        <name>张凌赫</name>
+        <name>丞磊</name>
+        <name>卢昱晓</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

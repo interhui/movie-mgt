@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-宇宙追缉令</id>
+    <title>宇宙追缉令</title>
+    <year>2001</year>
+    <studio>新线影业</studio>
+    <director>黄毅瑜</director>
+    <description>平行宇宙中的对决</description>
+    <tag>action</tag>
+    <tag>sci-fi</tag>
+    <actor>
+        <name>李连杰</name>
+        <name>杰森·斯坦森</name>
+        <name>卡拉·古奇诺</name>
+        <name>德尔罗伊·林多</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

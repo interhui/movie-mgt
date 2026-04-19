@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-星汉灿烂</id>
+    <title>星汉灿烂</title>
+    <year>2022</year>
+    <studio>腾讯视频</studio>
+    <director>费振翔</director>
+    <description>少女程少商与将军凌不疑的成长与爱情</description>
+    <tag>costume</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>吴磊</name>
+        <name>赵露思</name>
+        <name>郭涛</name>
+        <name>曾黎</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

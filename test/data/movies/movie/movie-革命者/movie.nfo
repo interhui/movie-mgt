@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-革命者</id>
+    <title>革命者</title>
+    <year>2021</year>
+    <studio>博纳影业</studio>
+    <director>徐展雄</director>
+    <description>李大钊的革命生涯</description>
+    <tag>history</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>张颂文</name>
+        <name>李易峰</name>
+        <name>佟丽娅</name>
+        <name>彭昱畅</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

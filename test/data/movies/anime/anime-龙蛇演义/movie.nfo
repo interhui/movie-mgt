@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-龙蛇演义</id>
+    <title>龙蛇演义</title>
+    <year>2022</year>
+    <studio>万维猫动画</studio>
+    <director>刘怀</director>
+    <description>王超的国术修炼之路</description>
+    <tag>animation</tag>
+    <tag>action</tag>
+    <actor>
+        <name>马正阳</name>
+        <name>宝木中阳</name>
+        <name>文森</name>
+        <name>胡良伟</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

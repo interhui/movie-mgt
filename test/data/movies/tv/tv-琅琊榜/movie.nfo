@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-琅琊榜</id>
+    <title>琅琊榜</title>
+    <year>2015</year>
+    <studio>山东影视</studio>
+    <director>孔笙</director>
+    <description>麒麟才子梅长苏辅佐靖王夺嫡的故事</description>
+    <tag>costume</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>胡歌</name>
+        <name>刘涛</name>
+        <name>王凯</name>
+        <name>黄维德</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

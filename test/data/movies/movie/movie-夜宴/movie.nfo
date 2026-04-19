@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-夜宴</id>
+    <title>夜宴</title>
+    <year>2006</year>
+    <studio>华谊兄弟</studio>
+    <director>冯小刚</director>
+    <description>宫廷权谋与爱情悲剧</description>
+    <tag>costume</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>章子怡</name>
+        <name>葛优</name>
+        <name>吴彦祖</name>
+        <name>周迅</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

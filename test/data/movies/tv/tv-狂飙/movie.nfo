@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-狂飙</id>
+    <title>狂飙</title>
+    <year>2023</year>
+    <studio>爱奇艺</studio>
+    <director>徐纪周</director>
+    <description>刑警与黑恶势力长达20年的较量</description>
+    <tag>crime</tag>
+    <tag>suspense</tag>
+    <actor>
+        <name>张译</name>
+        <name>张颂文</name>
+        <name>李一桐</name>
+        <name>张志坚</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

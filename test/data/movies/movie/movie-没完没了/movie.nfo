@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-没完没了</id>
+    <title>没完没了</title>
+    <year>1999</year>
+    <studio>中国电影</studio>
+    <director>冯小刚</director>
+    <description>韩冬绑架阮大伟女友的故事</description>
+    <tag>comedy</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>葛优</name>
+        <name>吴倩莲</name>
+        <name>傅彪</name>
+        <name>徐帆</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

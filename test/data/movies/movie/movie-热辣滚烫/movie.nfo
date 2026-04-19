@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-热辣滚烫</id>
+    <title>热辣滚烫</title>
+    <year>2024</year>
+    <studio>新丽传媒</studio>
+    <director>贾玲</director>
+    <description>宅女通过拳击实现自我蜕变</description>
+    <tag>comedy</tag>
+    <tag>drama</tag>
+    <actor>
+        <name>贾玲</name>
+        <name>雷佳音</name>
+        <name>张小斐</name>
+        <name>杨紫</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

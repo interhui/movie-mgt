@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-黄飞鸿</id>
+    <title>黄飞鸿</title>
+    <year>1991</year>
+    <studio>嘉禾</studio>
+    <director>徐克</director>
+    <description>黄飞鸿在广州的故事</description>
+    <tag>action</tag>
+    <tag>history</tag>
+    <actor>
+        <name>李连杰</name>
+        <name>关之琳</name>
+        <name>元彪</name>
+        <name>张学友</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

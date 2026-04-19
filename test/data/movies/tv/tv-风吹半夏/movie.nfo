@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-风吹半夏</id>
+    <title>风吹半夏</title>
+    <year>2022</year>
+    <studio>爱奇艺</studio>
+    <director>傅东育</director>
+    <description>女性企业家在改革开放浪潮中的奋斗</description>
+    <tag>drama</tag>
+    <tag>business</tag>
+    <actor>
+        <name>赵丽颖</name>
+        <name>欧豪</name>
+        <name>李光洁</name>
+        <name>刘威</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

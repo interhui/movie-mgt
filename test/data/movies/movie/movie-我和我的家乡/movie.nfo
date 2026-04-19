@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-我和我的家乡</id>
+    <title>我和我的家乡</title>
+    <year>2020</year>
+    <studio>中国电影</studio>
+    <director>宁浩</director>
+    <description>五个故事讲述家乡的变化</description>
+    <tag>drama</tag>
+    <tag>comedy</tag>
+    <actor>
+        <name>葛优</name>
+        <name>黄渤</name>
+        <name>范伟</name>
+        <name>邓超</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

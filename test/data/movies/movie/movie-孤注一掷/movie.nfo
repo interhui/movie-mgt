@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-孤注一掷</id>
+    <title>孤注一掷</title>
+    <year>2023</year>
+    <studio>坏猴子影业</studio>
+    <director>申奥</director>
+    <description>网络诈骗题材电影，揭露境外诈骗产业链</description>
+    <tag>crime</tag>
+    <tag>suspense</tag>
+    <actor>
+        <name>张艺兴</name>
+        <name>金晨</name>
+        <name>咏梅</name>
+        <name>王传君</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

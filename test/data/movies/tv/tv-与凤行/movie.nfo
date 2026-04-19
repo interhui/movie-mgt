@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-与凤行</id>
+    <title>与凤行</title>
+    <year>2024</year>
+    <studio>腾讯视频</studio>
+    <director>邓科</director>
+    <description>碧苍王与上古神的爱情故事</description>
+    <tag>fantasy</tag>
+    <tag>costume</tag>
+    <actor>
+        <name>赵丽颖</name>
+        <name>林更新</name>
+        <name>辛云来</name>
+        <name>何与</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

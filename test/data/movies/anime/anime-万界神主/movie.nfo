@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-万界神主</id>
+    <title>万界神主</title>
+    <year>2019</year>
+    <studio>若鸿文化</studio>
+    <director>叶老酒</director>
+    <description>神王叶辰重活一世的故事</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>徐翔</name>
+        <name>柳知萧</name>
+        <name>默伶</name>
+        <name>唐泽宗</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

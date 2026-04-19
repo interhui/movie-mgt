@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-云襄传</id>
+    <title>云襄传</title>
+    <year>2023</year>
+    <studio>爱奇艺</studio>
+    <director>游达志</director>
+    <description>书生云襄闯荡江湖的故事</description>
+    <tag>costume</tag>
+    <tag>action</tag>
+    <actor>
+        <name>陈晓</name>
+        <name>毛晓彤</name>
+        <name>唐晓天</name>
+        <name>许龄月</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

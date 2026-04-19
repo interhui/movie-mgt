@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-猪猪侠·恐龙日记</id>
+    <title>猪猪侠·恐龙日记</title>
+    <year>2021</year>
+    <studio>咏声动漫</studio>
+    <director>陆锦明</director>
+    <description>猪猪侠穿越到恐龙时代的冒险</description>
+    <tag>animation</tag>
+    <tag>comedy</tag>
+    <actor>
+        <name>陆双</name>
+        <name>陈志荣</name>
+        <name>祖晴</name>
+        <name>徐经纬</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

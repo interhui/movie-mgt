@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>anime-神印王座</id>
+    <title>神印王座</title>
+    <year>2022</year>
+    <studio>神漫文化</studio>
+    <director>曾元俊</director>
+    <description>骑士龙皓晨守护人类的故事</description>
+    <tag>animation</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>常蓉珊</name>
+        <name>锦鲤</name>
+        <name>阎么么</name>
+        <name>李兰陵</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-太阳照常升起</id>
+    <title>太阳照常升起</title>
+    <year>2007</year>
+    <studio>不亦乐乎</studio>
+    <director>姜文</director>
+    <description>四个时空交织的魔幻故事</description>
+    <tag>drama</tag>
+    <tag>fantasy</tag>
+    <actor>
+        <name>房祖名</name>
+        <name>周韵</name>
+        <name>姜文</name>
+        <name>黄秋生</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

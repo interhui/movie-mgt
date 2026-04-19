@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-苍兰诀</id>
+    <title>苍兰诀</title>
+    <year>2022</year>
+    <studio>爱奇艺</studio>
+    <director>伊峥</director>
+    <description>仙女小兰花与魔尊东方青苍的爱情故事</description>
+    <tag>fantasy</tag>
+    <tag>costume</tag>
+    <actor>
+        <name>虞书欣</name>
+        <name>王鹤棣</name>
+        <name>张彬彬</name>
+        <name>郭晓婷</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

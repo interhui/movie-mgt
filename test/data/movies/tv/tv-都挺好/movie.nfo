@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>tv-都挺好</id>
+    <title>都挺好</title>
+    <year>2019</year>
+    <studio>正午阳光</studio>
+    <director>简川訸</director>
+    <description>现代家庭中的亲情与矛盾</description>
+    <tag>modern</tag>
+    <tag>family</tag>
+    <actor>
+        <name>姚晨</name>
+        <name>倪大红</name>
+        <name>郭京飞</name>
+        <name>高露</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

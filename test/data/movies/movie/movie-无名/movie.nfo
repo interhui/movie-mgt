@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-无名</id>
+    <title>无名</title>
+    <year>2023</year>
+    <studio>博纳影业</studio>
+    <director>程耳</director>
+    <description>抗日战争时期地下工作者的故事</description>
+    <tag>history</tag>
+    <tag>suspense</tag>
+    <actor>
+        <name>梁朝伟</name>
+        <name>王一博</name>
+        <name>周迅</name>
+        <name>黄磊</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

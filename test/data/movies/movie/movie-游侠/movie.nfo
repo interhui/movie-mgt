@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-游侠</id>
+    <title>游侠</title>
+    <year>2007</year>
+    <studio>狮门影业</studio>
+    <director>菲利普·G·阿特威尔</director>
+    <description>FBI追捕神秘杀手</description>
+    <tag>action</tag>
+    <tag>crime</tag>
+    <actor>
+        <name>李连杰</name>
+        <name>杰森·斯坦森</name>
+        <name>娜迪亚·法尔丝</name>
+        <name>路易斯·古兹曼</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

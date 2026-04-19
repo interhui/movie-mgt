@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-流浪地球</id>
+    <title>流浪地球</title>
+    <year>2019</year>
+    <studio>中国电影</studio>
+    <director>郭帆</director>
+    <description>太阳即将毁灭，人类启动流浪地球计划，带着地球逃离太阳系</description>
+    <tag>sci-fi</tag>
+    <tag>action</tag>
+    <actor>
+        <name>吴京</name>
+        <name>屈楚萧</name>
+        <name>李光洁</name>
+        <name>吴孟达</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

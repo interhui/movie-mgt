@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-笑傲江湖</id>
+    <title>笑傲江湖</title>
+    <year>1990</year>
+    <studio>金公主</studio>
+    <director>胡金铨</director>
+    <description>令狐冲的江湖冒险</description>
+    <tag>action</tag>
+    <tag>costume</tag>
+    <actor>
+        <name>许冠杰</name>
+        <name>叶童</name>
+        <name>张学友</name>
+        <name>张敏</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-追龙</id>
+    <title>追龙</title>
+    <year>2017</year>
+    <studio>博纳影业</studio>
+    <director>王晶</director>
+    <description>跛豪与雷洛的黑白故事</description>
+    <tag>crime</tag>
+    <tag>history</tag>
+    <actor>
+        <name>甄子丹</name>
+        <name>刘德华</name>
+        <name>姜皓文</name>
+        <name>惠英红</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>

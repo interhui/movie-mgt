@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<movie>
+    <id>movie-红海行动</id>
+    <title>红海行动</title>
+    <year>2018</year>
+    <studio>博纳影业</studio>
+    <director>林超贤</director>
+    <description>中国海军陆战队执行撤侨任务</description>
+    <tag>action</tag>
+    <tag>war</tag>
+    <actor>
+        <name>张译</name>
+        <name>黄景瑜</name>
+        <name>海清</name>
+        <name>杜江</name>
+    </actor>
+    <fileinfo>
+        <streamdetails>
+            <video>
+                <durationinseconds>7200</durationinseconds>
+            </video>
+        </streamdetails>
+    </fileinfo>
+</movie>
