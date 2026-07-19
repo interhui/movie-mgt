@@ -139,6 +139,7 @@ const elements = {
     subtitleTextStroke: document.getElementById('subtitle-text-stroke'),
     volumeSetting: document.getElementById('volume-setting'),
     volumeSettingValue: document.getElementById('volume-setting-value'),
+    volumeStepSetting: document.getElementById('volume-step-setting'),
     seekStepSetting: document.getElementById('seek-step-setting'),
     // 设置 Tab
     settingsTabs: document.querySelector('.settings-tabs'),
@@ -926,6 +927,13 @@ async function loadSettings() {
             if (elements.volumeSettingValue) {
                 elements.volumeSettingValue.textContent = volumeValue;
             }
+        }
+
+        // 加载音量步长配置（非正整数回退为默认 5）
+        if (elements.volumeStepSetting) {
+            const volumeStep = state.settings.player?.volumeStep;
+            const volumeStepValue = (typeof volumeStep === 'number' && volumeStep > 0) ? volumeStep : 5;
+            elements.volumeStepSetting.value = volumeStepValue;
         }
 
         // 加载快进 / 快退间隔配置（非正整数回退为默认 10）
@@ -3869,6 +3877,10 @@ async function saveSettingsHandler() {
         const seekStepRaw = parseInt(elements.seekStepSetting?.value, 10);
         const seekStepValue = (Number.isInteger(seekStepRaw) && seekStepRaw > 0) ? seekStepRaw : 10;
 
+        // 音量步长：非正整数回退为默认 5，避免保存无效步长
+        const volumeStepRaw = parseInt(elements.volumeStepSetting?.value, 10);
+        const volumeStepValue = (Number.isInteger(volumeStepRaw) && volumeStepRaw > 0) ? volumeStepRaw : 5;
+
         const newSettings = {
             ...state.settings,
             emulators: state.settings.emulators,
@@ -3936,7 +3948,8 @@ async function saveSettingsHandler() {
                     textStroke: `2px ${elements.subtitleTextStroke?.value || '#000'}`
                 },
                 volume: parseInt(elements.volumeSetting?.value || '45', 10),
-                seekStep: seekStepValue
+                seekStep: seekStepValue,
+                volumeStep: volumeStepValue
             }
         };
 

@@ -750,5 +750,62 @@ describe('SettingsService', () => {
             expect(config.seekStep).toBe(20);
             expect(config.subtitle.fontWeight).toBe('700');
         });
+
+        test('SVC-SETTINGS-046A: getPlayerConfig 默认包含 volumeStep 为 5', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const config = service.getPlayerConfig();
+            expect(config.volumeStep).toBe(5);
+        });
+
+        test('SVC-SETTINGS-046B: getVolumeStep 默认返回 5', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            expect(service.getVolumeStep()).toBe(5);
+        });
+
+        test('SVC-SETTINGS-046C: setVolumeStep 设置后可读取', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setVolumeStep(8);
+            expect(service.getVolumeStep()).toBe(8);
+        });
+
+        test('SVC-SETTINGS-046D: setVolumeStep 持久化到 settings.player', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setVolumeStep(7);
+            const settings = service.getSettings();
+            expect(settings.player.volumeStep).toBe(7);
+        });
+
+        test('SVC-SETTINGS-046E: getVolumeStep 对非正数回退为 5', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setVolumeStep(0);
+            expect(service.getVolumeStep()).toBe(5);
+            service.setVolumeStep(-3);
+            expect(service.getVolumeStep()).toBe(5);
+        });
+
+        test('SVC-SETTINGS-046F: getVolumeStep 对非数字回退为 5', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setVolumeStep('abc');
+            expect(service.getVolumeStep()).toBe(5);
+        });
+
+        test('SVC-SETTINGS-046G: setPlayerConfig 同时设置 volumeStep 与 subtitle 且互不丢失', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setPlayerConfig({ subtitle: { fontSize: '28px' }, volumeStep: 12 });
+            const config = service.getPlayerConfig();
+            expect(config.subtitle.fontSize).toBe('28px');
+            // subtitle 其他字段保留
+            expect(config.subtitle.backgroundColor).toBe('rgba(0, 0, 0, 0.7)');
+            expect(config.volumeStep).toBe(12);
+        });
+
+        test('SVC-SETTINGS-046H: setPlayerConfig 设置 volumeStep 时不影响已有 subtitle', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setPlayerConfig({ subtitle: { fontWeight: '700' } });
+            service.setPlayerConfig({ volumeStep: 15 });
+            const config = service.getPlayerConfig();
+            expect(config.volumeStep).toBe(15);
+            expect(config.subtitle.fontWeight).toBe('700');
+        });
     });
 });

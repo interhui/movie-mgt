@@ -80,8 +80,10 @@ class HardCodeService {
                     fontWeight: '800',
                     textStroke: '2px #000'
                 },
-                // 快进 / 快退间隔（秒），用于播放器方向键seek步长
-                seekStep: 10
+                // 快进 / 快退间隔（秒），用于播放器方向键 ArrowLeft / ArrowRight 调节播放进度的变化量
+                seekStep: 10,
+                // 音量步长（百分比），用于播放器方向键 ArrowUp / ArrowDown 调节音量的单次变化量
+                volumeStep: 5
             }
         };
     }

@@ -81,6 +81,12 @@ describe('HardCodeService', () => {
             expect(settings.player.seekStep).toBe(10);
         });
 
+        test('SVC-HARDCODED-009A: player 默认包含 volumeStep 为 5', () => {
+            const settings = service.getDefaultSettings();
+            expect(settings.player).toBeDefined();
+            expect(settings.player.volumeStep).toBe(5);
+        });
+
     });
 
     describe('getDefaultTags', () => {

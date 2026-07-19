@@ -551,4 +551,101 @@ Dialogue: 0,0:00:01.00,0:00:03.00,Default,,0,0,0,,ASS字幕`;
             });
         });
     });
+
+    describe('calculateVolumeTarget - 音量步长计算', () => {
+        describe('增大 (up)', () => {
+            test('SVC-VOL-001: 增大方向在当前音量基础上加步长', () => {
+                expect(playerService.calculateVolumeTarget(40, 5, 'up')).toBe(45);
+            });
+
+            test('SVC-VOL-002: 增大不超过音量上限 100', () => {
+                expect(playerService.calculateVolumeTarget(98, 5, 'up')).toBe(100);
+            });
+
+            test('SVC-VOL-003: 增大恰好到达音量上限 100', () => {
+                expect(playerService.calculateVolumeTarget(95, 5, 'up')).toBe(100);
+            });
+        });
+
+        describe('减小 (down)', () => {
+            test('SVC-VOL-004: 减小方向在当前音量基础上减步长', () => {
+                expect(playerService.calculateVolumeTarget(40, 5, 'down')).toBe(35);
+            });
+
+            test('SVC-VOL-005: 减小不低于音量下限 0', () => {
+                expect(playerService.calculateVolumeTarget(3, 5, 'down')).toBe(0);
+            });
+
+            test('SVC-VOL-006: 减小恰好到达音量下限 0', () => {
+                expect(playerService.calculateVolumeTarget(5, 5, 'down')).toBe(0);
+            });
+        });
+
+        describe('自定义步长', () => {
+            test('SVC-VOL-007: 自定义步长 15 生效（增大）', () => {
+                expect(playerService.calculateVolumeTarget(40, 15, 'up')).toBe(55);
+            });
+
+            test('SVC-VOL-008: 自定义步长 15 生效（减小）', () => {
+                expect(playerService.calculateVolumeTarget(40, 15, 'down')).toBe(25);
+            });
+        });
+
+        describe('步长规整', () => {
+            test('SVC-VOL-009: 步长为 0 时回退默认 5', () => {
+                expect(playerService.calculateVolumeTarget(40, 0, 'up')).toBe(45);
+            });
+
+            test('SVC-VOL-010: 步长为负数时回退默认 5', () => {
+                expect(playerService.calculateVolumeTarget(40, -5, 'up')).toBe(45);
+            });
+
+            test('SVC-VOL-011: 步长非数字时回退默认 5', () => {
+                expect(playerService.calculateVolumeTarget(40, 'abc', 'up')).toBe(45);
+            });
+
+            test('SVC-VOL-012: 步长为 undefined 时回退默认 5', () => {
+                expect(playerService.calculateVolumeTarget(40, undefined, 'up')).toBe(45);
+            });
+        });
+
+        describe('边界与异常输入', () => {
+            test('SVC-VOL-013: 当前音量无效时按 0 处理（增大）', () => {
+                expect(playerService.calculateVolumeTarget(NaN, 5, 'up')).toBe(5);
+            });
+
+            test('SVC-VOL-014: 当前音量无效时按 0 处理（减小）', () => {
+                expect(playerService.calculateVolumeTarget(NaN, 5, 'down')).toBe(0);
+            });
+
+            test('SVC-VOL-015: 未知方向时保持当前音量不变', () => {
+                expect(playerService.calculateVolumeTarget(40, 5, 'unknown')).toBe(40);
+            });
+
+            test('SVC-VOL-016: 方向缺失时保持当前音量不变', () => {
+                expect(playerService.calculateVolumeTarget(40, 5)).toBe(40);
+            });
+
+            test('SVC-VOL-017: 增大方向不会超出上限（大步长）', () => {
+                expect(playerService.calculateVolumeTarget(50, 200, 'up')).toBe(100);
+            });
+
+            test('SVC-VOL-018: 减小方向不会低于下限（大步长）', () => {
+                expect(playerService.calculateVolumeTarget(50, 200, 'down')).toBe(0);
+            });
+        });
+
+        describe('导出常量', () => {
+            test('SVC-VOL-019: DEFAULT_VOLUME_STEP 默认音量步长为 5', () => {
+                expect(PlayerService.DEFAULT_VOLUME_STEP).toBe(5);
+            });
+
+            test('SVC-VOL-020: 音量边界与方向常量定义正确', () => {
+                expect(PlayerService.VOLUME_MIN).toBe(0);
+                expect(PlayerService.VOLUME_MAX).toBe(100);
+                expect(PlayerService.VOLUME_DIRECTION_UP).toBe('up');
+                expect(PlayerService.VOLUME_DIRECTION_DOWN).toBe('down');
+            });
+        });
+    });
 });

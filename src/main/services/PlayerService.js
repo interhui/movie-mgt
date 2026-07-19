@@ -1,17 +1,10 @@
 /**
  * 播放器服务
- * 负责管理播放列表、播放器窗口，以及快进 / 快退目标时间的计算。
+ * 负责管理播放列表、播放器窗口，以及快进 / 快退目标时间、音量调节目标值的计算。
  */
 const path = require('path');
 const fs = require('fs').promises;
 const fsSync = require('fs');
-
-// ==================== 快进 / 快退计算 ====================
-//
-// 以下常量与工具函数供 calculateSeekTarget 使用：根据当前播放时间、视频总时长与
-// 快进/快退间隔计算目标播放时间。纯计算逻辑，无副作用、不依赖 Electron / DOM，
-// 便于在 Node 环境下单元测试。渲染层（player.js）经 preload.js 同步调用本方法，
-// 既保证计算逻辑单一来源（避免重复实现），又保证可被单元测试覆盖。
 
 /** 默认快进 / 快退间隔（秒） */
 const DEFAULT_SEEK_STEP = 10;
@@ -42,6 +35,44 @@ function normalizeSeekStep(seekStep) {
  */
 function normalizeTime(time) {
     return (typeof time === 'number' && !isNaN(time)) ? time : 0;
+}
+
+
+/** 默认音量步长（百分比），方向键调节音量时的单次变化量 */
+const DEFAULT_VOLUME_STEP = 5;
+
+/** 音量下限（百分比） */
+const VOLUME_MIN = 0;
+
+/** 音量上限（百分比） */
+const VOLUME_MAX = 100;
+
+/** 音量增大方向：向上调节（对应方向键 ArrowUp） */
+const VOLUME_DIRECTION_UP = 'up';
+
+/** 音量减小方向：向下调节（对应方向键 ArrowDown） */
+const VOLUME_DIRECTION_DOWN = 'down';
+
+/**
+ * 规整音量步长
+ * 非数字或非正数一律回退为默认值，保证调用方始终拿到有效步长。
+ * @param {any} volumeStep - 原始音量步长
+ * @returns {number} 有效的音量步长（百分比）
+ */
+function normalizeVolumeStep(volumeStep) {
+    return (typeof volumeStep === 'number' && !isNaN(volumeStep) && volumeStep > 0)
+        ? volumeStep
+        : DEFAULT_VOLUME_STEP;
+}
+
+/**
+ * 规整音量基线
+ * 非数字或 NaN 一律按 0 处理，避免计算结果出现 NaN。
+ * @param {any} volume - 原始音量
+ * @returns {number} 有效的音量（百分比）
+ */
+function normalizeVolume(volume) {
+    return (typeof volume === 'number' && !isNaN(volume)) ? volume : 0;
 }
 
 class PlayerService {
@@ -466,9 +497,45 @@ class PlayerService {
         // 未知方向：保持原位
         return baseTime;
     }
+
+    /**
+     * 计算音量调节后的目标音量
+     *
+     * 边界规则：
+     *   - 增大方向（up）结果不超过 VOLUME_MAX（100）；
+     *   - 减小方向（down）结果不低于 VOLUME_MIN（0）；
+     *   - 未知方向时保持当前音量不变。
+     *
+     * @param {number} currentVolume - 当前音量（百分比，0~100）
+     * @param {number} volumeStep - 音量步长（百分比，正整数）
+     * @param {string} direction - 方向：VOLUME_DIRECTION_UP（增大）/ VOLUME_DIRECTION_DOWN（减小）
+     * @returns {number} 目标音量（百分比，0~100）
+     */
+    calculateVolumeTarget(currentVolume, volumeStep, direction) {
+        const step = normalizeVolumeStep(volumeStep);
+        const baseVolume = normalizeVolume(currentVolume);
+
+        if (direction === VOLUME_DIRECTION_UP) {
+            // 增大：在当前音量基础上加步长，并裁剪到上限 100
+            return Math.min(VOLUME_MAX, baseVolume + step);
+        }
+
+        if (direction === VOLUME_DIRECTION_DOWN) {
+            // 减小：在当前音量基础上减步长，并裁剪到下限 0
+            return Math.max(VOLUME_MIN, baseVolume - step);
+        }
+
+        // 未知方向：保持原位
+        return baseVolume;
+    }
 }
 
 module.exports = PlayerService;
 module.exports.DEFAULT_SEEK_STEP = DEFAULT_SEEK_STEP;
 module.exports.DIRECTION_BACKWARD = DIRECTION_BACKWARD;
 module.exports.DIRECTION_FORWARD = DIRECTION_FORWARD;
+module.exports.DEFAULT_VOLUME_STEP = DEFAULT_VOLUME_STEP;
+module.exports.VOLUME_MIN = VOLUME_MIN;
+module.exports.VOLUME_MAX = VOLUME_MAX;
+module.exports.VOLUME_DIRECTION_UP = VOLUME_DIRECTION_UP;
+module.exports.VOLUME_DIRECTION_DOWN = VOLUME_DIRECTION_DOWN;

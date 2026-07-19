@@ -581,7 +581,7 @@ class SettingsService {
      * @returns {object} 播放器配置
      */
     getPlayerConfig() {
-        return this.settings.player || { subtitle: { backgroundColor: 'rgba(0, 0, 0, 0.7)', fontSize: '22px' }, volume: 45, seekStep: 10 };
+        return this.settings.player || { subtitle: { backgroundColor: 'rgba(0, 0, 0, 0.7)', fontSize: '22px' }, volume: 45, seekStep: 10, volumeStep: 5 };
     }
 
     /**
@@ -627,6 +627,28 @@ class SettingsService {
             this.settings.player = {};
         }
         this.settings.player.seekStep = step;
+        this.saveSettings(this.settings);
+    }
+
+    /**
+     * 获取音量步长（百分比）
+     * 非正数或非数字时回退为默认值 5，保证播放器始终拿到有效步长。
+     * @returns {number} volumeStep
+     */
+    getVolumeStep() {
+        const volumeStep = this.settings.player && this.settings.player.volumeStep;
+        return (typeof volumeStep === 'number' && volumeStep > 0) ? volumeStep : 5;
+    }
+
+    /**
+     * 设置音量步长（百分比）
+     * @param {number} step - 音量步长（正整数，1~100）
+     */
+    setVolumeStep(step) {
+        if (!this.settings.player) {
+            this.settings.player = {};
+        }
+        this.settings.player.volumeStep = step;
         this.saveSettings(this.settings);
     }
 

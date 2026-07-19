@@ -77,6 +77,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 快进 / 快退间隔（秒），由配置加载；默认 10，配置缺失或无效时回退默认值
     let currentSeekStep = 10;
 
+    // 音量步长（百分比），由配置加载；默认 5，配置缺失或无效时回退默认值
+    let currentVolumeStep = 5;
+
     // 应用字幕设置
     await applySubtitleSettings();
 
@@ -85,6 +88,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 应用快进 / 快退间隔设置
     await applySeekStepSettings();
+
+    // 应用音量步长设置
+    await applyVolumeStepSettings();
 
     async function applyVolumeSettings() {
         try {
@@ -117,6 +123,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (error) {
             console.error('Failed to apply seek step settings:', error.message || error);
             currentSeekStep = 10;
+        }
+    }
+
+    /**
+     * 应用音量步长设置
+     * 从配置读取 player.volumeStep 并缓存到 currentVolumeStep，供键盘方向键 ArrowUp / ArrowDown 调节音量使用；
+     * 配置缺失或非正数时回退为默认值 5。
+     */
+    async function applyVolumeStepSettings() {
+        try {
+            const settings = await window.electronAPI.getSettings();
+            const volumeStep = (settings && settings.player && typeof settings.player.volumeStep === 'number')
+                ? settings.player.volumeStep
+                : 5;
+            currentVolumeStep = (volumeStep > 0) ? volumeStep : 5;
+        } catch (error) {
+            console.error('Failed to apply volume step settings:', error.message || error);
+            currentVolumeStep = 5;
         }
     }
 
@@ -590,11 +614,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                 );
                 break;
             case 'ArrowUp':
-                elements.volumeBar.value = Math.min(100, parseInt(elements.volumeBar.value) + 5);
+                // 音量增大：通过 PlayerService 计算目标音量，步长取自音量配置（currentVolumeStep）
+                elements.volumeBar.value = window.electronAPI.calculateVolumeTarget(
+                    parseInt(elements.volumeBar.value),
+                    currentVolumeStep,
+                    'up'
+                );
                 elements.volumeBar.dispatchEvent(new Event('input'));
                 break;
             case 'ArrowDown':
-                elements.volumeBar.value = Math.max(0, parseInt(elements.volumeBar.value) - 5);
+                // 音量减小：通过 PlayerService 计算目标音量，步长取自音量配置（currentVolumeStep）
+                elements.volumeBar.value = window.electronAPI.calculateVolumeTarget(
+                    parseInt(elements.volumeBar.value),
+                    currentVolumeStep,
+                    'down'
+                );
                 elements.volumeBar.dispatchEvent(new Event('input'));
                 break;
             case 'm':
