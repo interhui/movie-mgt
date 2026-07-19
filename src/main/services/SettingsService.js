@@ -581,11 +581,13 @@ class SettingsService {
      * @returns {object} 播放器配置
      */
     getPlayerConfig() {
-        return this.settings.player || { subtitle: { backgroundColor: 'rgba(0, 0, 0, 0.7)', fontSize: '22px' }, volume: 45 };
+        return this.settings.player || { subtitle: { backgroundColor: 'rgba(0, 0, 0, 0.7)', fontSize: '22px' }, volume: 45, seekStep: 10 };
     }
 
     /**
      * 设置播放器配置
+     * 说明：subtitle 为子对象，按字段浅合并以保留未提供的字幕字段；
+     *       其余顶层字段（如 volume、seekStep）整体写入。
      * @param {object} config - 播放器配置
      */
     setPlayerConfig(config) {
@@ -594,9 +596,37 @@ class SettingsService {
         }
         if (config.subtitle) {
             this.settings.player.subtitle = { ...this.settings.player.subtitle, ...config.subtitle };
-        } else {
-            this.settings.player = { ...this.settings.player, ...config };
         }
+        // 合并字幕以外的顶层字段（volume / seekStep 等），保留未提供的字段
+        const topLevelKeys = Object.keys(config).filter((key) => key !== 'subtitle');
+        if (topLevelKeys.length > 0) {
+            this.settings.player = {
+                ...this.settings.player,
+                ...Object.fromEntries(topLevelKeys.map((key) => [key, config[key]]))
+            };
+        }
+        this.saveSettings(this.settings);
+    }
+
+    /**
+     * 获取快进 / 快退间隔（秒）
+     * 非正数或非数字时回退为默认值 10，保证播放器始终拿到有效步长。
+     * @returns {number} seekStep
+     */
+    getSeekStep() {
+        const seekStep = this.settings.player && this.settings.player.seekStep;
+        return (typeof seekStep === 'number' && seekStep > 0) ? seekStep : 10;
+    }
+
+    /**
+     * 设置快进 / 快退间隔（秒）
+     * @param {number} step - 间隔秒数（正整数）
+     */
+    setSeekStep(step) {
+        if (!this.settings.player) {
+            this.settings.player = {};
+        }
+        this.settings.player.seekStep = step;
         this.saveSettings(this.settings);
     }
 

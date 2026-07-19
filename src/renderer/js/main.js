@@ -139,6 +139,7 @@ const elements = {
     subtitleTextStroke: document.getElementById('subtitle-text-stroke'),
     volumeSetting: document.getElementById('volume-setting'),
     volumeSettingValue: document.getElementById('volume-setting-value'),
+    seekStepSetting: document.getElementById('seek-step-setting'),
     // 设置 Tab
     settingsTabs: document.querySelector('.settings-tabs'),
     onlyNewMoviesCheckbox: document.getElementById('only-new-movies'),
@@ -925,6 +926,13 @@ async function loadSettings() {
             if (elements.volumeSettingValue) {
                 elements.volumeSettingValue.textContent = volumeValue;
             }
+        }
+
+        // 加载快进 / 快退间隔配置（非正整数回退为默认 10）
+        if (elements.seekStepSetting) {
+            const seekStep = state.settings.player?.seekStep;
+            const seekStepValue = (typeof seekStep === 'number' && seekStep > 0) ? seekStep : 10;
+            elements.seekStepSetting.value = seekStepValue;
         }
 
         state.viewMode = state.settings.layout.viewMode;
@@ -3857,6 +3865,10 @@ async function loadActors() {
  */
 async function saveSettingsHandler() {
     try {
+        // 快进 / 快退间隔：非正整数回退为默认 10，避免保存无效步长
+        const seekStepRaw = parseInt(elements.seekStepSetting?.value, 10);
+        const seekStepValue = (Number.isInteger(seekStepRaw) && seekStepRaw > 0) ? seekStepRaw : 10;
+
         const newSettings = {
             ...state.settings,
             emulators: state.settings.emulators,
@@ -3923,7 +3935,8 @@ async function saveSettingsHandler() {
                     fontWeight: elements.subtitleFontWeight?.value || '500',
                     textStroke: `2px ${elements.subtitleTextStroke?.value || '#000'}`
                 },
-                volume: parseInt(elements.volumeSetting?.value || '45', 10)
+                volume: parseInt(elements.volumeSetting?.value || '45', 10),
+                seekStep: seekStepValue
             }
         };
 

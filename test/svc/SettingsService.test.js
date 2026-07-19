@@ -693,5 +693,62 @@ describe('SettingsService', () => {
             expect(config.subtitle.fontSize).toBe('36px');
             expect(config.subtitle.fontWeight).toBe('800');
         });
+
+        test('SVC-SETTINGS-045A: getPlayerConfig 默认包含 seekStep 为 10', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const config = service.getPlayerConfig();
+            expect(config.seekStep).toBe(10);
+        });
+
+        test('SVC-SETTINGS-045B: getSeekStep 默认返回 10', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            expect(service.getSeekStep()).toBe(10);
+        });
+
+        test('SVC-SETTINGS-045C: setSeekStep 设置后可读取', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setSeekStep(30);
+            expect(service.getSeekStep()).toBe(30);
+        });
+
+        test('SVC-SETTINGS-045D: setSeekStep 持久化到 settings.player', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setSeekStep(25);
+            const settings = service.getSettings();
+            expect(settings.player.seekStep).toBe(25);
+        });
+
+        test('SVC-SETTINGS-045E: getSeekStep 对非正数回退为 10', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setSeekStep(0);
+            expect(service.getSeekStep()).toBe(10);
+            service.setSeekStep(-5);
+            expect(service.getSeekStep()).toBe(10);
+        });
+
+        test('SVC-SETTINGS-045F: getSeekStep 对非数字回退为 10', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setSeekStep('abc');
+            expect(service.getSeekStep()).toBe(10);
+        });
+
+        test('SVC-SETTINGS-045G: setPlayerConfig 同时设置 seekStep 与 subtitle 且互不丢失', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setPlayerConfig({ subtitle: { fontSize: '28px' }, seekStep: 15 });
+            const config = service.getPlayerConfig();
+            expect(config.subtitle.fontSize).toBe('28px');
+            // subtitle 其他字段保留
+            expect(config.subtitle.backgroundColor).toBe('rgba(0, 0, 0, 0.7)');
+            expect(config.seekStep).toBe(15);
+        });
+
+        test('SVC-SETTINGS-045H: setPlayerConfig 设置 seekStep 时不影响已有 subtitle', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setPlayerConfig({ subtitle: { fontWeight: '700' } });
+            service.setPlayerConfig({ seekStep: 20 });
+            const config = service.getPlayerConfig();
+            expect(config.seekStep).toBe(20);
+            expect(config.subtitle.fontWeight).toBe('700');
+        });
     });
 });

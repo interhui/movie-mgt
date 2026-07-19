@@ -1,10 +1,48 @@
 /**
  * 播放器服务
- * 负责管理播放列表和播放器窗口
+ * 负责管理播放列表、播放器窗口，以及快进 / 快退目标时间的计算。
  */
 const path = require('path');
 const fs = require('fs').promises;
 const fsSync = require('fs');
+
+// ==================== 快进 / 快退计算 ====================
+//
+// 以下常量与工具函数供 calculateSeekTarget 使用：根据当前播放时间、视频总时长与
+// 快进/快退间隔计算目标播放时间。纯计算逻辑，无副作用、不依赖 Electron / DOM，
+// 便于在 Node 环境下单元测试。渲染层（player.js）经 preload.js 同步调用本方法，
+// 既保证计算逻辑单一来源（避免重复实现），又保证可被单元测试覆盖。
+
+/** 默认快进 / 快退间隔（秒） */
+const DEFAULT_SEEK_STEP = 10;
+
+/** 快退方向：向后跳转 */
+const DIRECTION_BACKWARD = 'backward';
+
+/** 快进方向：向前跳转 */
+const DIRECTION_FORWARD = 'forward';
+
+/**
+ * 规整快进 / 快退间隔
+ * 非数字或非正数一律回退为默认值，保证调用方始终拿到有效步长。
+ * @param {any} seekStep - 原始步长
+ * @returns {number} 有效的步长（秒）
+ */
+function normalizeSeekStep(seekStep) {
+    return (typeof seekStep === 'number' && !isNaN(seekStep) && seekStep > 0)
+        ? seekStep
+        : DEFAULT_SEEK_STEP;
+}
+
+/**
+ * 规整播放时间基线
+ * 非数字或 NaN 一律按 0 处理，避免计算结果出现 NaN。
+ * @param {any} time - 原始时间
+ * @returns {number} 有效的播放时间（秒）
+ */
+function normalizeTime(time) {
+    return (typeof time === 'number' && !isNaN(time)) ? time : 0;
+}
 
 class PlayerService {
     constructor() {
@@ -383,15 +421,54 @@ class PlayerService {
         }
 
         const ext = path.extname(subtitlePath).toLowerCase();
-        
+
         if (ext === '.srt') {
             return await this.parseSRT(subtitlePath);
         } else if (ext === '.ass') {
             return await this.parseASS(subtitlePath);
         }
-        
+
         return [];
+    }
+
+    /**
+     * 计算快进 / 快退后的目标播放时间
+     *
+     * 边界规则：
+     *   - 快退结果不低于 0；
+     *   - 快进结果不超过 duration（duration 无效时不设上限，交由浏览器最终裁剪）；
+     *   - 未知方向时保持当前播放时间不变。
+     *
+     * @param {number} currentTime - 当前播放时间（秒）
+     * @param {number} duration - 视频总时长（秒）
+     * @param {number} seekStep - 快进 / 快退间隔（秒）
+     * @param {string} direction - 方向：DIRECTION_FORWARD（快进）/ DIRECTION_BACKWARD（快退）
+     * @returns {number} 目标播放时间（秒）
+     */
+    calculateSeekTarget(currentTime, duration, seekStep, direction) {
+        const step = normalizeSeekStep(seekStep);
+        const baseTime = normalizeTime(currentTime);
+        // duration 无效时使用 Infinity，使快进仅做加法、由浏览器裁剪到真实时长
+        const maxTime = (typeof duration === 'number' && !isNaN(duration) && duration > 0)
+            ? duration
+            : Infinity;
+
+        if (direction === DIRECTION_FORWARD) {
+            // 快进：在当前时间基础上加步长，并裁剪到视频时长
+            return Math.min(maxTime, baseTime + step);
+        }
+
+        if (direction === DIRECTION_BACKWARD) {
+            // 快退：在当前时间基础上减步长，并裁剪到 0
+            return Math.max(0, baseTime - step);
+        }
+
+        // 未知方向：保持原位
+        return baseTime;
     }
 }
 
 module.exports = PlayerService;
+module.exports.DEFAULT_SEEK_STEP = DEFAULT_SEEK_STEP;
+module.exports.DIRECTION_BACKWARD = DIRECTION_BACKWARD;
+module.exports.DIRECTION_FORWARD = DIRECTION_FORWARD;

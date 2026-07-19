@@ -75,6 +75,12 @@ describe('HardCodeService', () => {
             expect(settings.moviebox).toBeUndefined();
         });
 
+        test('SVC-HARDCODED-009: player 默认包含 seekStep 为 10', () => {
+            const settings = service.getDefaultSettings();
+            expect(settings.player).toBeDefined();
+            expect(settings.player.seekStep).toBe(10);
+        });
+
     });
 
     describe('getDefaultTags', () => {

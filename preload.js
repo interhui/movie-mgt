@@ -3,6 +3,9 @@
  * 用于安全地暴露 API 给渲染进程
  */
 const { contextBridge, ipcRenderer } = require('electron');
+// 播放器服务：用于快进 / 快退目标时间的纯计算，同步暴露给渲染层，避免重复实现且便于单元测试
+const PlayerService = require('./src/main/services/PlayerService');
+const playerService = new PlayerService();
 
 // 暴露给渲染进程的 API
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -88,6 +91,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     openCategoryManagement: () => ipcRenderer.invoke('open-category-management'),
     openPlayerWindow: (movieData, startTime) => ipcRenderer.invoke('open-player-window', movieData, startTime),
     openBatchPlayerWindow: (playlistData) => ipcRenderer.invoke('open-batch-player-window', playlistData),
+
+    // 播放器快进 / 快退目标时间计算（纯函数，同步调用，复用主进程 PlayerService）
+    calculateSeekTarget: (currentTime, duration, seekStep, direction) =>
+        playerService.calculateSeekTarget(currentTime, duration, seekStep, direction),
 
     // 文件选择对话框
     selectDirectory: () => ipcRenderer.invoke('select-directory'),

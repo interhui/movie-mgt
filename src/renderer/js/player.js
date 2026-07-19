@@ -74,11 +74,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     let availableSubtitleFiles = [];
     let selectedSubtitleFile = null;
 
+    // 快进 / 快退间隔（秒），由配置加载；默认 10，配置缺失或无效时回退默认值
+    let currentSeekStep = 10;
+
     // 应用字幕设置
     await applySubtitleSettings();
 
     // 应用音量设置
     await applyVolumeSettings();
+
+    // 应用快进 / 快退间隔设置
+    await applySeekStepSettings();
 
     async function applyVolumeSettings() {
         try {
@@ -93,6 +99,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Failed to apply volume settings:', error.message || error);
             elements.volumeBar.value = 45;
             elements.videoPlayer.volume = 0.45;
+        }
+    }
+
+    /**
+     * 应用快进 / 快退间隔设置
+     * 从配置读取 player.seekStep 并缓存到 currentSeekStep，供键盘方向键 seek 使用；
+     * 配置缺失或非正数时回退为默认值 10。
+     */
+    async function applySeekStepSettings() {
+        try {
+            const settings = await window.electronAPI.getSettings();
+            const seekStep = (settings && settings.player && typeof settings.player.seekStep === 'number')
+                ? settings.player.seekStep
+                : 10;
+            currentSeekStep = (seekStep > 0) ? seekStep : 10;
+        } catch (error) {
+            console.error('Failed to apply seek step settings:', error.message || error);
+            currentSeekStep = 10;
         }
     }
 
@@ -548,10 +572,22 @@ document.addEventListener('DOMContentLoaded', async () => {
                 elements.playPauseBtn.click();
                 break;
             case 'ArrowLeft':
-                elements.videoPlayer.currentTime = Math.max(0, elements.videoPlayer.currentTime - 10);
+                // 快退：通过 PlayerService 计算目标时间，步长取自进度配置（currentSeekStep）
+                elements.videoPlayer.currentTime = window.electronAPI.calculateSeekTarget(
+                    elements.videoPlayer.currentTime,
+                    elements.videoPlayer.duration,
+                    currentSeekStep,
+                    'backward'
+                );
                 break;
             case 'ArrowRight':
-                elements.videoPlayer.currentTime = Math.min(elements.videoPlayer.duration, elements.videoPlayer.currentTime + 10);
+                // 快进：通过 PlayerService 计算目标时间，步长取自进度配置（currentSeekStep）
+                elements.videoPlayer.currentTime = window.electronAPI.calculateSeekTarget(
+                    elements.videoPlayer.currentTime,
+                    elements.videoPlayer.duration,
+                    currentSeekStep,
+                    'forward'
+                );
                 break;
             case 'ArrowUp':
                 elements.volumeBar.value = Math.min(100, parseInt(elements.volumeBar.value) + 5);

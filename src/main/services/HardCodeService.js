@@ -79,7 +79,9 @@ class HardCodeService {
                     fontSize: '36px',
                     fontWeight: '800',
                     textStroke: '2px #000'
-                }
+                },
+                // 快进 / 快退间隔（秒），用于播放器方向键seek步长
+                seekStep: 10
             }
         };
     }

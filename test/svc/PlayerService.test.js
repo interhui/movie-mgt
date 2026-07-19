@@ -4,7 +4,6 @@
 const path = require('path');
 const fs = require('fs').promises;
 const PlayerService = require('../../src/main/services/PlayerService');
-
 describe('PlayerService', () => {
     let playerService;
 
@@ -454,6 +453,101 @@ Dialogue: 0,0:00:01.00,0:00:03.00,Default,,0,0,0,,ASS字幕`;
             test('不支持的格式应返回空数组', async () => {
                 const subtitles = await playerService.loadSubtitle('/test.txt');
                 expect(subtitles).toHaveLength(0);
+            });
+        });
+    });
+
+    describe('calculateSeekTarget - 快进 / 快退计算', () => {
+        describe('快进 (forward)', () => {
+            test('SVC-SEEK-001: 快进方向在当前时间基础上加步长', () => {
+                expect(playerService.calculateSeekTarget(100, 300, 10, 'forward')).toBe(110);
+            });
+
+            test('SVC-SEEK-002: 快进不超过视频时长', () => {
+                expect(playerService.calculateSeekTarget(295, 300, 10, 'forward')).toBe(300);
+            });
+
+            test('SVC-SEEK-003: 快进恰好到达视频时长', () => {
+                expect(playerService.calculateSeekTarget(290, 300, 10, 'forward')).toBe(300);
+            });
+        });
+
+        describe('快退 (backward)', () => {
+            test('SVC-SEEK-004: 快退方向在当前时间基础上减步长', () => {
+                expect(playerService.calculateSeekTarget(100, 300, 10, 'backward')).toBe(90);
+            });
+
+            test('SVC-SEEK-005: 快退不低于 0', () => {
+                expect(playerService.calculateSeekTarget(5, 300, 10, 'backward')).toBe(0);
+            });
+
+            test('SVC-SEEK-006: 快退恰好到达 0', () => {
+                expect(playerService.calculateSeekTarget(10, 300, 10, 'backward')).toBe(0);
+            });
+        });
+
+        describe('自定义步长', () => {
+            test('SVC-SEEK-007: 自定义步长 30 生效（快进）', () => {
+                expect(playerService.calculateSeekTarget(100, 300, 30, 'forward')).toBe(130);
+            });
+
+            test('SVC-SEEK-008: 自定义步长 30 生效（快退）', () => {
+                expect(playerService.calculateSeekTarget(100, 300, 30, 'backward')).toBe(70);
+            });
+        });
+
+        describe('步长规整', () => {
+            test('SVC-SEEK-009: 步长为 0 时回退默认 10', () => {
+                expect(playerService.calculateSeekTarget(100, 300, 0, 'forward')).toBe(110);
+            });
+
+            test('SVC-SEEK-010: 步长为负数时回退默认 10', () => {
+                expect(playerService.calculateSeekTarget(100, 300, -5, 'forward')).toBe(110);
+            });
+
+            test('SVC-SEEK-011: 步长非数字时回退默认 10', () => {
+                expect(playerService.calculateSeekTarget(100, 300, 'abc', 'forward')).toBe(110);
+            });
+
+            test('SVC-SEEK-012: 步长为 undefined 时回退默认 10', () => {
+                expect(playerService.calculateSeekTarget(100, 300, undefined, 'forward')).toBe(110);
+            });
+        });
+
+        describe('边界与异常输入', () => {
+            test('SVC-SEEK-013: duration 无效时快进仅做加法（不裁剪到 0）', () => {
+                expect(playerService.calculateSeekTarget(100, NaN, 10, 'forward')).toBe(110);
+            });
+
+            test('SVC-SEEK-014: duration 为 0 时按无效处理，快进仅做加法', () => {
+                expect(playerService.calculateSeekTarget(100, 0, 10, 'forward')).toBe(110);
+            });
+
+            test('SVC-SEEK-015: currentTime 无效时按 0 处理（快进）', () => {
+                expect(playerService.calculateSeekTarget(NaN, 300, 10, 'forward')).toBe(10);
+            });
+
+            test('SVC-SEEK-016: currentTime 无效时按 0 处理（快退）', () => {
+                expect(playerService.calculateSeekTarget(NaN, 300, 10, 'backward')).toBe(0);
+            });
+
+            test('SVC-SEEK-017: 未知方向时保持当前时间不变', () => {
+                expect(playerService.calculateSeekTarget(100, 300, 10, 'unknown')).toBe(100);
+            });
+
+            test('SVC-SEEK-018: 方向缺失时保持当前时间不变', () => {
+                expect(playerService.calculateSeekTarget(100, 300, 10)).toBe(100);
+            });
+        });
+
+        describe('导出常量', () => {
+            test('SVC-SEEK-019: DEFAULT_SEEK_STEP 默认步长为 10', () => {
+                expect(PlayerService.DEFAULT_SEEK_STEP).toBe(10);
+            });
+
+            test('SVC-SEEK-020: 方向常量定义正确', () => {
+                expect(PlayerService.DIRECTION_FORWARD).toBe('forward');
+                expect(PlayerService.DIRECTION_BACKWARD).toBe('backward');
             });
         });
     });
