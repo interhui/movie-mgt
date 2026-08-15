@@ -162,49 +162,67 @@ class BatchSearchService {
         };
     }
 
-    async batchSearchMovies(movies, adapterType, progressCallback) {
+    /**
+     * 批量搜索电影（Worker Pool 并发模式）
+     * @param {Array} movies - 待搜索电影列表
+     * @param {string} adapterType - 适配器类型 ('tmdb' | 'r18')
+     * @param {Function} progressCallback - 进度回调
+     * @param {number} concurrency - 并发线程数，默认5
+     * @returns {Promise<Array>} 搜索结果数组
+     */
+    async batchSearchMovies(movies, adapterType, progressCallback, concurrency = 5) {
         this.resetCancelled();
-        const results = [];
-        
-        for (let i = 0; i < movies.length; i++) {
-            if (this.cancelled) {
-                break;
-            }
-            
-            const movie = movies[i];
-            
-            if (progressCallback) {
-                progressCallback({
-                    current: i + 1,
-                    total: movies.length,
-                    movieId: movie.id || movie.movieId,
-                    status: 'searching'
-                });
-            }
 
-            const searchResult = await this.searchMovie(
-                movie.id || movie.movieId,
-                movie.name,
-                adapterType
-            );
+        const total = movies.length;
+        const results = new Array(total);
+        let completedCount = 0;
+        let nextIndex = 0;
 
-            results.push({
-                movie: movie,
-                searchResult: searchResult
-            });
+        const searchOne = async () => {
+            while (nextIndex < total && !this.cancelled) {
+                const index = nextIndex++;
 
-            if (progressCallback) {
-                progressCallback({
-                    current: i + 1,
-                    total: movies.length,
-                    movieId: movie.id || movie.movieId,
-                    status: searchResult.status,
-                    result: searchResult.result
-                });
+                const movie = movies[index];
+
+                if (progressCallback) {
+                    progressCallback({
+                        current: completedCount + 1,
+                        total: total,
+                        movieId: movie.id || movie.movieId,
+                        status: 'searching'
+                    });
+                }
+
+                const searchResult = await this.searchMovie(
+                    movie.id || movie.movieId,
+                    movie.name,
+                    adapterType
+                );
+
+                results[index] = { movie, searchResult };
+                completedCount++;
+
+                if (progressCallback) {
+                    progressCallback({
+                        current: completedCount,
+                        total: total,
+                        movieId: movie.id || movie.movieId,
+                        status: searchResult.status,
+                        result: searchResult.result
+                    });
+                }
             }
+        };
+
+        const workerCount = Math.min(concurrency, total);
+        const workers = [];
+        for (let i = 0; i < workerCount; i++) {
+            workers.push(searchOne());
         }
 
-        return results;
+        await Promise.all(workers);
+
+        return results.filter(r => r !== undefined);
     }
 
     async batchSaveMovies(batchResults, progressCallback) {
