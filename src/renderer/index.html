@@ -431,66 +431,85 @@
                 <!-- 播放器配置 Tab -->
                 <div class="settings-tab-content" id="tab-player-settings">
                     <div class="settings-section">
-                        <h3 class="settings-section-title">声音配置</h3>
+                        <h3 class="settings-section-title">播放器配置</h3>
                         <div class="settings-item">
-                            <label>音量：</label>
-                            <div class="volume-setting">
-                                <input type="range" id="volume-setting" class="volume-bar" min="0" max="100" value="45" step="1">
-                                <span id="volume-setting-value" class="volume-setting-value">45</span>
+                            <label>默认播放器：</label>
+                            <select id="default-player-select" class="filter-select">
+                                <option value="builtin" selected>自带播放器</option>
+                                <option value="potplayer">PotPlayer</option>
+                            </select>
+                        </div>
+                        <div class="settings-item" id="potplayer-path-item">
+                            <label>PotPlayer 路径：</label>
+                            <div class="dir-input-group">
+                                <input type="text" id="potplayer-path-input" class="form-input" placeholder="选择 PotPlayer 可执行文件">
+                                <button id="select-potplayer-path-btn" class="btn btn-small">选择</button>
                             </div>
                         </div>
-                        <div class="settings-item">
-                            <label>音量步长：</label>
-                            <input type="number" id="volume-step-setting" min="1" max="100" step="1" value="5" placeholder="5">
-                        </div>
                     </div>
-                    <div class="settings-section">
-                        <h3 class="settings-section-title">进度配置</h3>
-                        <div class="settings-item">
-                            <label>快进 / 快退间隔：</label>
-                            <input type="number" id="seek-step-setting" min="1" max="600" step="1" value="10" placeholder="10">
-                        </div>
-                    </div>
-                    <div class="settings-section">
-                        <h3 class="settings-section-title">字幕配置</h3>
-                        <div class="settings-item">
-                            <label>背景样式：</label>
-                            <select id="subtitle-bg-mode" class="filter-select">
-                                <option value="transparent">透明背景</option>
-                                <option value="colored" selected>底色背景</option>
-                            </select>
-                        </div>
-                        <div class="settings-item" id="subtitle-color-item">
-                            <label>背景颜色：</label>
-                            <div class="color-picker-wrapper">
-                                <input type="color" id="subtitle-bg-color" value="#000000">
+                    <div id="builtin-player-settings">
+                        <div class="settings-section">
+                            <h3 class="settings-section-title">声音配置</h3>
+                            <div class="settings-item">
+                                <label>音量：</label>
+                                <div class="volume-setting">
+                                    <input type="range" id="volume-setting" class="volume-bar" min="0" max="100" value="45" step="1">
+                                    <span id="volume-setting-value" class="volume-setting-value">45</span>
+                                </div>
+                            </div>
+                            <div class="settings-item">
+                                <label>音量步长：</label>
+                                <input type="number" id="volume-step-setting" min="1" max="100" step="1" value="5" placeholder="5">
                             </div>
                         </div>
-                        <div class="settings-item">
-                            <label>字体大小：</label>
-                            <select id="subtitle-font-size" class="filter-select">
-                                <option value="22px">22px</option>
-                                <option value="24px">24px</option>
-                                <option value="26px" selected>26px</option>
-                                <option value="28px">28px</option>
-                                <option value="32px">32px</option>
-                                <option value="36px">36px</option>
-                                <option value="40px">40px</option>
-                            </select>
+                        <div class="settings-section">
+                            <h3 class="settings-section-title">进度配置</h3>
+                            <div class="settings-item">
+                                <label>快进 / 快退间隔：</label>
+                                <input type="number" id="seek-step-setting" min="1" max="600" step="1" value="10" placeholder="10">
+                            </div>
                         </div>
-                        <div class="settings-item">
-                            <label>字体加粗：</label>
-                            <select id="subtitle-font-weight" class="filter-select">
-                                <option value="500" selected>500</option>
-                                <option value="600">600</option>
-                                <option value="700">700</option>
-                                <option value="800">800</option>
-                            </select>
-                        </div>
-                        <div class="settings-item">
-                            <label>字体边框：</label>
-                            <div class="color-picker-wrapper">
-                                <input type="color" id="subtitle-text-stroke" value="#000000">
+                        <div class="settings-section">
+                            <h3 class="settings-section-title">字幕配置</h3>
+                            <div class="settings-item">
+                                <label>背景样式：</label>
+                                <select id="subtitle-bg-mode" class="filter-select">
+                                    <option value="transparent">透明背景</option>
+                                    <option value="colored" selected>底色背景</option>
+                                </select>
+                            </div>
+                            <div class="settings-item" id="subtitle-color-item">
+                                <label>背景颜色：</label>
+                                <div class="color-picker-wrapper">
+                                    <input type="color" id="subtitle-bg-color" value="#000000">
+                                </div>
+                            </div>
+                            <div class="settings-item">
+                                <label>字体大小：</label>
+                                <select id="subtitle-font-size" class="filter-select">
+                                    <option value="22px">22px</option>
+                                    <option value="24px">24px</option>
+                                    <option value="26px" selected>26px</option>
+                                    <option value="28px">28px</option>
+                                    <option value="32px">32px</option>
+                                    <option value="36px">36px</option>
+                                    <option value="40px">40px</option>
+                                </select>
+                            </div>
+                            <div class="settings-item">
+                                <label>字体加粗：</label>
+                                <select id="subtitle-font-weight" class="filter-select">
+                                    <option value="500" selected>500</option>
+                                    <option value="600">600</option>
+                                    <option value="700">700</option>
+                                    <option value="800">800</option>
+                                </select>
+                            </div>
+                            <div class="settings-item">
+                                <label>字体边框：</label>
+                                <div class="color-picker-wrapper">
+                                    <input type="color" id="subtitle-text-stroke" value="#000000">
+                                </div>
                             </div>
                         </div>
                     </div>

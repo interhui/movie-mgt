@@ -141,6 +141,11 @@ const elements = {
     volumeSettingValue: document.getElementById('volume-setting-value'),
     volumeStepSetting: document.getElementById('volume-step-setting'),
     seekStepSetting: document.getElementById('seek-step-setting'),
+    defaultPlayerSelect: document.getElementById('default-player-select'),
+    potplayerPathInput: document.getElementById('potplayer-path-input'),
+    selectPotplayerPathBtn: document.getElementById('select-potplayer-path-btn'),
+    potplayerPathItem: document.getElementById('potplayer-path-item'),
+    builtinPlayerSettings: document.getElementById('builtin-player-settings'),
     // 设置 Tab
     settingsTabs: document.querySelector('.settings-tabs'),
     onlyNewMoviesCheckbox: document.getElementById('only-new-movies'),
@@ -919,6 +924,18 @@ async function loadSettings() {
             }
         }
 
+        // 加载默认播放器配置（非法值回退为自带播放器 builtin）
+        if (elements.defaultPlayerSelect) {
+            const defaultPlayer = state.settings.player?.defaultPlayer === 'potplayer' ? 'potplayer' : 'builtin';
+            elements.defaultPlayerSelect.value = defaultPlayer;
+            updatePotplayerPathVisibility(defaultPlayer);
+        }
+
+        // 加载 PotPlayer 可执行文件路径
+        if (elements.potplayerPathInput) {
+            elements.potplayerPathInput.value = state.settings.player?.potplayerPath || '';
+        }
+
         // 加载音量配置
         if (elements.volumeSetting) {
             const volume = state.settings.player?.volume;
@@ -950,6 +967,21 @@ async function loadSettings() {
         syncDirectoryInputsFromCurrentLibrary();
     } catch (error) {
         console.error('Error loading settings:', error.message || error);
+    }
+}
+
+/**
+ * 根据默认播放器类型联动显示 / 隐藏 PotPlayer 路径选择项及自带播放器专属配置
+ * 仅当默认播放器选择 PotPlayer 时展示路径输入框；
+ * 仅当默认播放器选择自带播放器时展示声音、进度、字幕等内置播放器配置
+ * @param {string} defaultPlayer - 默认播放器类型（builtin / potplayer）
+ */
+function updatePotplayerPathVisibility(defaultPlayer) {
+    if (elements.potplayerPathItem) {
+        elements.potplayerPathItem.style.display = (defaultPlayer === 'potplayer') ? 'flex' : 'none';
+    }
+    if (elements.builtinPlayerSettings) {
+        elements.builtinPlayerSettings.style.display = (defaultPlayer === 'builtin') ? 'block' : 'none';
     }
 }
 
@@ -2387,6 +2419,25 @@ function bindEvents() {
         }
     });
 
+    // 默认播放器切换 - 联动显示 / 隐藏 PotPlayer 路径选择项
+    if (elements.defaultPlayerSelect) {
+        elements.defaultPlayerSelect.addEventListener('change', (e) => {
+            updatePotplayerPathVisibility(e.target.value);
+        });
+    }
+
+    // 选择 PotPlayer 可执行文件路径
+    if (elements.selectPotplayerPathBtn) {
+        elements.selectPotplayerPathBtn.addEventListener('click', async () => {
+            const result = await window.electronAPI.selectFile([
+                { name: 'Executable Files', extensions: ['exe'] }
+            ]);
+            if (!result.canceled && result.path) {
+                elements.potplayerPathInput.value = result.path;
+            }
+        });
+    }
+
     // 影视库下拉框变化 - 切换当前影视库并刷新目录输入框
     if (elements.libraryNameSelect) {
         elements.libraryNameSelect.addEventListener('change', (e) => {
@@ -2789,7 +2840,7 @@ function bindEvents() {
         }
     });
 
-    // ==================== 批量删除相关事件 ====================
+    // ==================== 批量播放相关事件 ====================
 
     elements.batchPlayBtn.addEventListener('click', async () => {
         if (state.selectedMovies.size === 0) {
@@ -2850,6 +2901,8 @@ function bindEvents() {
             alert('播放失败: ' + error.message);
         }
     });
+
+    // ==================== 批量删除相关事件 ====================
 
     // 批量删除按钮点击
     elements.batchDeleteBtn.addEventListener('click', async () => {
@@ -3881,6 +3934,14 @@ async function saveSettingsHandler() {
         const volumeStepRaw = parseInt(elements.volumeStepSetting?.value, 10);
         const volumeStepValue = (Number.isInteger(volumeStepRaw) && volumeStepRaw > 0) ? volumeStepRaw : 5;
 
+        // 默认播放器：选择 PotPlayer 时必须提供可执行文件路径，否则终止保存
+        const defaultPlayerValue = elements.defaultPlayerSelect?.value === 'potplayer' ? 'potplayer' : 'builtin';
+        const potplayerPathValue = (elements.potplayerPathInput?.value || '').trim();
+        if (defaultPlayerValue === 'potplayer' && !potplayerPathValue) {
+            alert('已选择 PotPlayer 作为默认播放器，请先选择 PotPlayer 可执行文件路径');
+            return;
+        }
+
         const newSettings = {
             ...state.settings,
             emulators: state.settings.emulators,
@@ -3949,7 +4010,9 @@ async function saveSettingsHandler() {
                 },
                 volume: parseInt(elements.volumeSetting?.value || '45', 10),
                 seekStep: seekStepValue,
-                volumeStep: volumeStepValue
+                volumeStep: volumeStepValue,
+                defaultPlayer: defaultPlayerValue,
+                potplayerPath: potplayerPathValue
             }
         };
 

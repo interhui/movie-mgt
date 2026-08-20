@@ -83,7 +83,11 @@ class HardCodeService {
                 // 快进 / 快退间隔（秒），用于播放器方向键 ArrowLeft / ArrowRight 调节播放进度的变化量
                 seekStep: 10,
                 // 音量步长（百分比），用于播放器方向键 ArrowUp / ArrowDown 调节音量的单次变化量
-                volumeStep: 5
+                volumeStep: 5,
+                // 默认播放器类型：builtin = 自带播放器；potplayer = PotPlayer 外部播放器
+                defaultPlayer: 'builtin',
+                // PotPlayer 可执行文件路径（defaultPlayer 为 potplayer 时使用）
+                potplayerPath: ''
             }
         };
     }

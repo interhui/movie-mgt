@@ -648,4 +648,263 @@ Dialogue: 0,0:00:01.00,0:00:03.00,Default,,0,0,0,,ASS字幕`;
             });
         });
     });
+
+    describe('多播放器选择（PotPlayer 外部播放）', () => {
+        let mockLaunchExternalPlayer;
+        let externalPlayerService;
+        let mockCreatePlayerWindow;
+        let mockMainWindow;
+
+        beforeEach(() => {
+            // 模拟子进程对象：记录 error 监听与 unref 调用
+            const fakeChildProcess = {
+                on: jest.fn(),
+                unref: jest.fn()
+            };
+            mockLaunchExternalPlayer = jest.fn(() => fakeChildProcess);
+            externalPlayerService = new PlayerService(mockLaunchExternalPlayer);
+            mockCreatePlayerWindow = jest.fn();
+            mockMainWindow = {};
+        });
+
+        describe('isPotplayerEnabled', () => {
+            test('SVC-PLAYER-EXT-001: 类型为 potplayer 且路径非空时启用', () => {
+                expect(PlayerService.isPotplayerEnabled({ defaultPlayer: 'potplayer', potplayerPath: 'C:\\PotPlayer\\PotPlayerMini64.exe' })).toBe(true);
+            });
+
+            test('SVC-PLAYER-EXT-002: 类型为 builtin 时不启用', () => {
+                expect(PlayerService.isPotplayerEnabled({ defaultPlayer: 'builtin', potplayerPath: 'C:\\PotPlayer\\PotPlayerMini64.exe' })).toBe(false);
+            });
+
+            test('SVC-PLAYER-EXT-003: 类型为 potplayer 但路径为空时不启用', () => {
+                expect(PlayerService.isPotplayerEnabled({ defaultPlayer: 'potplayer', potplayerPath: '' })).toBe(false);
+            });
+
+            test('SVC-PLAYER-EXT-004: 类型为 potplayer 但路径为空白字符时不启用', () => {
+                expect(PlayerService.isPotplayerEnabled({ defaultPlayer: 'potplayer', potplayerPath: '   ' })).toBe(false);
+            });
+
+            test('SVC-PLAYER-EXT-005: 配置为 null / undefined 时不启用', () => {
+                expect(PlayerService.isPotplayerEnabled(null)).toBe(false);
+                expect(PlayerService.isPotplayerEnabled(undefined)).toBe(false);
+            });
+        });
+
+        describe('playWithPotplayer', () => {
+            let consoleLogSpy;
+
+            beforeEach(() => {
+                consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+            });
+
+            afterEach(() => {
+                consoleLogSpy.mockRestore();
+            });
+
+            test('SVC-PLAYER-EXT-010: 单个电影以单个路径参数启动 PotPlayer（路径带双引号）', () => {
+                externalPlayerService.playWithPotplayer('C:\\PotPlayer\\PotPlayerMini64.exe', ['D:\\Video.mp4']);
+
+                expect(mockLaunchExternalPlayer).toHaveBeenCalledWith(
+                    'C:\\PotPlayer\\PotPlayerMini64.exe',
+                    ['"D:\\Video.mp4"'],
+                    { detached: true, stdio: 'ignore' }
+                );
+            });
+
+            test('SVC-PLAYER-EXT-011: 多个电影以路径列表形式直接透传，每个路径都带双引号', () => {
+                externalPlayerService.playWithPotplayer('C:\\PotPlayer\\PotPlayerMini64.exe', ['D:\\Video1.mp4', 'D:\\Video2.mp4']);
+
+                expect(mockLaunchExternalPlayer).toHaveBeenCalledWith(
+                    'C:\\PotPlayer\\PotPlayerMini64.exe',
+                    ['"D:\\Video1.mp4"', '"D:\\Video2.mp4"'],
+                    { detached: true, stdio: 'ignore' }
+                );
+            });
+
+            test('SVC-PLAYER-EXT-011B: 三个以上电影同样以路径列表形式直接透传，每个路径都带双引号', () => {
+                externalPlayerService.playWithPotplayer('C:\\PotPlayer\\PotPlayerMini64.exe', ['D:\\V1.mp4', 'D:\\V2.mp4', 'D:\\V3.mp4']);
+
+                expect(mockLaunchExternalPlayer).toHaveBeenCalledWith(
+                    'C:\\PotPlayer\\PotPlayerMini64.exe',
+                    ['"D:\\V1.mp4"', '"D:\\V2.mp4"', '"D:\\V3.mp4"'],
+                    { detached: true, stdio: 'ignore' }
+                );
+            });
+
+            test('SVC-PLAYER-EXT-011C: 含空格的路径应被正确处理（参数数组本身保留原样）', () => {
+                externalPlayerService.playWithPotplayer('C:\\PotPlayer\\PotPlayerMini64.exe', ['D:\\My Videos\\V1.mp4', 'D:\\My Videos\\V2.mp4']);
+
+                expect(mockLaunchExternalPlayer).toHaveBeenCalledWith(
+                    'C:\\PotPlayer\\PotPlayerMini64.exe',
+                    ['"D:\\My Videos\\V1.mp4"', '"D:\\My Videos\\V2.mp4"'],
+                    { detached: true, stdio: 'ignore' }
+                );
+            });
+
+            test('SVC-PLAYER-EXT-012: 过滤空路径与非法路径条目', () => {
+                externalPlayerService.playWithPotplayer('C:\\PotPlayer\\PotPlayerMini64.exe', ['D:\\Video.mp4', '', '   ', null, undefined]);
+
+                expect(mockLaunchExternalPlayer).toHaveBeenCalledWith(
+                    'C:\\PotPlayer\\PotPlayerMini64.exe',
+                    ['"D:\\Video.mp4"'],
+                    { detached: true, stdio: 'ignore' }
+                );
+            });
+
+            test('SVC-PLAYER-EXT-013: 全部路径无效时抛出错误', () => {
+                expect(() => {
+                    externalPlayerService.playWithPotplayer('C:\\PotPlayer\\PotPlayerMini64.exe', ['', null]);
+                }).toThrow('没有可播放的文件');
+                expect(mockLaunchExternalPlayer).not.toHaveBeenCalled();
+            });
+
+            test('SVC-PLAYER-EXT-014: 路径列表为 null / undefined 时抛出错误', () => {
+                expect(() => {
+                    externalPlayerService.playWithPotplayer('C:\\PotPlayer\\PotPlayerMini64.exe', null);
+                }).toThrow('没有可播放的文件');
+            });
+
+            test('SVC-PLAYER-EXT-015: 启动后监听 error 事件并调用 unref 独立运行', () => {
+                const childProcess = externalPlayerService.playWithPotplayer('C:\\PotPlayer\\PotPlayerMini64.exe', ['D:\\Video.mp4']);
+
+                expect(childProcess.on).toHaveBeenCalledWith('error', expect.any(Function));
+                expect(childProcess.unref).toHaveBeenCalled();
+            });
+
+            test('SVC-PLAYER-EXT-016: 调用时打印将要执行的 PotPlayer 完整命令行（单文件带引号）', () => {
+                externalPlayerService.playWithPotplayer('C:\\PotPlayer\\PotPlayerMini64.exe', ['D:\\Video.mp4']);
+
+                expect(consoleLogSpy).toHaveBeenCalledWith(
+                    '[PlayerService] 执行 PotPlayer 命令: C:\\PotPlayer\\PotPlayerMini64.exe "D:\\Video.mp4"'
+                );
+            });
+
+            test('SVC-PLAYER-EXT-016B: 调用时打印将要执行的 PotPlayer 完整命令行（多文件每个路径都带引号）', () => {
+                externalPlayerService.playWithPotplayer('C:\\PotPlayer\\PotPlayerMini64.exe', ['D:\\Video1.mp4', 'D:\\Video2.mp4']);
+
+                expect(consoleLogSpy).toHaveBeenCalledWith(
+                    '[PlayerService] 执行 PotPlayer 命令: C:\\PotPlayer\\PotPlayerMini64.exe "D:\\Video1.mp4" "D:\\Video2.mp4"'
+                );
+            });
+
+            test('SVC-PLAYER-EXT-016C: 含空格的路径在调试输出中保持双引号包裹', () => {
+                externalPlayerService.playWithPotplayer('C:\\PotPlayer\\PotPlayerMini64.exe', ['D:\\My Videos\\V1.mp4', 'D:\\My Videos\\V2.mp4']);
+
+                expect(consoleLogSpy).toHaveBeenCalledWith(
+                    '[PlayerService] 执行 PotPlayer 命令: C:\\PotPlayer\\PotPlayerMini64.exe "D:\\My Videos\\V1.mp4" "D:\\My Videos\\V2.mp4"'
+                );
+            });
+        });
+
+        describe('openPlayerWindow - 播放器路由', () => {
+            const movieData = {
+                title: '测试电影',
+                id: 'movie-001',
+                fileset: [
+                    { type: 'Main', fullpath: 'D:\\Video1.mp4', filename: '视频1.mp4' },
+                    { type: 'Preview', fullpath: 'D:\\Trailer.mp4' },
+                    { type: 'Main', fullpath: 'D:\\Video2.mp4', filename: '视频2.mp4' }
+                ]
+            };
+
+            test('SVC-PLAYER-EXT-020: PotPlayer 配置时用外部播放器播放全部正片（多文件每个路径都带双引号）', () => {
+                const playerConfig = { defaultPlayer: 'potplayer', potplayerPath: 'C:\\PotPlayer\\PotPlayerMini64.exe' };
+
+                externalPlayerService.openPlayerWindow(movieData, mockMainWindow, mockCreatePlayerWindow, 0, playerConfig);
+
+                expect(mockLaunchExternalPlayer).toHaveBeenCalledWith(
+                    'C:\\PotPlayer\\PotPlayerMini64.exe',
+                    ['"D:\\Video1.mp4"', '"D:\\Video2.mp4"'],
+                    { detached: true, stdio: 'ignore' }
+                );
+                // 不应再打开自带播放器窗口
+                expect(mockCreatePlayerWindow).not.toHaveBeenCalled();
+            });
+
+            test('SVC-PLAYER-EXT-021: 默认（builtin）配置时打开自带播放器窗口', () => {
+                externalPlayerService.openPlayerWindow(movieData, mockMainWindow, mockCreatePlayerWindow, 0, { defaultPlayer: 'builtin' });
+
+                expect(mockLaunchExternalPlayer).not.toHaveBeenCalled();
+                expect(mockCreatePlayerWindow).toHaveBeenCalledTimes(1);
+            });
+
+            test('SVC-PLAYER-EXT-022: 未传入播放器配置时按自带播放器处理', () => {
+                externalPlayerService.openPlayerWindow(movieData, mockMainWindow, mockCreatePlayerWindow, 0);
+
+                expect(mockLaunchExternalPlayer).not.toHaveBeenCalled();
+                expect(mockCreatePlayerWindow).toHaveBeenCalledTimes(1);
+            });
+
+            test('SVC-PLAYER-EXT-023: PotPlayer 类型但路径为空时回退自带播放器', () => {
+                externalPlayerService.openPlayerWindow(movieData, mockMainWindow, mockCreatePlayerWindow, 0, { defaultPlayer: 'potplayer', potplayerPath: '' });
+
+                expect(mockLaunchExternalPlayer).not.toHaveBeenCalled();
+                expect(mockCreatePlayerWindow).toHaveBeenCalledTimes(1);
+            });
+
+            test('SVC-PLAYER-EXT-024: 没有可播放文件时抛出错误', () => {
+                expect(() => {
+                    externalPlayerService.openPlayerWindow({ title: '空电影' }, mockMainWindow, mockCreatePlayerWindow, 0, { defaultPlayer: 'potplayer', potplayerPath: 'C:\\PotPlayer\\PotPlayerMini64.exe' });
+                }).toThrow('没有可播放的文件');
+            });
+        });
+
+        describe('openBatchPlayerWindow - 播放器路由', () => {
+            const playlistData = [
+                { path: 'D:\\Video1.mp4', title: '视频1' },
+                { path: 'D:\\Video2.mp4', title: '视频2' }
+            ];
+
+            test('SVC-PLAYER-EXT-030: PotPlayer 配置时用外部播放器播放全部影片（多文件每个路径都带双引号）', () => {
+                const playerConfig = { defaultPlayer: 'potplayer', potplayerPath: 'C:\\PotPlayer\\PotPlayerMini64.exe' };
+
+                externalPlayerService.openBatchPlayerWindow(playlistData, mockMainWindow, mockCreatePlayerWindow, playerConfig);
+
+                expect(mockLaunchExternalPlayer).toHaveBeenCalledWith(
+                    'C:\\PotPlayer\\PotPlayerMini64.exe',
+                    ['"D:\\Video1.mp4"', '"D:\\Video2.mp4"'],
+                    { detached: true, stdio: 'ignore' }
+                );
+                expect(mockCreatePlayerWindow).not.toHaveBeenCalled();
+            });
+
+            test('SVC-PLAYER-EXT-031: 默认（builtin）配置时打开自带播放器窗口', () => {
+                externalPlayerService.openBatchPlayerWindow(playlistData, mockMainWindow, mockCreatePlayerWindow, { defaultPlayer: 'builtin' });
+
+                expect(mockLaunchExternalPlayer).not.toHaveBeenCalled();
+                expect(mockCreatePlayerWindow).toHaveBeenCalledWith({
+                    playlist: playlistData,
+                    currentIndex: 0,
+                    movieTitle: '批量播放'
+                });
+            });
+
+            test('SVC-PLAYER-EXT-032: 未传入播放器配置时按自带播放器处理', () => {
+                externalPlayerService.openBatchPlayerWindow(playlistData, mockMainWindow, mockCreatePlayerWindow);
+
+                expect(mockLaunchExternalPlayer).not.toHaveBeenCalled();
+                expect(mockCreatePlayerWindow).toHaveBeenCalledTimes(1);
+            });
+
+            test('SVC-PLAYER-EXT-033: PotPlayer 类型但路径为空时回退自带播放器', () => {
+                externalPlayerService.openBatchPlayerWindow(playlistData, mockMainWindow, mockCreatePlayerWindow, { defaultPlayer: 'potplayer', potplayerPath: '' });
+
+                expect(mockLaunchExternalPlayer).not.toHaveBeenCalled();
+                expect(mockCreatePlayerWindow).toHaveBeenCalledTimes(1);
+            });
+
+            test('SVC-PLAYER-EXT-034: 空播放列表时抛出错误', () => {
+                expect(() => {
+                    externalPlayerService.openBatchPlayerWindow([], mockMainWindow, mockCreatePlayerWindow, { defaultPlayer: 'potplayer', potplayerPath: 'C:\\PotPlayer\\PotPlayerMini64.exe' });
+                }).toThrow('没有可播放的文件');
+            });
+        });
+
+        describe('导出常量', () => {
+            test('SVC-PLAYER-EXT-040: 播放器类型常量定义正确', () => {
+                expect(PlayerService.PLAYER_TYPE_BUILTIN).toBe('builtin');
+                expect(PlayerService.PLAYER_TYPE_POTPLAYER).toBe('potplayer');
+            });
+        });
+    });
 });

@@ -1517,11 +1517,12 @@ function setupIpcHandlers(services) {
         }
     });
 
-    // 打开播放器窗口
+    // 打开播放器窗口（默认播放器为 PotPlayer 时改为调用外部 PotPlayer 播放）
     ipcMain.handle('open-player-window', async (event, movieData, startTime) => {
         try {
             const mainWindow = getMainWindow();
-            playerService.openPlayerWindow(movieData, mainWindow, createPlayerWindow, startTime);
+            const playerConfig = settingsService.getPlayerConfig();
+            playerService.openPlayerWindow(movieData, mainWindow, createPlayerWindow, startTime, playerConfig);
             return { success: true };
         } catch (error) {
             console.error('Error opening player window:', error.message || error);
@@ -2047,10 +2048,12 @@ function setupIpcHandlers(services) {
         }
     });
 
+    // 批量播放电影（默认播放器为 PotPlayer 时改为调用外部 PotPlayer 播放全部影片）
     ipcMain.handle('open-batch-player-window', async (event, playlistData) => {
         try {
             const mainWindow = getMainWindow();
-            playerService.openBatchPlayerWindow(playlistData, mainWindow, createPlayerWindow);
+            const playerConfig = settingsService.getPlayerConfig();
+            playerService.openBatchPlayerWindow(playlistData, mainWindow, createPlayerWindow, playerConfig);
             return { success: true };
         } catch (error) {
             console.error('Error opening batch player window:', error.message || error);

@@ -87,6 +87,18 @@ describe('HardCodeService', () => {
             expect(settings.player.volumeStep).toBe(5);
         });
 
+        test('SVC-HARDCODED-009B: player 默认包含 defaultPlayer 为 builtin', () => {
+            const settings = service.getDefaultSettings();
+            expect(settings.player).toBeDefined();
+            expect(settings.player.defaultPlayer).toBe('builtin');
+        });
+
+        test('SVC-HARDCODED-009C: player 默认包含 potplayerPath 为空字符串', () => {
+            const settings = service.getDefaultSettings();
+            expect(settings.player).toBeDefined();
+            expect(settings.player.potplayerPath).toBe('');
+        });
+
     });
 
     describe('getDefaultTags', () => {
@@ -115,9 +127,9 @@ describe('HardCodeService', () => {
     });
 
     describe('getDefaultCategories', () => {
-        test('SVC-HARDCODED-013: 返回4个分类', () => {
+        test('SVC-HARDCODED-013: 返回3个分类', () => {
             const categories = service.getDefaultCategories();
-            expect(categories).toHaveLength(4);
+            expect(categories).toHaveLength(3);
         });
 
         test('SVC-HARDCODED-014: 分类有必含属性', () => {

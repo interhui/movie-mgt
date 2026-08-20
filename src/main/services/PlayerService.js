@@ -1,10 +1,31 @@
 /**
  * 播放器服务
  * 负责管理播放列表、播放器窗口，以及快进 / 快退目标时间、音量调节目标值的计算。
+ * 支持多播放器选择：默认使用自带（内置 HTML5）播放器，也可配置为 PotPlayer 外部播放器。
  */
 const path = require('path');
 const fs = require('fs').promises;
 const fsSync = require('fs');
+const { spawn } = require('child_process');
+
+/** 默认播放器类型：自带（内置 HTML5）播放器 */
+const PLAYER_TYPE_BUILTIN = 'builtin';
+
+/** 外部播放器类型：PotPlayer */
+const PLAYER_TYPE_POTPLAYER = 'potplayer';
+
+/**
+ * 判断播放器配置是否要求使用 PotPlayer 外部播放器
+ * 只有类型为 potplayer 且可执行文件路径非空时才视为启用，否则一律回退自带播放器。
+ * @param {object} playerConfig - 播放器配置（settings.player）
+ * @returns {boolean} 是否启用 PotPlayer
+ */
+function isPotplayerEnabled(playerConfig) {
+    return Boolean(playerConfig
+        && playerConfig.defaultPlayer === PLAYER_TYPE_POTPLAYER
+        && typeof playerConfig.potplayerPath === 'string'
+        && playerConfig.potplayerPath.trim() !== '');
+}
 
 /** 默认快进 / 快退间隔（秒） */
 const DEFAULT_SEEK_STEP = 10;
@@ -75,10 +96,27 @@ function normalizeVolume(volume) {
     return (typeof volume === 'number' && !isNaN(volume)) ? volume : 0;
 }
 
+/**
+ * 将电影路径显式包裹在双引号中
+ * 内部可能存在的双引号字符会被转义为 `\"`，避免与外层引号冲突。
+ * 用于 PotPlayer 命令时统一每个电影路径都带引号的展示形式。
+ * @param {string} moviePath - 原始电影路径
+ * @returns {string} 包裹双引号后的路径
+ */
+function wrapMoviePathInQuotes(moviePath) {
+    const stringValue = String(moviePath);
+    return `"${stringValue.replace(/"/g, '\\"')}"`;
+}
+
 class PlayerService {
-    constructor() {
+    /**
+     * @param {Function} [launchExternalPlayer] - 外部进程启动函数（默认 child_process.spawn），
+     *        参数为 (exePath, args, options)；注入是为了便于单元测试。
+     */
+    constructor(launchExternalPlayer = spawn) {
         this.currentPlaylist = [];
         this.currentIndex = 0;
+        this.launchExternalPlayer = launchExternalPlayer;
     }
 
     /**
@@ -124,14 +162,26 @@ class PlayerService {
 
     /**
      * 打开播放器窗口
+     * 当播放器配置启用 PotPlayer 时，改为调用外部 PotPlayer 播放；
+     * 否则使用自带播放器窗口。
      * @param {Object} movieData - 电影数据
      * @param {Object} mainWindow - 主窗口引用
      * @param {Function} createPlayerWindow - 创建播放器窗口的函数
+     * @param {number} [startTime] - 起始播放时间（秒），仅自带播放器使用
+     * @param {Object} [playerConfig] - 播放器配置（settings.player）
      */
-    openPlayerWindow(movieData, mainWindow, createPlayerWindow, startTime = 0) {
+    openPlayerWindow(movieData, mainWindow, createPlayerWindow, startTime = 0, playerConfig = null) {
         const playlist = this.getPlaylist(movieData);
         if (playlist.length === 0) {
             throw new Error('没有可播放的文件');
+        }
+
+        // 启用 PotPlayer 时，将正片文件交给外部播放器
+        if (isPotplayerEnabled(playerConfig)) {
+            return this.playWithPotplayer(
+                playerConfig.potplayerPath,
+                playlist.map((item) => item.path)
+            );
         }
 
         this.currentPlaylist = playlist;
@@ -152,9 +202,26 @@ class PlayerService {
         }
     }
 
-    openBatchPlayerWindow(playlistData, mainWindow, createPlayerWindow) {
+    /**
+     * 批量播放电影
+     * 当播放器配置启用 PotPlayer 时，改为调用外部 PotPlayer 播放全部影片；
+     * 否则使用自带播放器窗口。
+     * @param {Array} playlistData - 播放列表（元素含 path 字段）
+     * @param {Object} mainWindow - 主窗口引用
+     * @param {Function} createPlayerWindow - 创建播放器窗口的函数
+     * @param {Object} [playerConfig] - 播放器配置（settings.player）
+     */
+    openBatchPlayerWindow(playlistData, mainWindow, createPlayerWindow, playerConfig = null) {
         if (!playlistData || playlistData.length === 0) {
             throw new Error('没有可播放的文件');
+        }
+
+        // 启用 PotPlayer 时，将播放列表中的全部文件交给外部播放器
+        if (isPotplayerEnabled(playerConfig)) {
+            return this.playWithPotplayer(
+                playerConfig.potplayerPath,
+                playlistData.map((item) => item && item.path)
+            );
         }
 
         this.currentPlaylist = playlistData;
@@ -167,6 +234,85 @@ class PlayerService {
                 movieTitle: '批量播放'
             });
         }
+    }
+
+    /**
+     * 使用外部 PotPlayer 播放电影
+     * 调用方式（单个文件）：
+     *   "PotPlayer可执行文件路径" "电影路径1"
+     * 调用方式（多个文件）：
+     *   "PotPlayer可执行文件路径" "电影路径1" "电影路径2" "电影路径3" ...
+     *
+     * 无论传入 1 个还是多个电影路径，都以相同的"路径列表"形式传参，
+     * 不在路径之间插入 /add 等额外参数，调用形式保持一致。
+     *
+     * 每一个电影路径都会被显式包裹双引号，保证命令中每个路径都带引号，
+     * 形式统一为 `potplayerpath "movie1" "movie2"`。
+     *
+     * @param {string} potplayerPath - PotPlayer 可执行文件路径
+     * @param {Array<string>} moviePaths - 电影文件路径列表
+     * @returns {Object} 子进程对象
+     */
+    playWithPotplayer(potplayerPath, moviePaths) {
+        // 过滤掉空 / 非法的路径条目，全部无效时与内部播放保持一致的错误提示
+        const validMoviePaths = (Array.isArray(moviePaths) ? moviePaths : [])
+            .filter((moviePath) => typeof moviePath === 'string' && moviePath.trim() !== '');
+
+        if (validMoviePaths.length === 0) {
+            throw new Error('没有可播放的文件');
+        }
+
+        // 构造 PotPlayer 命令行参数：每一个电影路径都显式包裹双引号，
+        // 不在路径之间插入 /add 等额外标记，保证 1 个与多个文件的调用形式一致，
+        // 且命令中每个路径都带引号。
+        const spawnArgs = validMoviePaths.map(wrapMoviePathInQuotes);
+
+        // 调试输出：打印实际将要执行的 PotPlayer 命令行，便于排查参数传递问题
+        const commandPreview = this.buildPotplayerCommandPreview(potplayerPath, spawnArgs);
+        console.log(`[PlayerService] 执行 PotPlayer 命令: ${commandPreview}`);
+
+        // detached + stdio ignore + unref：让 PotPlayer 独立运行，不阻塞本应用退出
+        const childProcess = this.launchExternalPlayer(potplayerPath, spawnArgs, {
+            detached: true,
+            stdio: 'ignore'
+        });
+
+        // 启动失败（如路径不存在）时仅记录日志，不影响主流程
+        if (childProcess && typeof childProcess.on === 'function') {
+            childProcess.on('error', (error) => {
+                console.error('启动 PotPlayer 失败:', error.message || error);
+            });
+        }
+        if (childProcess && typeof childProcess.unref === 'function') {
+            childProcess.unref();
+        }
+
+        return childProcess;
+    }
+
+    /**
+     * 构造 PotPlayer 命令行预览字符串
+     * 仅用于调试日志展示：把可执行文件路径与参数按 Windows 习惯拼接成可读的命令行形式
+     * （含空格的参数加双引号），不会影响实际 spawn 调用的参数数组。
+     * @param {string} potplayerPath - PotPlayer 可执行文件路径
+     * @param {Array<string>} args - 实际传给 spawn 的参数数组
+     * @returns {string} 命令行预览字符串
+     */
+    buildPotplayerCommandPreview(potplayerPath, args) {
+        const quote = (value) => {
+            const stringValue = String(value);
+            // 已显式包裹双引号的参数（如电影路径）按原样输出，避免重复转义
+            if (stringValue.length >= 2 && stringValue.startsWith('"') && stringValue.endsWith('"')) {
+                return stringValue;
+            }
+            // 含空格 / 制表符 / 双引号的参数统一加引号，保持与 Windows 命令行规范一致
+            if (/[\s"]/.test(stringValue)) {
+                return `"${stringValue.replace(/"/g, '\\"')}"`;
+            }
+            return stringValue;
+        };
+
+        return [potplayerPath, ...args].map(quote).join(' ');
     }
 
     /**
@@ -539,3 +685,6 @@ module.exports.VOLUME_MIN = VOLUME_MIN;
 module.exports.VOLUME_MAX = VOLUME_MAX;
 module.exports.VOLUME_DIRECTION_UP = VOLUME_DIRECTION_UP;
 module.exports.VOLUME_DIRECTION_DOWN = VOLUME_DIRECTION_DOWN;
+module.exports.PLAYER_TYPE_BUILTIN = PLAYER_TYPE_BUILTIN;
+module.exports.PLAYER_TYPE_POTPLAYER = PLAYER_TYPE_POTPLAYER;
+module.exports.isPotplayerEnabled = isPotplayerEnabled;

@@ -26,6 +26,11 @@ const MOVIES_SUBDIR = 'movies';
 const ACTOR_PHOTO_SUBDIR = 'actors';
 const MOVIEBOX_SUBDIR = 'boxes';
 
+// 默认播放器类型：自带（内置 HTML5）播放器
+const PLAYER_TYPE_BUILTIN = 'builtin';
+// 默认播放器类型：PotPlayer 外部播放器
+const PLAYER_TYPE_POTPLAYER = 'potplayer';
+
 /**
  * 判断是否为对象
  * @param {any} item
@@ -581,7 +586,14 @@ class SettingsService {
      * @returns {object} 播放器配置
      */
     getPlayerConfig() {
-        return this.settings.player || { subtitle: { backgroundColor: 'rgba(0, 0, 0, 0.7)', fontSize: '22px' }, volume: 45, seekStep: 10, volumeStep: 5 };
+        return this.settings.player || {
+            subtitle: { backgroundColor: 'rgba(0, 0, 0, 0.7)', fontSize: '22px' },
+            volume: 45,
+            seekStep: 10,
+            volumeStep: 5,
+            defaultPlayer: PLAYER_TYPE_BUILTIN,
+            potplayerPath: ''
+        };
     }
 
     /**
@@ -649,6 +661,51 @@ class SettingsService {
             this.settings.player = {};
         }
         this.settings.player.volumeStep = step;
+        this.saveSettings(this.settings);
+    }
+
+    /**
+     * 获取默认播放器类型
+     * 非法值（未知类型 / 空值）一律回退为 builtin（自带播放器），保证播放逻辑始终可用。
+     * @returns {string} PLAYER_TYPE_BUILTIN（自带播放器）或 PLAYER_TYPE_POTPLAYER（PotPlayer）
+     */
+    getDefaultPlayer() {
+        const defaultPlayer = this.settings.player && this.settings.player.defaultPlayer;
+        return (defaultPlayer === PLAYER_TYPE_POTPLAYER) ? PLAYER_TYPE_POTPLAYER : PLAYER_TYPE_BUILTIN;
+    }
+
+    /**
+     * 设置默认播放器类型
+     * @param {string} playerType - PLAYER_TYPE_BUILTIN 或 PLAYER_TYPE_POTPLAYER，非法值按 builtin 处理
+     */
+    setDefaultPlayer(playerType) {
+        if (!this.settings.player) {
+            this.settings.player = {};
+        }
+        this.settings.player.defaultPlayer = (playerType === PLAYER_TYPE_POTPLAYER)
+            ? PLAYER_TYPE_POTPLAYER
+            : PLAYER_TYPE_BUILTIN;
+        this.saveSettings(this.settings);
+    }
+
+    /**
+     * 获取 PotPlayer 可执行文件路径
+     * @returns {string} 可执行文件路径，未配置时返回空字符串
+     */
+    getPotplayerPath() {
+        const potplayerPath = this.settings.player && this.settings.player.potplayerPath;
+        return (typeof potplayerPath === 'string') ? potplayerPath : '';
+    }
+
+    /**
+     * 设置 PotPlayer 可执行文件路径
+     * @param {string} potplayerPath - 可执行文件路径，非法值按空字符串处理
+     */
+    setPotplayerPath(potplayerPath) {
+        if (!this.settings.player) {
+            this.settings.player = {};
+        }
+        this.settings.player.potplayerPath = (typeof potplayerPath === 'string') ? potplayerPath : '';
         this.saveSettings(this.settings);
     }
 
@@ -728,4 +785,6 @@ class SettingsService {
 
 module.exports = SettingsService;
 module.exports.DEFAULT_LIBRARY_NAME = DEFAULT_LIBRARY_NAME;
+module.exports.PLAYER_TYPE_BUILTIN = PLAYER_TYPE_BUILTIN;
+module.exports.PLAYER_TYPE_POTPLAYER = PLAYER_TYPE_POTPLAYER;
 module.exports.deriveLibraryPaths = deriveLibraryPaths;

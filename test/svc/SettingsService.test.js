@@ -807,5 +807,74 @@ describe('SettingsService', () => {
             expect(config.volumeStep).toBe(15);
             expect(config.subtitle.fontWeight).toBe('700');
         });
+
+        test('SVC-SETTINGS-047A: getPlayerConfig 默认包含 defaultPlayer 为 builtin', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const config = service.getPlayerConfig();
+            expect(config.defaultPlayer).toBe('builtin');
+        });
+
+        test('SVC-SETTINGS-047B: getPlayerConfig 默认包含 potplayerPath 为空字符串', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const config = service.getPlayerConfig();
+            expect(config.potplayerPath).toBe('');
+        });
+
+        test('SVC-SETTINGS-047C: setDefaultPlayer 设置 potplayer 后可读取', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setDefaultPlayer('potplayer');
+            expect(service.getDefaultPlayer()).toBe('potplayer');
+        });
+
+        test('SVC-SETTINGS-047D: setDefaultPlayer 对非法值回退为 builtin', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setDefaultPlayer('potplayer');
+            service.setDefaultPlayer('vlc');
+            expect(service.getDefaultPlayer()).toBe('builtin');
+        });
+
+        test('SVC-SETTINGS-047E: getDefaultPlayer 对配置中的非法值回退为 builtin', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.settings.player.defaultPlayer = 'unknown-player';
+            expect(service.getDefaultPlayer()).toBe('builtin');
+        });
+
+        test('SVC-SETTINGS-047F: setDefaultPlayer 持久化到 settings.player', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setDefaultPlayer('potplayer');
+            const settings = service.getSettings();
+            expect(settings.player.defaultPlayer).toBe('potplayer');
+        });
+
+        test('SVC-SETTINGS-047G: setPotplayerPath 设置后可读取', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const exePath = 'C:\\Program Files\\PotPlayer\\PotPlayerMini64.exe';
+            service.setPotplayerPath(exePath);
+            expect(service.getPotplayerPath()).toBe(exePath);
+        });
+
+        test('SVC-SETTINGS-047H: setPotplayerPath 对非字符串按空字符串处理', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setPotplayerPath('C:\\PotPlayer\\PotPlayerMini64.exe');
+            service.setPotplayerPath(123);
+            expect(service.getPotplayerPath()).toBe('');
+        });
+
+        test('SVC-SETTINGS-047I: setPotplayerPath 持久化到 settings.player', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            const exePath = 'D:\\Tools\\PotPlayerMini64.exe';
+            service.setPotplayerPath(exePath);
+            const settings = service.getSettings();
+            expect(settings.player.potplayerPath).toBe(exePath);
+        });
+
+        test('SVC-SETTINGS-047J: setPlayerConfig 同时设置 defaultPlayer / potplayerPath 与 subtitle 且互不丢失', async () => {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            service.setPlayerConfig({ subtitle: { fontSize: '28px' }, defaultPlayer: 'potplayer', potplayerPath: 'C:\\PotPlayer\\PotPlayerMini64.exe' });
+            const config = service.getPlayerConfig();
+            expect(config.defaultPlayer).toBe('potplayer');
+            expect(config.potplayerPath).toBe('C:\\PotPlayer\\PotPlayerMini64.exe');
+            expect(config.subtitle.fontSize).toBe('28px');
+        });
     });
 });
